@@ -1,0 +1,30 @@
+{
+  "name": "prompt-quest",
+  "version": "1.0.0",
+  "description": "A gamified web application to teach students AI prompt engineering through interactive challenges",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "start": "python -m http.server 8000",
+    "build": "echo 'Build completed - ready for deployment'",
+    "test": "echo 'No tests specified'"
+  },
+  "keywords": [
+    "prompt-engineering",
+    "ai-education",
+    "gamification",
+    "learning",
+    "web-app"
+  ],
+  "author": "Prompt Quest Team",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/prompt-quest"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

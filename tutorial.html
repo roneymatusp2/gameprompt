@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial - Prompt Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #059669;
+            --accent: #F59E0B;
+            --neutral: #64748B;
+            --background: #FEFBF3;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: #1F2937;
+        }
+        
+        .font-display { font-family: 'Poppins', sans-serif; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .example-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .bad-example {
+            border-left: 4px solid #EF4444;
+            background: #FEF2F2;
+        }
+        
+        .good-example {
+            border-left: 4px solid #10B981;
+            background: #F0FDF4;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        
+        .code-block {
+            background: #1F2937;
+            color: #F9FAFB;
+            font-family: 'JetBrains Mono', monospace;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .highlight {
+            background: rgba(79, 70, 229, 0.1);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="font-display font-bold text-xl gradient-text">Prompt Quest</a>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg font-medium">Back to Game</a>
+                    <a href="progress.html" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg font-medium">Progress</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-indigo-50 to-emerald-50 py-16 px-4">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="font-display text-4xl md:text-5xl font-bold mb-6 gradient-text">
+                Prompt Engineering Tutorial
+            </h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Master the art of writing effective AI prompts with our comprehensive guide
+            </p>
+        </div>
+    </section>
+
+    <!-- Tutorial Content -->
+    <section class="py-16 px-4">
+        <div class="max-w-4xl mx-auto">
+            
+            <!-- Introduction -->
+            <div class="mb-16 fade-in">
+                <h2 class="font-display text-3xl font-bold mb-8 gradient-text">What is Prompt Engineering?</h2>
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                        Prompt engineering is the art and science of crafting instructions that help AI models understand exactly what you want. Just like learning to communicate effectively with a colleague, prompt engineering helps you get better, more accurate results from AI systems.
+                    </p>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        Think of it as learning to ask better questions. The way you phrase your request can dramatically change the quality and relevance of the AI's response.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Core Principles -->
+            <div class="mb-16 fade-in stagger-1">
+                <h2 class="font-display text-3xl font-bold mb-8 gradient-text">Core Principles</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="text-3xl mb-4">🎯</div>
+                        <h3 class="font-display text-xl font-bold mb-3">Clarity</h3>
+                        <p class="text-gray-700">Be clear and specific about what you want. Avoid vague language and ambiguous instructions.</p>
+                    </div>
+                    
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="text-3xl mb-4">📋</div>
+                        <h3 class="font-display text-xl font-bold mb-3">Context</h3>
+                        <p class="text-gray-700">Provide relevant background information, constraints, and expectations.</p>
+                    </div>
+                    
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="text-3xl mb-4">🔧</div>
+                        <h3 class="font-display text-xl font-bold mb-3">Structure</h3>
+                        <p class="text-gray-700">Organize your prompt logically with clear sections and formatting.</p>
+                    </div>
+                    
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="text-3xl mb-4">👥</div>
+                        <h3 class="font-display text-xl font-bold mb-3">Audience</h3>
+                        <p class="text-gray-700">Specify who the content is for and what tone or style should be used.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Before/After Examples -->
+            <div class="mb-16 fade-in stagger-2">
+                <h2 class="font-display text-3xl font-bold mb-8 gradient-text">Before & After Examples</h2>
+                
+                <div class="space-y-8">
+                    <!-- Example 1 -->
+                    <div class="example-card rounded-2xl p-6">
+                        <h3 class="font-display text-xl font-bold mb-4">Example 1: Basic Request</h3>
+                        
+                        <div class="bad-example rounded-xl p-4 mb-4">
+                            <h4 class="font-semibold text-red-800 mb-2">❌ Before (Vague)</h4>
+                            <div class="code-block">
+                                Tell me about climate change.
+                            </div>
+                            <p class="text-sm text-red-700 mt-2">Problem: Too vague - doesn't specify what aspect, audience, or format.</p>
+                        </div>
+                        
+                        <div class="good-example rounded-xl p-4">
+                            <h4 class="font-semibold text-green-800 mb-2">✅ After (Specific)</h4>
+                            <div class="code-block">
+                                Explain the main causes of climate change in 3 bullet points suitable for high school students. 
+                                Include one practical action students can take to help.
+                            </div>
+                            <p class="text-sm text-green-700 mt-2">Improvement: Specifies format, audience, length, and includes actionable content.</p>
+                        </div>
+                    </div>
+
+                    <!-- Example 2 -->
+                    <div class="example-card rounded-2xl p-6">
+                        <h3 class="font-display text-xl font-bold mb-4">Example 2: Adding Context</h3>
+                        
+                        <div class="bad-example rounded-xl p-4 mb-4">
+                            <h4 class="font-semibold text-red-800 mb-2">❌ Before (No Context)</h4>
+                            <div class="code-block">
+                                Write a business plan for a coffee shop.
+                            </div>
+                            <p class="text-sm text-red-700 mt-2">Problem: Missing crucial context like budget, location, target market.</p>
+                        </div>
+                        
+                        <div class="good-example rounded-xl p-4">
+                            <h4 class="font-semibold text-green-800 mb-2">✅ After (With Context)</h4>
+                            <div class="code-block">
+                                Create a business plan for a specialty coffee shop in downtown Portland with a $50,000 budget. 
+                                Target audience: young professionals and students. Include sections on unique selling proposition, 
+                                marketing strategy, and financial projections for the first year.
+                            </div>
+                            <p class="text-sm text-green-700 mt-2">Improvement: Provides location, budget, target audience, and specific requirements.</p>
+                        </div>
+                    </div>
+
+                    <!-- Example 3 -->
+                    <div class="example-card rounded-2xl p-6">
+                        <h3 class="font-display text-xl font-bold mb-4">Example 3: Role Definition</h3>
+                        
+                        <div class="bad-example rounded-xl p-4 mb-4">
+                            <h4 class="font-semibold text-red-800 mb-2">❌ Before (No Role)</h4>
+                            <div class="code-block">
+                                How should I invest my money?
+                            </div>
+                            <p class="text-sm text-red-700 mt-2">Problem: Too general - doesn't specify investment goals, risk tolerance, or timeline.</p>
+                        </div>
+                        
+                        <div class="good-example rounded-xl p-4">
+                            <h4 class="font-semibold text-green-800 mb-2">✅ After (With Role & Context)</h4>
+                            <div class="code-block">
+                                Act as a financial advisor for a 30-year-old teacher with $10,000 to invest. 
+                                I want to save for retirement in 35 years and can tolerate moderate risk. 
+                                Provide a diversified investment strategy with specific fund recommendations and allocation percentages.
+                            </div>
+                            <p class="text-sm text-green-700 mt-2">Improvement: Defines advisor role, provides personal context, goals, and risk tolerance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best Practices -->
+            <div class="mb-16 fade-in stagger-3">
+                <h2 class="font-display text-3xl font-bold mb-8 gradient-text">Best Practices</h2>
+                
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-display text-xl font-bold mb-4 text-green-700">✅ Do</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">•</span>
+                                    Start with clear action verbs (explain, create, analyze)
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">•</span>
+                                    Specify format requirements (bullet points, paragraphs, tables)
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">•</span>
+                                    Define your target audience and tone
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">•</span>
+                                    Include constraints and limitations
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">•</span>
+                                    Provide examples of desired output
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">•</span>
+                                    Break complex tasks into steps
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-display text-xl font-bold mb-4 text-red-700">❌ Don't</h3>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">•</span>
+                                    Use vague language like "good" or "better"
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">•</span>
+                                    Ask multiple unrelated questions at once
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">•</span>
+                                    Assume the AI knows your context
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">•</span>
+                                    Use negative instructions ("don't do X")
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">•</span>
+                                    Make prompts too long or complex
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">•</span>
+                                    Forget to specify output format
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Mistakes -->
+            <div class="mb-16 fade-in stagger-4">
+                <h2 class="font-display text-3xl font-bold mb-8 gradient-text">Common Mistakes to Avoid</h2>
+                
+                <div class="space-y-6">
+                    <div class="example-card rounded-2xl p-6">
+                        <h3 class="font-display text-lg font-bold mb-3 text-red-700">1. The "Mind Reader" Mistake</h3>
+                        <p class="text-gray-700 mb-3">Assuming the AI knows your context, background, or preferences without telling it.</p>
+                        <div class="code-block text-red-300">
+                            ❌ "Write about that thing we discussed yesterday"
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">Instead, provide full context every time.</p>
+                    </div>
+                    
+                    <div class="example-card rounded-2xl p-6">
+                        <h3 class="font-display text-lg font-bold mb-3 text-red-700">2. The "Kitchen Sink" Approach</h3>
+                        <p class="text-gray-700 mb-3">Trying to accomplish too many different things in one prompt.</p>
+                        <div class="code-block text-red-300">
+                            ❌ "Write a blog post, create social media content, design a logo, and build a website"
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">Break complex requests into separate, focused prompts.</p>
+                    </div>
+                    
+                    <div class="example-card rounded-2xl p-6">
+                        <h3 class="font-display text-lg font-bold mb-3 text-red-700">3. The "Perfectionist" Trap</h3>
+                        <p class="text-gray-700 mb-3">Expecting perfect results on the first try without iteration.</p>
+                        <div class="code-block text-red-300">
+                            ❌ Giving up after one attempt instead of refining the prompt
+                        </div>
+                        <p class="text-sm text-gray-600 mt-2">Treat it like a conversation - refine and improve based on results.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Tips -->
+            <div class="mb-16 fade-in stagger-4">
+                <h2 class="font-display text-3xl font-bold mb-8 gradient-text">Quick Tips for Better Prompts</h2>
+                
+                <div class="bg-gradient-to-r from-indigo-50 to-emerald-50 rounded-2xl p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="text-4xl mb-3">🎯</div>
+                            <h3 class="font-semibold mb-2">Be Specific</h3>
+                            <p class="text-sm text-gray-600">Instead of "write something about X", try "explain X in 3 paragraphs for beginners"</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="text-4xl mb-3">👥</div>
+                            <h3 class="font-semibold mb-2">Define Audience</h3>
+                            <p class="text-sm text-gray-600">Always specify who the content is for: "for high school students", "for executives", etc.</p>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="text-4xl mb-3">📋</div>
+                            <h3 class="font-semibold mb-2">Show Format</h3>
+                            <p class="text-sm text-gray-600">Give examples: "like this: [example]" or specify format: "as bullet points"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="text-center fade-in stagger-4">
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <h2 class="font-display text-2xl font-bold mb-4 gradient-text">Ready to Practice?</h2>
+                    <p class="text-gray-600 mb-6">Now that you know the fundamentals, it's time to put your skills to the test!</p>
+                    <a href="index.html" class="inline-block bg-gradient-to-r from-indigo-500 to-emerald-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-lg transition-all">
+                        Start Your First Challenge
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="font-display text-2xl font-bold mb-4 gradient-text">Prompt Quest</div>
+            <p class="text-gray-400 mb-6">Master the art of AI communication through interactive learning</p>
+            <div class="text-sm text-gray-500">
+                © 2025 Prompt Quest. Educational tool for AI literacy development.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all fade-in elements
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Quest - Master AI Prompt Engineering</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #059669;
+            --accent: #F59E0B;
+            --neutral: #64748B;
+            --background: #FEFBF3;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: #1F2937;
+        }
+        
+        .font-display { font-family: 'Poppins', sans-serif; }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%),
+                        url('hero-bg.jpg') center/cover;
+            min-height: 40vh;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .typing-cursor {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .challenge-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .prompt-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .prompt-input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+        
+        .badge {
+            background: linear-gradient(135deg, var(--accent) 0%, #F97316 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .difficulty-easy { background: linear-gradient(135deg, #10B981 0%, #059669 100%); }
+        .difficulty-intermediate { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); }
+        .difficulty-advanced { background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform-origin: 50% 50%;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="font-display font-bold text-xl gradient-text">Prompt Quest</div>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm font-bold" id="current-level">1</span>
+                        </div>
+                        <span class="text-sm text-gray-600">Level <span id="level-number">1</span></span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <div class="hidden md:flex items-center space-x-2">
+                        <span class="text-sm font-medium text-gray-700">XP:</span>
+                        <span class="text-lg font-bold gradient-text" id="total-xp">0</span>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <span class="text-sm font-medium text-gray-700">Streak:</span>
+                        <span class="text-lg font-bold text-orange-500" id="streak-count">0</span>
+                        <span class="text-orange-500">🔥</span>
+                    </div>
+                    <a href="progress.html" class="btn-primary text-white px-4 py-2 rounded-lg font-medium">Progress</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg flex items-center justify-center text-center py-16 px-4">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="font-display text-5xl md:text-6xl font-bold mb-6">
+                <span class="gradient-text">Master AI Prompt Engineering</span>
+            </h1>
+            <div class="text-xl md:text-2xl text-gray-700 mb-8 font-medium">
+                <span id="typed-text"></span>
+            </div>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+                Learn to write better AI prompts through interactive challenges, real-time feedback, and gamified learning. 
+                Progress from beginner to expert with hands-on practice and AI-powered evaluation.
+            </p>
+            <button onclick="scrollToChallenges()" class="btn-primary text-white px-8 py-4 rounded-xl font-semibold text-lg">
+                Start Your Quest
+            </button>
+        </div>
+    </section>
+
+    <!-- Current Challenge Section -->
+    <section id="current-challenge" class="py-16 px-4 bg-white/50">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-3xl font-bold mb-4 gradient-text">Current Challenge</h2>
+                <p class="text-gray-600 text-lg">Complete challenges to earn XP and unlock new levels</p>
+            </div>
+            
+            <div id="challenge-container" class="bg-white rounded-2xl shadow-xl p-8 max-w-4xl mx-auto">
+                <!-- Challenge content will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenge Grid -->
+    <section id="challenges" class="py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-3xl font-bold mb-4 gradient-text">Available Challenges</h2>
+                <p class="text-gray-600 text-lg">Choose from our curated collection of prompt engineering exercises</p>
+            </div>
+            
+            <div id="challenge-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Challenge cards will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-display text-2xl font-bold gradient-text">Challenge Results</h3>
+                    <button onclick="closeFeedbackModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+                </div>
+                
+                <div id="feedback-content">
+                    <!-- Feedback content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Notification -->
+    <div id="achievement-notification" class="notification bg-white rounded-xl shadow-lg p-4 max-w-sm">
+        <div class="flex items-center space-x-3">
+            <div class="text-3xl" id="achievement-icon">🏆</div>
+            <div>
+                <div class="font-semibold text-gray-900" id="achievement-title">Achievement Unlocked!</div>
+                <div class="text-sm text-gray-600" id="achievement-description">You've earned a new badge</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="font-display text-2xl font-bold mb-4 gradient-text">Prompt Quest</div>
+            <p class="text-gray-400 mb-6">Master the art of AI communication through interactive learning</p>
+            <div class="text-sm text-gray-500">
+                © 2025 Prompt Quest. Educational tool for AI literacy development.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load scripts -->
+    <script src="challenge-data.js"></script>
+    <script src="progress-system.js"></script>
+    <script src="gemini-integration.js"></script>
+    <script src="main.js"></script>
+    
+    <script>
+        // Initialize typed text effect
+        document.addEventListener('DOMContentLoaded', function() {
+            new Typed('#typed-text', {
+                strings: [
+                    'Write better AI prompts',
+                    'Get more accurate responses',
+                    'Master prompt engineering',
+                    'Level up your AI skills'
+                ],
+                typeSpeed: 50,
+                backSpeed: 30,
+                backDelay: 2000,
+                loop: true,
+                showCursor: true,
+                cursorChar: '|'
+            });
+        });
+        
+        // Smooth scroll to challenges
+        function scrollToChallenges() {
+            document.getElementById('challenges').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+    </script>
+</body>
+</html>

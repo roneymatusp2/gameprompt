@@ -101,33 +101,80 @@
         
         /* Dark theme adjustments */
         nav {
-            background: rgba(17, 24, 39, 0.95) !important;
+            background: rgba(17, 24, 39, 0.98) !important;
             backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3);
         }
         
         .bg-white {
             background: rgba(30, 41, 59, 0.95) !important;
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.2);
         }
         
         .text-gray-900 {
-            color: #F3F4F6 !important;
+            color: #F9FAFB !important;
         }
         
         .text-gray-700 {
-            color: #D1D5DB !important;
+            color: #E5E7EB !important;
         }
         
         .text-gray-600 {
+            color: #D1D5DB !important;
+        }
+        
+        .text-gray-500 {
             color: #9CA3AF !important;
         }
         
+        .text-gray-400 {
+            color: #6B7280 !important;
+        }
+        
         .bg-gray-50 {
-            background: rgba(30, 41, 59, 0.5) !important;
+            background: rgba(30, 41, 59, 0.6) !important;
+            border: 1px solid rgba(75, 85, 99, 0.2);
         }
         
         .bg-gray-100 {
-            background: rgba(30, 41, 59, 0.7) !important;
+            background: rgba(30, 41, 59, 0.8) !important;
+        }
+        
+        .bg-blue-50 {
+            background: rgba(59, 130, 246, 0.15) !important;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .bg-amber-50 {
+            background: rgba(245, 158, 11, 0.15) !important;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .bg-green-50 {
+            background: rgba(16, 185, 129, 0.15) !important;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .bg-purple-50 {
+            background: rgba(168, 85, 247, 0.15) !important;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        
+        .text-blue-900, .text-blue-800 {
+            color: #93C5FD !important;
+        }
+        
+        .text-amber-900, .text-amber-800 {
+            color: #FCD34D !important;
+        }
+        
+        .text-green-900, .text-green-800 {
+            color: #6EE7B7 !important;
+        }
+        
+        .text-purple-900, .text-purple-800 {
+            color: #C4B5FD !important;
         }
         
         .border-gray-300 {
@@ -135,14 +182,20 @@
         }
         
         textarea, input {
-            background: rgba(17, 24, 39, 0.8) !important;
-            color: #F3F4F6 !important;
+            background: rgba(17, 24, 39, 0.9) !important;
+            color: #F9FAFB !important;
             border-color: rgba(75, 85, 99, 0.5) !important;
+        }
+        
+        textarea::placeholder, input::placeholder {
+            color: #6B7280 !important;
         }
         
         textarea:focus, input:focus {
             border-color: var(--primary) !important;
             background: rgba(17, 24, 39, 0.95) !important;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
         
         .font-display { font-family: 'Poppins', sans-serif; }
@@ -171,42 +224,87 @@
         
         /* Button colors for dark theme */
         .open-mini-games {
-            background: rgba(147, 51, 234, 0.2) !important;
-            color: #C084FC !important;
-            border: 1px solid rgba(147, 51, 234, 0.3);
+            background: rgba(147, 51, 234, 0.25) !important;
+            color: #E9D5FF !important;
+            border: 1px solid rgba(147, 51, 234, 0.4);
+            font-weight: 600;
         }
         
         .open-mini-games:hover {
-            background: rgba(147, 51, 234, 0.3) !important;
+            background: rgba(147, 51, 234, 0.4) !important;
+            border-color: rgba(147, 51, 234, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
         }
         
         .open-achievements {
-            background: rgba(251, 191, 36, 0.2) !important;
-            color: #FCD34D !important;
-            border: 1px solid rgba(251, 191, 36, 0.3);
+            background: rgba(251, 191, 36, 0.25) !important;
+            color: #FEF3C7 !important;
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            font-weight: 600;
         }
         
         .open-achievements:hover {
-            background: rgba(251, 191, 36, 0.3) !important;
+            background: rgba(251, 191, 36, 0.4) !important;
+            border-color: rgba(251, 191, 36, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+        }
+        
+        /* Navigation links */
+        nav a {
+            color: #D1D5DB !important;
+            transition: color 0.2s;
+        }
+        
+        nav a:hover {
+            color: #F9FAFB !important;
         }
         
         /* Stats section dark theme */
         .stat-card {
-            background: rgba(30, 41, 59, 0.8);
-            padding: 1rem;
+            background: rgba(30, 41, 59, 0.9);
+            padding: 1.5rem;
             border-radius: 0.75rem;
-            border: 1px solid rgba(75, 85, 99, 0.3);
+            border: 1px solid rgba(75, 85, 99, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            background: rgba(30, 41, 59, 1);
+            border-color: rgba(79, 70, 229, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .stat-card .text-gray-600 {
+            color: #9CA3AF !important;
+            font-weight: 500;
         }
         
         /* Challenge cards dark theme */
         .challenge-card {
-            background: rgba(30, 41, 59, 0.9) !important;
-            border: 1px solid rgba(75, 85, 99, 0.3);
+            background: rgba(30, 41, 59, 0.95) !important;
+            border: 1px solid rgba(75, 85, 99, 0.4);
+            cursor: pointer;
         }
         
         .challenge-card:hover {
             background: rgba(30, 41, 59, 1) !important;
-            border-color: var(--primary);
+            border-color: rgba(79, 70, 229, 0.6);
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.2);
+        }
+        
+        .challenge-card .select-challenge {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .challenge-card .select-challenge:hover {
+            transform: scale(1.05);
+        }
+        
+        .challenge-card .select-challenge:active {
+            transform: scale(0.98);
         }
         
         .difficulty-easy { background: #10B981; color: white; }
@@ -299,30 +397,46 @@
         .btn-primary {
             background: var(--primary);
             color: white;
+            cursor: pointer;
         }
         
         .btn-primary:hover {
             background: #4338CA;
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
         }
         
         .btn-secondary {
-            background: #E5E7EB;
-            color: #374151;
+            background: rgba(75, 85, 99, 0.3);
+            color: #E5E7EB;
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            cursor: pointer;
         }
         
         .btn-secondary:hover {
-            background: #D1D5DB;
+            background: rgba(75, 85, 99, 0.5);
+            color: #F9FAFB;
+            border-color: rgba(75, 85, 99, 0.7);
         }
         
         .btn-success {
             background: var(--secondary);
             color: white;
+            cursor: pointer;
         }
         
         .btn-success:hover {
             background: #047857;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(5, 150, 105, 0.4);
+        }
+        
+        .btn-success:active {
+            transform: translateY(0);
         }
     </style>
 </head>

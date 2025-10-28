@@ -13,11 +13,46 @@ class PromptQuestGame {
     }
 
     setupEventListeners() {
-        // Handle challenge selection
+        // Handle challenge selection with event delegation
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('select-challenge')) {
-                const challengeId = parseInt(e.target.dataset.challengeId);
-                this.selectChallenge(challengeId);
+            // Challenge selection
+            const challengeBtn = e.target.closest('.select-challenge');
+            if (challengeBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const challengeId = parseInt(challengeBtn.dataset.challengeId);
+                if (!isNaN(challengeId)) {
+                    this.selectChallenge(challengeId);
+                }
+                return;
+            }
+            
+            // Hint button
+            if (e.target.closest('.show-hint')) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.showHint();
+                return;
+            }
+            
+            // Example button
+            if (e.target.closest('.show-example')) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.showExample();
+                return;
+            }
+            
+            // Challenge card click (entire card)
+            const challengeCard = e.target.closest('.challenge-card');
+            if (challengeCard && !e.target.closest('.select-challenge')) {
+                const selectBtn = challengeCard.querySelector('.select-challenge');
+                if (selectBtn) {
+                    const challengeId = parseInt(selectBtn.dataset.challengeId);
+                    if (!isNaN(challengeId)) {
+                        this.selectChallenge(challengeId);
+                    }
+                }
             }
         });
 
@@ -25,21 +60,8 @@ class PromptQuestGame {
         document.addEventListener('submit', (e) => {
             if (e.target.id === 'prompt-form') {
                 e.preventDefault();
+                e.stopPropagation();
                 this.submitPrompt();
-            }
-        });
-
-        // Handle hint requests
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('show-hint')) {
-                this.showHint();
-            }
-        });
-
-        // Handle example requests
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('show-example')) {
-                this.showExample();
             }
         });
     }
@@ -140,14 +162,30 @@ class PromptQuestGame {
         this.currentChallenge = selectedChallenge;
         this.displayChallenge(selectedChallenge, challengeLevel);
         
-        // Scroll to challenge section
-        document.getElementById('current-challenge').scrollIntoView({ 
-            behavior: 'smooth' 
+        // Highlight selected challenge card
+        document.querySelectorAll('.challenge-card').forEach(card => {
+            card.style.borderColor = 'rgba(75, 85, 99, 0.4)';
+            card.style.boxShadow = 'none';
         });
+        
+        const selectedCard = document.querySelector(`[data-challenge-id="${challengeId}"]`)?.closest('.challenge-card');
+        if (selectedCard) {
+            selectedCard.style.borderColor = 'rgba(79, 70, 229, 0.8)';
+            selectedCard.style.boxShadow = '0 8px 24px rgba(79, 70, 229, 0.3)';
+        }
+        
+        // Scroll to challenge display section
+        const challengeDisplay = document.querySelector('.challenge-display');
+        if (challengeDisplay) {
+            challengeDisplay.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
     }
 
     displayChallenge(challenge, level) {
-        const container = document.getElementById('challenge-container');
+        const container = document.getElementById('challenge-content');
         if (!container) return;
 
         container.innerHTML = `
@@ -180,87 +218,58 @@ class PromptQuestGame {
                 
                 <div class="bg-gray-50 rounded-xl p-4 mb-6">
                     <h4 class="font-semibold text-gray-900 mb-3">Success Criteria</h4>
-                    <ul class="space-y-1">
+                    <ul class="space-y-2">
                         ${challenge.successCriteria.map(criterion => `
-                            <li class="flex items-center text-gray-700">
-                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                                ${criterion}
+                            <li class="flex items-start text-gray-700">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3 mt-2 flex-shrink-0"></span>
+                                <span>${criterion}</span>
                             </li>
                         `).join('')}
                     </ul>
                 </div>
             </div>
-            
-            <form id="prompt-form" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">
-                        Write your prompt below:
-                    </label>
-                    <textarea 
-                        id="prompt-input" 
-                        class="prompt-input w-full h-32 p-4 rounded-xl resize-none focus:outline-none"
-                        placeholder="Enter your prompt here..."
-                        maxlength="1000"
-                        required
-                    ></textarea>
-                    <div class="flex justify-between items-center mt-2">
-                        <div class="flex space-x-2">
-                            <button type="button" class="show-hint text-sm text-blue-600 hover:text-blue-800 font-medium">
-                                💡 Need a hint?
-                            </button>
-                            <button type="button" class="show-example text-sm text-green-600 hover:text-green-800 font-medium">
-                                📋 Show example
-                            </button>
-                        </div>
-                        <div class="text-sm text-gray-500">
-                            <span id="char-count">0</span>/1000
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="flex justify-between items-center">
-                    <div class="text-sm text-gray-600">
-                        Ready to test your prompt engineering skills?
-                    </div>
-                    <button 
-                        type="submit" 
-                        id="submit-btn"
-                        class="btn-primary text-white px-8 py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        <span id="submit-text">Submit for Evaluation</span>
-                        <span id="submit-loading" class="hidden">Evaluating...</span>
-                    </button>
-                </div>
-            </form>
-            
-            <div id="hint-section" class="hidden mt-6 p-4 bg-purple-50 rounded-xl">
-                <h4 class="font-semibold text-purple-900 mb-2">💡 Hint</h4>
-                <div id="hint-content" class="text-purple-800"></div>
-            </div>
-            
-            <div id="example-section" class="hidden mt-6 p-4 bg-green-50 rounded-xl">
-                <h4 class="font-semibold text-green-900 mb-2">📋 Example Prompt</h4>
-                <div id="example-content" class="text-green-800 bg-white p-3 rounded-lg font-mono text-sm"></div>
-            </div>
         `;
-
-        // Setup character counter
-        const textarea = document.getElementById('prompt-input');
-        const counter = document.getElementById('char-count');
         
-        textarea.addEventListener('input', () => {
-            counter.textContent = textarea.value.length;
-        });
+        // Show the prompt input section
+        const promptSection = document.getElementById('prompt-input-section');
+        if (promptSection) {
+            promptSection.classList.remove('hidden');
+            
+            // Clear previous input
+            const textarea = document.getElementById('user-prompt');
+            if (textarea) {
+                textarea.value = '';
+            }
+            
+            // Hide feedback section
+            const feedbackSection = document.getElementById('feedback-section');
+            if (feedbackSection) {
+                feedbackSection.classList.add('hidden');
+            }
+        }
     }
 
     async submitPrompt() {
-        if (this.isSubmitting) return;
+        if (this.isSubmitting) {
+            console.log('Already submitting, please wait...');
+            return;
+        }
         
-        const promptInput = document.getElementById('prompt-input');
+        const promptInput = document.getElementById('user-prompt');
+        if (!promptInput) {
+            console.error('Prompt input not found');
+            return;
+        }
+        
         const userPrompt = promptInput.value.trim();
         
         if (!userPrompt) {
-            alert('Please enter a prompt before submitting.');
+            this.showNotification('Please enter a prompt before submitting.', 'warning');
+            return;
+        }
+        
+        if (!this.currentChallenge) {
+            this.showNotification('Please select a challenge first.', 'warning');
             return;
         }
 
@@ -275,16 +284,55 @@ class PromptQuestGame {
             const pointsAwarded = Math.round(evaluation.overallScore);
             progressSystem.awardPoints(pointsAwarded, this.currentChallenge.id);
             
-            // Show feedback modal
-            this.showFeedbackModal(evaluation, userPrompt);
+            // Show feedback
+            this.showFeedback(evaluation, userPrompt);
+            
+            // Update stats
+            this.updateStats();
             
         } catch (error) {
             console.error('Error submitting prompt:', error);
-            alert('An error occurred while evaluating your prompt. Please try again.');
+            this.showNotification('An error occurred while evaluating your prompt. Please try again.', 'error');
         } finally {
             this.isSubmitting = false;
             this.showLoadingState(false);
         }
+    }
+    
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg text-white font-medium animate-slide-in`;
+        notification.style.animation = 'slideInRight 0.3s ease-out';
+        
+        const bgColor = type === 'error' ? 'bg-red-500' : 
+                       type === 'warning' ? 'bg-yellow-500' : 
+                       type === 'success' ? 'bg-green-500' : 'bg-blue-500';
+        
+        notification.classList.add(bgColor);
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOutRight 0.3s ease-out';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+    
+    updateStats() {
+        const stats = {
+            totalPrompts: parseInt(localStorage.getItem('totalPrompts') || '0') + 1,
+            successRate: localStorage.getItem('successRate') || 0,
+            achievements: window.achievementSystem?.getUnlockedCount() || 0,
+            gamesPlayed: localStorage.getItem('miniGamesPlayed') || 0
+        };
+        
+        localStorage.setItem('totalPrompts', stats.totalPrompts);
+        
+        document.getElementById('total-prompts').textContent = stats.totalPrompts;
+        document.getElementById('success-rate').textContent = stats.successRate + '%';
+        document.getElementById('achievements-unlocked').textContent = stats.achievements;
+        document.getElementById('mini-games-played').textContent = stats.gamesPlayed;
     }
 
     showLoadingState(loading) {
@@ -342,9 +390,14 @@ class PromptQuestGame {
         }
     }
 
-    showFeedbackModal(evaluation, userPrompt) {
-        const modal = document.getElementById('feedback-modal');
+    showFeedback(evaluation, userPrompt) {
+        const feedbackSection = document.getElementById('feedback-section');
         const content = document.getElementById('feedback-content');
+        
+        if (!feedbackSection || !content) {
+            console.error('Feedback section not found');
+            return;
+        }
         
         // Calculate stars (1-3 stars based on score)
         const stars = evaluation.overallScore >= 80 ? 3 : evaluation.overallScore >= 60 ? 2 : 1;
@@ -425,36 +478,38 @@ class PromptQuestGame {
                 ` : ''}
             </div>
             
-            <div class="flex justify-center space-x-4 mt-8">
-                <button onclick="closeFeedbackModal()" class="btn-primary text-white px-6 py-3 rounded-xl font-semibold">
-                    Continue Quest
-                </button>
-            </div>
         `;
 
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        feedbackSection.classList.remove('hidden');
         
-        // Animate modal in
-        anime({
-            targets: modal.querySelector('.bg-white'),
-            scale: [0.8, 1],
-            opacity: [0, 1],
-            duration: 500,
-            easing: 'easeOutBack'
+        // Scroll to feedback
+        feedbackSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'nearest'
         });
-
-        // Animate score bars
-        setTimeout(() => {
-            const scoreBars = content.querySelectorAll('.bg-blue-600');
+        
+        // Animate feedback in
+        if (typeof anime !== 'undefined') {
             anime({
-                targets: scoreBars,
-                width: (el) => el.style.width,
-                duration: 1000,
-                delay: anime.stagger(100),
+                targets: feedbackSection,
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 500,
                 easing: 'easeOutQuart'
             });
-        }, 300);
+
+            // Animate score bars
+            setTimeout(() => {
+                const scoreBars = content.querySelectorAll('.bg-blue-600');
+                anime({
+                    targets: scoreBars,
+                    width: (el) => el.style.width,
+                    duration: 1000,
+                    delay: anime.stagger(100),
+                    easing: 'easeOutQuart'
+                });
+            }, 300);
+        }
     }
 
     initializeAnimations() {
@@ -481,12 +536,6 @@ class PromptQuestGame {
 }
 
 // Global functions
-function closeFeedbackModal() {
-    const modal = document.getElementById('feedback-modal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-}
-
 function scrollToChallenges() {
     document.getElementById('challenges').scrollIntoView({ 
         behavior: 'smooth' 
@@ -498,7 +547,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.promptQuestGame = new PromptQuestGame();
     
     // Make functions globally available
-    window.closeFeedbackModal = closeFeedbackModal;
     window.scrollToChallenges = scrollToChallenges;
     window.loadChallenges = () => window.promptQuestGame.loadChallenges();
 });

@@ -492,6 +492,12 @@
                     <div id="user-display" class="flex items-center gap-3">
                         <!-- User info will be inserted here by Firebase -->
                     </div>
+                    <div id="guest-upgrade-btn" class="hidden">
+                        <a href="auth.html" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:opacity-90 transition-opacity font-semibold">
+                            <span>⭐</span>
+                            <span>Upgrade Account</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -659,14 +665,142 @@
     <script src="js/audio-system.js"></script>
     <script src="js/game-integration.js"></script>
     
-    <!-- Auth Protection -->
+    <!-- Auth Check (Optional Mode) -->
     <script>
-        // Redirect to login if not authenticated
+        // Check authentication status but don't force login
+        let isGuestMode = localStorage.getItem('guestMode') === 'true';
+        
         firebase.auth().onAuthStateChanged((user) => {
-            if (!user) {
-                window.location.href = 'auth.html';
+            if (user) {
+                // User is authenticated - enable full features
+                isGuestMode = false;
+                localStorage.removeItem('guestMode');
+                console.log('Authenticated user:', user.email);
+            } else if (!isGuestMode) {
+                // Not authenticated and not in guest mode - show mode selection
+                const hasSeenModeSelection = sessionStorage.getItem('modeSelected');
+                if (!hasSeenModeSelection) {
+                    showModeSelectionModal();
+                }
+            } else {
+                // Guest mode - limited features
+                console.log('Playing in Guest Mode');
+                showGuestModeBanner();
             }
         });
+        
+        function showModeSelectionModal() {
+            const modal = document.createElement('div');
+            modal.id = 'mode-selection-modal';
+            modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 animate-scale-in">
+                    <h2 class="text-4xl font-bold text-center mb-4 gradient-text">Welcome to Prompt Quest!</h2>
+                    <p class="text-center text-gray-600 mb-8">Choose how you'd like to play</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Quick Play -->
+                        <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-purple-500 transition-all cursor-pointer" onclick="selectGuestMode()">
+                            <div class="text-5xl text-center mb-4">⚡</div>
+                            <h3 class="text-2xl font-bold text-center mb-3">Quick Play</h3>
+                            <ul class="space-y-2 text-sm text-gray-600 mb-4">
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>Play immediately, no sign-up</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>Access all challenges</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>Try mini-games</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">✗</span>
+                                    <span>Progress not saved</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">✗</span>
+                                    <span>No leaderboards</span>
+                                </li>
+                            </ul>
+                            <button class="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colours">
+                                Play as Guest
+                            </button>
+                        </div>
+                        
+                        <!-- Full Experience -->
+                        <div class="border-2 border-purple-500 rounded-xl p-6 bg-gradient-to-br from-purple-50 to-indigo-50 cursor-pointer" onclick="selectAuthMode()">
+                            <div class="text-5xl text-center mb-4">🏆</div>
+                            <h3 class="text-2xl font-bold text-center mb-3">Full Experience</h3>
+                            <ul class="space-y-2 text-sm text-gray-700 mb-4">
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>Save your progress</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>Unlock achievements</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>Compete on leaderboards</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>Track statistics</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>Multi-device sync</span>
+                                </li>
+                            </ul>
+                            <button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                                Sign In / Register
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <p class="text-center text-xs text-gray-500 mt-6">
+                        You can always create an account later to save your progress
+                    </p>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        function selectGuestMode() {
+            localStorage.setItem('guestMode', 'true');
+            sessionStorage.setItem('modeSelected', 'true');
+            document.getElementById('mode-selection-modal')?.remove();
+            showGuestModeBanner();
+            location.reload();
+        }
+        
+        function selectAuthMode() {
+            sessionStorage.setItem('modeSelected', 'true');
+            window.location.href = 'auth.html';
+        }
+        
+        function showGuestModeBanner() {
+            const banner = document.createElement('div');
+            banner.className = 'fixed top-0 left-0 right-0 bg-gradient-to-r from-orange-500 to-red-500 text-white py-2 px-4 z-40 text-center text-sm';
+            banner.innerHTML = `
+                <span>🎮 Playing in Guest Mode - Progress won't be saved</span>
+                <button onclick="window.location.href='auth.html'" class="ml-4 bg-white text-orange-600 px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colours">
+                    Sign In to Save Progress
+                </button>
+                <button onclick="this.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">✕</button>
+            `;
+            document.body.insertBefore(banner, document.body.firstChild);
+            
+            // Show upgrade button in nav
+            const upgradeBtn = document.getElementById('guest-upgrade-btn');
+            if (upgradeBtn) {
+                upgradeBtn.classList.remove('hidden');
+            }
+        }
     </script>
     
     <script>

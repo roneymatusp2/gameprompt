@@ -290,9 +290,17 @@ class PromptQuestGame {
             // Update stats
             this.updateStats();
             
+            // Prompt sign-up after 3rd successful submission in guest mode
+            const totalPrompts = parseInt(localStorage.getItem('totalPrompts') || '0');
+            if (window.firebaseAuth && window.firebaseAuth.isGuestMode() && totalPrompts === 3) {
+                setTimeout(() => {
+                    window.firebaseAuth.promptSignUp();
+                }, 2000);
+            }
+            
         } catch (error) {
             console.error('Error submitting prompt:', error);
-            this.showNotification('An error occurred while evaluating your prompt. Please try again.', 'error');
+            this.showNotification('An error occurred whilst evaluating your prompt. Please try again.', 'error');
         } finally {
             this.isSubmitting = false;
             this.showLoadingState(false);

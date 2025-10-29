@@ -216,7 +216,10 @@ class FirebaseAuthSystem {
     }
 
     async syncProgressToCloud() {
-        if (!this.currentUser) return;
+        if (!this.currentUser) {
+            console.log('Guest mode - progress saved locally only');
+            return;
+        }
 
         try {
             const progress = JSON.parse(localStorage.getItem('userProgress') || '{}');
@@ -240,6 +243,28 @@ class FirebaseAuthSystem {
             console.log('Progress synced to cloud');
         } catch (error) {
             console.error('Error syncing progress:', error);
+        }
+    }
+    
+    // Check if user is in guest mode
+    isGuestMode() {
+        return localStorage.getItem('guestMode') === 'true';
+    }
+    
+    // Prompt user to sign up to save progress
+    promptSignUp() {
+        if (this.isGuestMode()) {
+            const shouldSignUp = confirm(
+                'Sign in to save your progress and unlock all features!\n\n' +
+                '✓ Save progress across devices\n' +
+                '✓ Unlock achievements\n' +
+                '✓ Compete on leaderboards\n\n' +
+                'Would you like to create an account now?'
+            );
+            
+            if (shouldSignUp) {
+                window.location.href = 'auth.html';
+            }
         }
     }
 

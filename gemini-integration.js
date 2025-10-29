@@ -108,12 +108,12 @@ Be constructive and specific in your feedback. Focus on helping the user improve
         let structureScore = this.evaluateStructure(prompt);
         let effectivenessScore = this.evaluateEffectiveness(prompt, challenge);
 
-        // Add some randomness to make it more realistic
-        clarityScore += this.randomVariation(5);
-        specificityScore += this.randomVariation(5);
-        contextScore += this.randomVariation(5);
-        structureScore += this.randomVariation(5);
-        effectivenessScore += this.randomVariation(5);
+        // Add minimal randomness - evaluation should be consistent
+        clarityScore += this.randomVariation(2);
+        specificityScore += this.randomVariation(2);
+        contextScore += this.randomVariation(2);
+        structureScore += this.randomVariation(2);
+        effectivenessScore += this.randomVariation(2);
 
         // Ensure scores are within bounds
         const scores = {
@@ -136,101 +136,160 @@ Be constructive and specific in your feedback. Focus on helping the user improve
     }
 
     evaluateClarity(prompt, wordCount) {
-        let score = 15; // Base score
+        let score = 8; // Lower base score
         
         // Check for clear action verbs
-        const actionVerbs = ['explain', 'describe', 'create', 'write', 'generate', 'analyze', 'summarize'];
+        const actionVerbs = ['explain', 'describe', 'create', 'write', 'generate', 'analyze', 'summarize', 'provide', 'list'];
         const hasActionVerb = actionVerbs.some(verb => prompt.includes(verb));
-        if (hasActionVerb) score += 3;
+        if (hasActionVerb) score += 4;
+        else score -= 3; // Penalty for no action verb
         
-        // Check for vague language
-        const vagueWords = ['something', 'stuff', 'things', 'good', 'bad', 'nice'];
+        // Check for vague language - stricter penalties
+        const vagueWords = ['something', 'stuff', 'things', 'good', 'bad', 'nice', 'some', 'any'];
         const vagueCount = vagueWords.filter(word => prompt.includes(word)).length;
-        score -= vagueCount * 2;
+        score -= vagueCount * 3;
         
         // Check length (too short or too long can hurt clarity)
-        if (wordCount < 5) score -= 3;
-        if (wordCount > 50) score -= 2;
+        if (wordCount < 8) score -= 5; // Stricter minimum
+        if (wordCount < 5) score -= 8; // Very short prompts
+        if (wordCount > 100) score -= 4; // Too verbose
         
-        return Math.max(5, score);
+        // Bonus for proper sentence structure
+        if (prompt.includes('.') || prompt.includes('?')) score += 2;
+        
+        return Math.max(0, Math.min(20, score));
     }
 
     evaluateSpecificity(prompt, challenge) {
-        let score = 12; // Base score
+        let score = 5; // Much lower base score
+        let requiredMatches = 0;
+        let totalRequired = challenge.successCriteria.length;
+        
+        // Check if prompt addresses the specific challenge requirements
+        challenge.successCriteria.forEach(criterion => {
+            const keywords = criterion.toLowerCase().split(' ').filter(w => w.length > 3);
+            const hasKeyword = keywords.some(keyword => prompt.includes(keyword));
+            if (hasKeyword) {
+                requiredMatches++;
+                score += 3;
+            }
+        });
+        
+        // Penalty if not addressing challenge requirements
+        if (requiredMatches === 0) score -= 5;
+        if (requiredMatches < totalRequired / 2) score -= 3;
         
         // Check for specific details based on challenge
         if (challenge.id === 1) { // Photosynthesis for 10-year-old
-            if (prompt.includes('10') || prompt.includes('child') || prompt.includes('kid')) score += 4;
+            if (prompt.includes('10') || prompt.includes('child') || prompt.includes('kid') || prompt.includes('year')) score += 3;
+            else score -= 4; // Penalty for missing age specification
             if (prompt.includes('simple') || prompt.includes('easy') || prompt.includes('basic')) score += 2;
         } else if (challenge.id === 2) { // Recipe with dietary restrictions
-            if (prompt.includes('gluten') || prompt.includes('vegan') || prompt.includes('allerg')) score += 4;
+            if (prompt.includes('gluten') || prompt.includes('vegan') || prompt.includes('allerg')) score += 3;
+            else score -= 4; // Penalty for missing dietary info
             if (prompt.includes('measure') || prompt.includes('ingredient')) score += 2;
         } else if (challenge.id === 3) { // Science fair project
-            if (prompt.includes('school') || prompt.includes('student')) score += 3;
+            if (prompt.includes('school') || prompt.includes('student')) score += 2;
             if (prompt.includes('step') || prompt.includes('guide')) score += 2;
         } else if (challenge.id === 4) { // Travel recommendations
-            if (prompt.includes('local') || prompt.includes('expert') || prompt.includes('guide')) score += 4;
+            if (prompt.includes('local') || prompt.includes('expert') || prompt.includes('guide')) score += 3;
         } else if (challenge.id === 5) { // Business advice
-            if (prompt.includes('freelance') || prompt.includes('budget') || prompt.includes('experience')) score += 4;
+            if (prompt.includes('freelance') || prompt.includes('budget') || prompt.includes('experience')) score += 3;
         }
         
         // Check for constraints and requirements
-        if (prompt.includes('include') || prompt.includes('provide') || prompt.includes('add')) score += 2;
+        if (prompt.includes('include') || prompt.includes('provide') || prompt.includes('add')) score += 1;
         
-        return Math.max(5, score);
+        // Bonus for numbers and specific measurements
+        if (/\d+/.test(prompt)) score += 2;
+        
+        return Math.max(0, Math.min(20, score));
     }
 
     evaluateContext(prompt, challenge) {
-        let score = 10; // Base score
+        let score = 4; // Much lower base score
         
-        // Check for audience specification
-        const audienceIndicators = ['student', 'child', 'beginner', 'expert', 'professional', 'teacher'];
+        // Check for audience specification - now required
+        const audienceIndicators = ['student', 'child', 'beginner', 'expert', 'professional', 'teacher', 'audience', 'reader'];
         const hasAudience = audienceIndicators.some(indicator => prompt.includes(indicator));
-        if (hasAudience) score += 4;
+        if (hasAudience) score += 5;
+        else score -= 3; // Penalty for missing audience
         
-        // Check for role/persona definition
-        if (prompt.includes('act as') || prompt.includes('imagine you are') || prompt.includes('pretend')) score += 4;
+        // Check for role/persona definition - highly valued
+        if (prompt.includes('act as') || prompt.includes('imagine you are') || prompt.includes('pretend') || prompt.includes('you are')) score += 6;
+        else score -= 2; // Penalty for no role definition
         
         // Check for background context
-        if (prompt.includes('background') || prompt.includes('context') || prompt.includes('situation')) score += 2;
+        if (prompt.includes('background') || prompt.includes('context') || prompt.includes('situation')) score += 3;
         
-        return Math.max(5, score);
+        // Check for tone/style specification
+        if (prompt.includes('tone') || prompt.includes('style') || prompt.includes('formal') || prompt.includes('casual')) score += 2;
+        
+        // Check for purpose/goal
+        if (prompt.includes('purpose') || prompt.includes('goal') || prompt.includes('objective') || prompt.includes('aim')) score += 2;
+        
+        return Math.max(0, Math.min(20, score));
     }
 
     evaluateStructure(prompt) {
-        let score = 14; // Base score
+        let score = 6; // Lower base score
         
         // Check for organization (numbered lists, bullet points, paragraphs)
-        if (prompt.includes('1.') || prompt.includes('step') || prompt.includes('first') || prompt.includes('then')) score += 3;
+        if (prompt.includes('1.') || prompt.includes('2.') || prompt.includes('step')) score += 4;
+        if (prompt.includes('first') && prompt.includes('then')) score += 2;
         
         // Check for clear separation of ideas
         const sentences = prompt.split(/[.!?]+/).filter(s => s.trim().length > 0);
-        if (sentences.length > 1) score += 2;
+        if (sentences.length > 2) score += 3;
+        else if (sentences.length > 1) score += 1;
+        else score -= 2; // Penalty for single sentence
         
         // Check for formatting requests
-        if (prompt.includes('bullet') || prompt.includes('list') || prompt.includes('paragraph')) score += 1;
+        if (prompt.includes('bullet') || prompt.includes('list') || prompt.includes('paragraph')) score += 2;
         
-        return Math.max(5, score);
+        // Check for sections/parts
+        if (prompt.includes('section') || prompt.includes('part') || prompt.includes('include')) score += 2;
+        
+        // Bonus for using colons or semicolons (shows structure)
+        if (prompt.includes(':') || prompt.includes(';')) score += 1;
+        
+        return Math.max(0, Math.min(20, score));
     }
 
     evaluateEffectiveness(prompt, challenge) {
-        let score = 13; // Base score
+        let score = 5; // Lower base score
         
         // Check if it addresses the specific challenge requirements
         const challengeKeywords = challenge.successCriteria.map(criterion => 
             criterion.toLowerCase().split(' ')
-        ).flat();
+        ).flat().filter(w => w.length > 4);
         
         const matchingKeywords = challengeKeywords.filter(keyword => 
-            prompt.includes(keyword) && keyword.length > 3
+            prompt.includes(keyword)
         ).length;
         
-        score += matchingKeywords * 1.5;
+        // More strict matching requirement
+        if (matchingKeywords === 0) score -= 5; // Big penalty for no matches
+        else score += matchingKeywords * 2;
         
         // Check for clear outcome expectation
-        if (prompt.includes('create') || prompt.includes('generate') || prompt.includes('write') || prompt.includes('explain')) score += 2;
+        const outcomeVerbs = ['create', 'generate', 'write', 'explain', 'provide', 'describe', 'analyze'];
+        const hasOutcome = outcomeVerbs.some(verb => prompt.includes(verb));
+        if (hasOutcome) score += 3;
+        else score -= 3; // Penalty for no clear outcome
         
-        return Math.max(5, Math.min(20, score));
+        // Check if prompt is just copying the challenge description
+        const challengeWords = challenge.description.toLowerCase().split(' ').filter(w => w.length > 4);
+        const copiedWords = challengeWords.filter(word => prompt.includes(word)).length;
+        if (copiedWords > challengeWords.length * 0.7) {
+            score -= 10; // Heavy penalty for copying
+        }
+        
+        // Check for examples or constraints
+        if (prompt.includes('example') || prompt.includes('such as') || prompt.includes('like')) score += 2;
+        if (prompt.includes('must') || prompt.includes('should') || prompt.includes('need')) score += 2;
+        
+        return Math.max(0, Math.min(20, score));
     }
 
     generateFeedback(scores, prompt, challenge) {

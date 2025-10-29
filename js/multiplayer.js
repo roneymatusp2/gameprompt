@@ -598,8 +598,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const nav = document.querySelector('nav .flex.items-center.space-x-6');
     if (nav) {
         const multiplayerBtn = document.createElement('button');
-        multiplayerBtn.className = 'open-multiplayer flex items-center gap-2 px-4 py-2 bg-indigo-100 rounded-lg hover:bg-indigo-200 transition-colors';
-        multiplayerBtn.innerHTML = '<span>🌐</span><span>Multiplayer</span>';
+        multiplayerBtn.className = 'open-multiplayer flex items-center gap-2 px-4 py-2 rounded-lg transition-colors';
+        multiplayerBtn.style.cssText = 'background: rgba(99, 102, 241, 0.25); color: #E0E7FF; border: 1px solid rgba(99, 102, 241, 0.4); font-weight: 600;';
+        multiplayerBtn.innerHTML = '<span>🌐</span><span style="color: #E0E7FF;">Multiplayer</span>';
+        
+        // Hover effect
+        multiplayerBtn.addEventListener('mouseenter', () => {
+            multiplayerBtn.style.background = 'rgba(99, 102, 241, 0.4)';
+            multiplayerBtn.style.borderColor = 'rgba(99, 102, 241, 0.6)';
+            multiplayerBtn.style.transform = 'translateY(-2px)';
+            multiplayerBtn.style.boxShadow = '0 4px 12px rgba(99, 102, 241, 0.3)';
+        });
+        
+        multiplayerBtn.addEventListener('mouseleave', () => {
+            multiplayerBtn.style.background = 'rgba(99, 102, 241, 0.25)';
+            multiplayerBtn.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+            multiplayerBtn.style.transform = 'translateY(0)';
+            multiplayerBtn.style.boxShadow = 'none';
+        });
+        
         nav.insertBefore(multiplayerBtn, nav.children[2]);
     }
     

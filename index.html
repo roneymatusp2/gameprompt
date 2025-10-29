@@ -489,6 +489,9 @@
                             <span class="font-semibold text-orange-700" id="current-streak">0</span>
                         </div>
                     </div>
+                    <div id="user-display" class="flex items-center gap-3">
+                        <!-- User info will be inserted here by Firebase -->
+                    </div>
                 </div>
             </div>
         </nav>
@@ -635,7 +638,13 @@
         </div>
     </footer>
 
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+    
     <!-- Load scripts -->
+    <script src="js/firebase-config.js"></script>
     <script src="challenge-data.js"></script>
     <script src="progress-system.js"></script>
     <script src="gemini-integration.js"></script>
@@ -649,6 +658,16 @@
     <script src="js/multiplayer.js"></script>
     <script src="js/audio-system.js"></script>
     <script src="js/game-integration.js"></script>
+    
+    <!-- Auth Protection -->
+    <script>
+        // Redirect to login if not authenticated
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = 'auth.html';
+            }
+        });
+    </script>
     
     <script>
         // Initialize typed text effect

@@ -1,0 +1,362 @@
+/* Dark Theme Text Visibility Fixes */
+
+/* Mini-Games Hub */
+.mini-games-hub .hub-header h2,
+.mini-games-hub .hub-header p {
+    color: #F9FAFB !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-card h3 {
+    color: #1F2937 !important;
+}
+
+.game-card p {
+    color: #4B5563 !important;
+}
+
+.game-card .high-score {
+    color: #6B7280 !important;
+}
+
+/* Achievements Panel */
+.achievements-panel .panel-header h2,
+.achievements-panel .panel-header .achievement-stats {
+    color: #FFFFFF !important;
+}
+
+.achievement-card h4 {
+    color: #1F2937 !important;
+    font-weight: 700;
+}
+
+.achievement-card p {
+    color: #4B5563 !important;
+}
+
+.achievement-card .points {
+    color: #1F2937 !important;
+    font-weight: 700;
+}
+
+/* Multiplayer Panel */
+.multiplayer-panel .panel-header h2,
+.multiplayer-panel .panel-header p {
+    color: #FFFFFF !important;
+}
+
+.create-room-card h4,
+.join-room-card h4 {
+    color: #1F2937 !important;
+    font-weight: 700;
+}
+
+.create-room-card,
+.join-room-card {
+    color: #374151 !important;
+}
+
+.player-card .player-name {
+    color: #1F2937 !important;
+    font-weight: 600;
+}
+
+/* Game Screens */
+.full-screen-game .game-header h2 {
+    color: #F9FAFB !important;
+}
+
+.full-screen-game .game-header p {
+    color: #D1D5DB !important;
+}
+
+.full-screen-game .game-stats {
+    color: #F9FAFB !important;
+}
+
+.challenge-prompt h3 {
+    color: #1F2937 !important;
+    font-weight: 700;
+}
+
+.challenge-prompt p {
+    color: #374151 !important;
+}
+
+/* Fill the Blanks Game */
+.fill-blanks-game .game-header h2 {
+    color: #F9FAFB !important;
+}
+
+.fill-blanks-game .game-header p {
+    color: #D1D5DB !important;
+}
+
+.blank-challenge .challenge-text {
+    color: #1F2937 !important;
+}
+
+.word-option {
+    color: #374151 !important;
+    font-weight: 600;
+}
+
+/* Prompt Racing */
+.prompt-racing-game .timer {
+    color: #EF4444 !important;
+}
+
+.prompt-racing-game .score {
+    color: #10B981 !important;
+}
+
+/* Prompt Match */
+.prompt-match-game .game-header h2 {
+    color: #F9FAFB !important;
+}
+
+.prompt-match-game .game-header p {
+    color: #D1D5DB !important;
+}
+
+.prompts-column h3,
+.outputs-column h3 {
+    color: #F9FAFB !important;
+}
+
+.match-card p {
+    color: #1F2937 !important;
+}
+
+/* Prompt Puzzle */
+.prompt-puzzle-game .game-header h2 {
+    color: #F9FAFB !important;
+}
+
+.prompt-puzzle-game .game-header p {
+    color: #D1D5DB !important;
+}
+
+.target-prompt h3 {
+    color: #1F2937 !important;
+    font-weight: 700;
+}
+
+.target-prompt p {
+    color: #374151 !important;
+}
+
+.puzzle-piece {
+    color: #1F2937 !important;
+    font-weight: 600;
+}
+
+.puzzle-score p {
+    color: #F9FAFB !important;
+}
+
+/* Room Selection */
+.room-selection h3 {
+    color: #F9FAFB !important;
+}
+
+/* Active Room */
+.active-room .room-header h3 {
+    color: #F9FAFB !important;
+}
+
+.active-room .room-header p {
+    color: #D1D5DB !important;
+}
+
+.players-section h4 {
+    color: #F9FAFB !important;
+}
+
+.collaborative-workspace h4,
+.collaborative-workspace h5 {
+    color: #1F2937 !important;
+    font-weight: 700;
+}
+
+.chat-section h4 {
+    color: #1F2937 !important;
+    font-weight: 700;
+}
+
+/* Battle Arena */
+.battle-header h2 {
+    color: #F9FAFB !important;
+}
+
+.battle-header p {
+    color: #D1D5DB !important;
+}
+
+.player-info h3 {
+    font-weight: 700;
+}
+
+.player-score {
+    font-weight: 700;
+}
+
+.challenge-info h4 {
+    color: #1F2937 !important;
+    font-weight: 700;
+}
+
+.challenge-info p {
+    color: #374151 !important;
+}
+
+/* Tabs */
+.tab-btn {
+    color: #374151 !important;
+    font-weight: 600;
+}
+
+.tab-btn.active {
+    color: #FFFFFF !important;
+}
+
+/* Notifications */
+.achievement-unlocked h4 {
+    color: #1F2937 !important;
+}
+
+.achievement-unlocked p {
+    color: #4B5563 !important;
+}
+
+/* Input placeholders */
+input::placeholder,
+textarea::placeholder {
+    color: #9CA3AF !important;
+}
+
+/* Buttons text */
+.btn {
+    font-weight: 600;
+}
+
+/* Score displays */
+.blanks-score p,
+.match-score p {
+    color: #F9FAFB !important;
+}
+
+/* Popular rooms */
+#popular-rooms button {
+    color: #374151 !important;
+}
+
+#popular-rooms button .font-semibold {
+    color: #1F2937 !important;
+}
+
+#popular-rooms button .text-xs {
+    color: #6B7280 !important;
+}
+
+/* Feedback text */
+.feedback-text {
+    font-weight: 600;
+}
+
+/* Empty states */
+.empty-text {
+    color: #9CA3AF !important;
+}
+
+/* Status indicators */
+.status-indicator {
+    font-weight: 600;
+}
+
+/* VS divider */
+.vs-divider {
+    color: #9CA3AF !important;
+    font-weight: 700;
+}
+
+/* Timer display */
+.timer-display {
+    color: #F9FAFB !important;
+}
+
+/* Suggestion text */
+.suggestion span {
+    color: #1F2937 !important;
+}
+
+.suggestion p {
+    color: #4B5563 !important;
+}
+
+/* Chat messages */
+.chat-message {
+    color: #1F2937 !important;
+}
+
+/* Game container backgrounds */
+.mini-game-container {
+    background: rgba(17, 24, 39, 0.98) !important;
+}
+
+/* Ensure all headings are visible */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+}
+
+/* Make sure all white backgrounds have dark text */
+.bg-white h1,
+.bg-white h2,
+.bg-white h3,
+.bg-white h4,
+.bg-white h5,
+.bg-white h6,
+.bg-white p,
+.bg-white span,
+.bg-white div {
+    color: #1F2937;
+}
+
+/* Specific overrides for game elements */
+.game-card {
+    background: #FFFFFF !important;
+}
+
+.achievement-card {
+    background: #FFFFFF !important;
+}
+
+/* Room cards */
+.create-room-card,
+.join-room-card {
+    background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Player cards */
+.player-card {
+    background: #FFFFFF !important;
+}
+
+/* Match cards */
+.match-card {
+    background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Puzzle pieces */
+.puzzle-piece {
+    background: #FFFFFF !important;
+}
+
+/* Word options */
+.word-option {
+    background: #E5E7EB !important;
+}
+
+.word-option:hover {
+    background: #D1D5DB !important;
+}

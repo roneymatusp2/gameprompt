@@ -4,33 +4,59 @@ class FirebaseAuthSystem {
         this.auth = null;
         this.db = null;
         this.currentUser = null;
+        this.firebaseEnabled = false;
         this.init();
     }
 
     init() {
-        // Firebase config will be loaded from environment or config
-        // For security, these should be in Netlify environment variables
+        // Check if Firebase is available and configured
+        if (typeof firebase === 'undefined') {
+            console.log('Firebase not loaded - running in local-only mode');
+            this.firebaseEnabled = false;
+            return;
+        }
+
+        // Firebase config - Replace these with your actual values
+        // Or set them in Netlify environment variables
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY", // Will be replaced with Netlify env var
-            authDomain: "promtgames.firebaseapp.com",
-            projectId: "promtgames",
-            storageBucket: "promtgames.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "YOUR_API_KEY", // Replace with your Firebase API key
+            authDomain: "promtgames.firebaseapp.com", // Replace with your domain
+            projectId: "promtgames", // Replace with your project ID
+            storageBucket: "promtgames.appspot.com", // Replace with your bucket
+            messagingSenderId: "YOUR_SENDER_ID", // Replace with your sender ID
+            appId: "YOUR_APP_ID" // Replace with your app ID
         };
 
-        // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+        // Check if config is set up
+        if (firebaseConfig.apiKey === "YOUR_API_KEY") {
+            console.log('Firebase not configured - running in local-only mode');
+            console.log('To enable cloud features, follow the guide in FIREBASE_SETUP.md');
+            this.firebaseEnabled = false;
+            return;
         }
-        
-        this.auth = firebase.auth();
-        this.db = firebase.firestore();
-        
-        this.setupAuthStateListener();
+
+        try {
+            // Initialize Firebase
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            
+            this.auth = firebase.auth();
+            this.db = firebase.firestore();
+            this.firebaseEnabled = true;
+            
+            this.setupAuthStateListener();
+            console.log('Firebase initialized successfully');
+        } catch (error) {
+            console.error('Firebase initialization failed:', error);
+            console.log('Running in local-only mode');
+            this.firebaseEnabled = false;
+        }
     }
 
     setupAuthStateListener() {
+        if (!this.firebaseEnabled || !this.auth) return;
+        
         this.auth.onAuthStateChanged((user) => {
             if (user) {
                 this.currentUser = user;
@@ -65,6 +91,11 @@ class FirebaseAuthSystem {
 
     // Authentication Methods
     async login(email, password) {
+        if (!this.firebaseEnabled) {
+            this.showNotification('Firebase not configured. Running in local-only mode.', 'error');
+            throw new Error('Firebase not enabled');
+        }
+        
         try {
             const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
             this.showNotification('Login successful!', 'success');

@@ -240,13 +240,38 @@
             }
         });
 
-        // Check if already logged in
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                localStorage.removeItem('guestMode');
-                window.location.href = 'index.html';
+        // Check if Firebase is configured
+        setTimeout(() => {
+            if (typeof firebase === 'undefined' || !firebase.apps || firebase.apps.length === 0) {
+                // Firebase not configured
+                document.querySelector('.auth-card').innerHTML = `
+                    <div class="text-center">
+                        <div class="text-6xl mb-4">🔧</div>
+                        <h2 class="text-3xl font-bold mb-4">Firebase Not Configured</h2>
+                        <p class="text-gray-600 mb-6">
+                            To enable user accounts and cloud sync, you need to configure Firebase.
+                        </p>
+                        <a href="FIREBASE_SETUP.md" target="_blank" 
+                           class="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 mb-4">
+                            View Setup Guide
+                        </a>
+                        <br>
+                        <a href="index.html" class="text-gray-600 hover:text-gray-800">
+                            ← Continue in Local Mode
+                        </a>
+                    </div>
+                `;
+                return;
             }
-        });
+            
+            // Check if already logged in
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    localStorage.removeItem('guestMode');
+                    window.location.href = 'index.html';
+                }
+            });
+        }, 500);
         
         // Handle guest mode link
         document.addEventListener('DOMContentLoaded', () => {

@@ -669,25 +669,39 @@
     <script>
         // Check authentication status but don't force login
         let isGuestMode = localStorage.getItem('guestMode') === 'true';
+        let firebaseAvailable = typeof firebase !== 'undefined';
         
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // User is authenticated - enable full features
-                isGuestMode = false;
-                localStorage.removeItem('guestMode');
-                console.log('Authenticated user:', user.email);
-            } else if (!isGuestMode) {
-                // Not authenticated and not in guest mode - show mode selection
-                const hasSeenModeSelection = sessionStorage.getItem('modeSelected');
-                if (!hasSeenModeSelection) {
-                    showModeSelectionModal();
-                }
+        // Wait for Firebase to load
+        setTimeout(() => {
+            if (firebaseAvailable && firebase.apps && firebase.apps.length > 0) {
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (user) {
+                        // User is authenticated - enable full features
+                        isGuestMode = false;
+                        localStorage.removeItem('guestMode');
+                        console.log('Authenticated user:', user.email);
+                    } else if (!isGuestMode) {
+                        // Not authenticated and not in guest mode - show mode selection
+                        const hasSeenModeSelection = sessionStorage.getItem('modeSelected');
+                        if (!hasSeenModeSelection) {
+                            showModeSelectionModal();
+                        }
+                    } else {
+                        // Guest mode - limited features
+                        console.log('Playing in Guest Mode');
+                        showGuestModeBanner();
+                    }
+                });
             } else {
-                // Guest mode - limited features
-                console.log('Playing in Guest Mode');
-                showGuestModeBanner();
+                // Firebase not configured - auto guest mode
+                console.log('Firebase not configured - running in local-only mode');
+                if (!isGuestMode) {
+                    localStorage.setItem('guestMode', 'true');
+                    isGuestMode = true;
+                }
+                showLocalOnlyBanner();
             }
-        });
+        }, 500);
         
         function showModeSelectionModal() {
             const modal = document.createElement('div');
@@ -800,6 +814,19 @@
             if (upgradeBtn) {
                 upgradeBtn.classList.remove('hidden');
             }
+        }
+        
+        function showLocalOnlyBanner() {
+            const banner = document.createElement('div');
+            banner.className = 'fixed top-0 left-0 right-0 bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-2 px-4 z-40 text-center text-sm';
+            banner.innerHTML = `
+                <span>💾 Local Mode - Progress saved on this device only</span>
+                <a href="FIREBASE_SETUP.md" target="_blank" class="ml-4 bg-white text-blue-600 px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colours">
+                    Enable Cloud Sync
+                </a>
+                <button onclick="this.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">✕</button>
+            `;
+            document.body.insertBefore(banner, document.body.firstChild);
         }
     </script>
     

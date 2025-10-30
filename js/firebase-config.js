@@ -70,15 +70,21 @@ class FirebaseAuthSystem {
             }
         }
 
-        // Local/fallback configuration
+        // Local/fallback configuration - use placeholders
+        // Real credentials should be in firebase-config.local.js (not committed)
         const firebaseConfig = {
-            apiKey: "AIzaSyBuzlggCmuCkOgorMnLFw6aAmgh25b8FIs",
+            apiKey: "YOUR_API_KEY",
             authDomain: "promptgames-65e49.firebaseapp.com",
             projectId: "promptgames-65e49",
             storageBucket: "promptgames-65e49.firebasestorage.app",
-            messagingSenderId: "617690670802",
-            appId: "1:617690670802:web:3c5be7009be9af5238ef0b"
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
+
+        // Check if local config exists (from firebase-config.local.js)
+        if (typeof window !== 'undefined' && window.__FIREBASE_LOCAL_CONFIG__) {
+            return window.__FIREBASE_LOCAL_CONFIG__;
+        }
 
         return firebaseConfig;
     }
@@ -563,19 +569,21 @@ class FirebaseAuthSystem {
 
     getErrorMessage(errorCode) {
         const messages = {
-            'auth/email-already-in-use': 'This email is already registered',
-            'auth/invalid-email': 'Invalid email address',
-            'auth/operation-not-allowed': 'Operation not allowed',
-            'auth/weak-password': 'Password is too weak (minimum 6 characters)',
-            'auth/user-disabled': 'This account has been disabled',
-            'auth/user-not-found': 'No account found with this email',
-            'auth/wrong-password': 'Incorrect password',
-            'auth/too-many-requests': 'Too many attempts. Please try again later',
-            'auth/network-request-failed': 'Network error. Please check your connection',
+            'auth/email-already-in-use': 'This email is already registered. Please sign in instead.',
+            'auth/invalid-email': 'Invalid email address format. Please check and try again.',
+            'auth/operation-not-allowed': 'Email/Password authentication is not enabled. Please contact support.',
+            'auth/weak-password': 'Password is too weak (minimum 6 characters required)',
+            'auth/user-disabled': 'This account has been disabled. Please contact support.',
+            'auth/user-not-found': 'No account found with this email. Please create an account first.',
+            'auth/wrong-password': 'Incorrect password. Please try again.',
+            'auth/invalid-credential': 'Invalid email or password. If you don\'t have an account, please create one first.',
+            'auth/too-many-requests': 'Too many attempts. Please try again later.',
+            'auth/network-request-failed': 'Network error. Please check your connection and try again.',
             'auth/popup-closed-by-user': 'Sign-in popup was closed',
-            'auth/cancelled-popup-request': 'Only one popup request is allowed at a time'
+            'auth/cancelled-popup-request': 'Only one popup request is allowed at a time',
+            'auth/unauthorized-domain': 'This domain is not authorized. Please contact support.'
         };
-        return messages[errorCode] || 'An error occurred. Please try again.';
+        return messages[errorCode] || `An error occurred: ${errorCode}. Please try again.`;
     }
 
     // Check if user is logged in

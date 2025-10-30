@@ -142,7 +142,7 @@
             </p>
             
             <div class="text-center mt-4">
-                <a href="index.html" class="text-sm text-gray-500 hover:text-gray-700">
+                <a href="index.html" id="guest-mode-link" class="text-sm text-gray-500 hover:text-gray-700 cursor-pointer">
                     ← Continue as Guest (progress won't be saved)
                 </a>
             </div>
@@ -153,6 +153,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Local Config (if exists, not committed to git) -->
+    <script src="js/firebase-config.local.js" onerror="console.log('Local config not found, using defaults')"></script>
     
     <!-- Firebase Config -->
     <script src="js/firebase-config.js"></script>
@@ -211,10 +214,14 @@
 
             try {
                 await firebaseAuth.register(email, password, name);
-                // Switch to login tab
-                loginTab.click();
+                // Show success message and switch to login tab
+                setTimeout(() => {
+                    loginTab.click();
+                    alert('Account created successfully! You can now sign in.');
+                }, 500);
             } catch (error) {
                 console.error('Registration failed:', error);
+                // Error message is already shown by firebaseAuth
             }
         });
 
@@ -275,16 +282,46 @@
         
         // Handle guest mode link
         document.addEventListener('DOMContentLoaded', () => {
-            const guestLink = document.querySelector('a[href="index.html"]');
+            const guestLink = document.getElementById('guest-mode-link');
             if (guestLink) {
                 guestLink.addEventListener('click', (e) => {
                     e.preventDefault();
                     localStorage.setItem('guestMode', 'true');
                     sessionStorage.setItem('modeSelected', 'true');
+                    console.log('Guest mode enabled, redirecting...');
+                    window.location.href = 'index.html';
+                });
+            } else {
+                // Fallback: try to find by href
+                const guestLinkFallback = document.querySelector('a[href="index.html"]');
+                if (guestLinkFallback && guestLinkFallback.textContent.includes('Guest')) {
+                    guestLinkFallback.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        localStorage.setItem('guestMode', 'true');
+                        sessionStorage.setItem('modeSelected', 'true');
+                        console.log('Guest mode enabled, redirecting...');
+                        window.location.href = 'index.html';
+                    });
+                }
+            }
+        });
+        
+        // Also handle immediately if DOM is already loaded
+        if (document.readyState === 'loading') {
+            // DOM is still loading, wait for DOMContentLoaded
+        } else {
+            // DOM is already loaded
+            const guestLink = document.getElementById('guest-mode-link');
+            if (guestLink) {
+                guestLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.setItem('guestMode', 'true');
+                    sessionStorage.setItem('modeSelected', 'true');
+                    console.log('Guest mode enabled, redirecting...');
                     window.location.href = 'index.html';
                 });
             }
-        });
+        }
     </script>
 </body>
 </html>

@@ -649,6 +649,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
     
+    <!-- Firebase Local Config (if exists, not committed to git) -->
+    <script src="js/firebase-config.local.js" onerror="console.log('Local config not found, using defaults')"></script>
+    
     <!-- Load scripts -->
     <script src="js/firebase-config.js"></script>
     <script src="challenge-data.js"></script>
@@ -671,8 +674,51 @@
         let isGuestMode = localStorage.getItem('guestMode') === 'true';
         let firebaseAvailable = typeof firebase !== 'undefined';
         
+        // Define showGuestModeBanner function early so it can be called immediately
+        function showGuestModeBanner() {
+            // Remove existing banner if any
+            const existingBanner = document.querySelector('.guest-mode-banner');
+            if (existingBanner) {
+                existingBanner.remove();
+            }
+            
+            const banner = document.createElement('div');
+            banner.className = 'guest-mode-banner fixed top-0 left-0 right-0 bg-gradient-to-r from-orange-500 to-red-500 text-white py-2 px-4 z-40 text-center text-sm';
+            banner.innerHTML = `
+                <span>🎮 Playing in Guest Mode - Progress won't be saved</span>
+                <button onclick="window.location.href='auth.html'" class="ml-4 bg-white text-orange-600 px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colours">
+                    Sign In to Save Progress
+                </button>
+                <button onclick="this.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">✕</button>
+            `;
+            document.body.insertBefore(banner, document.body.firstChild);
+            
+            // Show upgrade button in nav
+            const upgradeBtn = document.getElementById('guest-upgrade-btn');
+            if (upgradeBtn) {
+                upgradeBtn.classList.remove('hidden');
+            }
+            
+            console.log('Guest mode banner displayed');
+        }
+        
+        // Immediate check on page load
+        if (isGuestMode) {
+            console.log('Guest mode detected on page load');
+            // Show banner immediately if in guest mode
+            setTimeout(() => {
+                if (!document.querySelector('.guest-mode-banner')) {
+                    showGuestModeBanner();
+                }
+            }, 100);
+        }
+        
         // Wait for Firebase to load
         setTimeout(() => {
+            // Check guest mode first
+            isGuestMode = localStorage.getItem('guestMode') === 'true';
+            console.log('Guest mode status:', isGuestMode);
+            
             if (firebaseAvailable && firebase.apps && firebase.apps.length > 0) {
                 firebase.auth().onAuthStateChanged((user) => {
                     if (user) {
@@ -680,6 +726,8 @@
                         isGuestMode = false;
                         localStorage.removeItem('guestMode');
                         console.log('Authenticated user:', user.email);
+                        // Hide guest banner if shown
+                        document.querySelector('.fixed.top-0')?.remove();
                     } else if (!isGuestMode) {
                         // Not authenticated and not in guest mode - show mode selection
                         const hasSeenModeSelection = sessionStorage.getItem('modeSelected');
@@ -787,33 +835,21 @@
         function selectGuestMode() {
             localStorage.setItem('guestMode', 'true');
             sessionStorage.setItem('modeSelected', 'true');
-            document.getElementById('mode-selection-modal')?.remove();
+            console.log('Guest mode selected');
+            const modal = document.getElementById('mode-selection-modal');
+            if (modal) {
+                modal.remove();
+            }
             showGuestModeBanner();
-            location.reload();
+            // Small delay to ensure banner is shown before reload
+            setTimeout(() => {
+                location.reload();
+            }, 100);
         }
         
         function selectAuthMode() {
             sessionStorage.setItem('modeSelected', 'true');
             window.location.href = 'auth.html';
-        }
-        
-        function showGuestModeBanner() {
-            const banner = document.createElement('div');
-            banner.className = 'fixed top-0 left-0 right-0 bg-gradient-to-r from-orange-500 to-red-500 text-white py-2 px-4 z-40 text-center text-sm';
-            banner.innerHTML = `
-                <span>🎮 Playing in Guest Mode - Progress won't be saved</span>
-                <button onclick="window.location.href='auth.html'" class="ml-4 bg-white text-orange-600 px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colours">
-                    Sign In to Save Progress
-                </button>
-                <button onclick="this.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">✕</button>
-            `;
-            document.body.insertBefore(banner, document.body.firstChild);
-            
-            // Show upgrade button in nav
-            const upgradeBtn = document.getElementById('guest-upgrade-btn');
-            if (upgradeBtn) {
-                upgradeBtn.classList.remove('hidden');
-            }
         }
         
         function showLocalOnlyBanner() {

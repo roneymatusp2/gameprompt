@@ -33,6 +33,11 @@ Thumbs.db
 logs
 *.log
 
+# Firebase configuration (contains credentials)
+js/firebase-config.local.js
+firebase-config.local.js
+*.local.js
+
 # Environment variables
 .env
 .env.local

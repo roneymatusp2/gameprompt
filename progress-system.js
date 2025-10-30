@@ -21,12 +21,17 @@ class ProgressSystem {
                 challengeScores: {},
                 levelProgress: {
                     1: { unlocked: true, completed: false },
-                    2: { unlocked: false, completed: false }
+                    2: { unlocked: false, completed: false },
+                    3: { unlocked: false, completed: false },
+                    4: { unlocked: false, completed: false },
+                    5: { unlocked: false, completed: false }
                 }
             };
             this.saveProgress();
         }
-        
+
+        this.syncLevelUnlocks();
+        this.saveProgress();
         this.updateUI();
         this.checkAchievements();
     }
@@ -53,6 +58,46 @@ class ProgressSystem {
         }
     }
 
+    syncLevelUnlocks() {
+        challengeData.levels.forEach(level => {
+            if (!this.userProgress.levelProgress[level.id]) {
+                this.userProgress.levelProgress[level.id] = {
+                    unlocked: level.unlocked || level.id === 1,
+                    completed: false
+                };
+            }
+
+            level.unlocked = Boolean(this.userProgress.levelProgress[level.id].unlocked);
+        });
+
+        this.updateLevelCompletionStatus();
+    }
+
+    updateLevelCompletionStatus() {
+        challengeData.levels.forEach(level => {
+            const allCompleted = level.challenges.every(challenge =>
+                this.userProgress.completedChallenges.includes(challenge.id)
+            );
+
+            if (!this.userProgress.levelProgress[level.id]) {
+                this.userProgress.levelProgress[level.id] = {
+                    unlocked: level.unlocked || level.id === 1,
+                    completed: allCompleted
+                };
+            } else {
+                this.userProgress.levelProgress[level.id].completed = allCompleted;
+            }
+        });
+    }
+
+    isLevelCompleted(levelId) {
+        const level = challengeData.levels.find(l => l.id === levelId);
+        if (!level) return false;
+        return level.challenges.every(challenge =>
+            this.userProgress.completedChallenges.includes(challenge.id)
+        );
+    }
+
     awardPoints(points, challengeId) {
         const previousXP = this.userProgress.totalXP;
         this.userProgress.totalXP += points;
@@ -74,7 +119,8 @@ class ProgressSystem {
 
         // Update streak
         this.updateStreak();
-        
+
+        this.updateLevelCompletionStatus();
         this.saveProgress();
         this.updateUI();
         this.checkAchievements();
@@ -140,8 +186,6 @@ class ProgressSystem {
     }
 
     evaluateBadgeCondition(badge) {
-        const condition = badge.condition;
-        
         switch (badge.id) {
             case 'clarity_champion':
                 return this.checkConsecutiveHighScores('clarity', 80, 3);
@@ -153,7 +197,19 @@ class ProgressSystem {
                 return this.checkConsecutiveHighScores('context', 90, 3);
             
             case 'prompt_pioneer':
-                return this.userProgress.completedChallenges.length >= 3;
+                return this.isLevelCompleted(1);
+
+            case 'roleplay_ranger':
+                return this.isLevelCompleted(2);
+
+            case 'structure_scholar':
+                return this.isLevelCompleted(3);
+
+            case 'constraint_conductor':
+                return this.isLevelCompleted(4);
+
+            case 'diagnostics_maestro':
+                return this.isLevelCompleted(5);
             
             case 'streak_master':
                 return this.userProgress.currentStreak >= 5;
@@ -271,12 +327,32 @@ class ProgressSystem {
     }
 
     updateLevelProgress() {
-        // Unlock levels based on current level
-        if (this.userProgress.currentLevel >= 2) {
-            this.userProgress.levelProgress[2] = { unlocked: true, completed: false };
-        }
+        const unlockThresholds = {
+            1: 1,
+            2: 2,
+            3: 3,
+            4: 4,
+            5: 5
+        };
 
-        // Update challenge grid to reflect unlocked levels
+        Object.entries(unlockThresholds).forEach(([levelId, requiredPlayerLevel]) => {
+            const numericId = parseInt(levelId, 10);
+            const isUnlocked = this.userProgress.currentLevel >= requiredPlayerLevel;
+
+            if (!this.userProgress.levelProgress[numericId]) {
+                this.userProgress.levelProgress[numericId] = { unlocked: isUnlocked, completed: false };
+            } else if (isUnlocked && !this.userProgress.levelProgress[numericId].unlocked) {
+                this.userProgress.levelProgress[numericId].unlocked = true;
+            }
+
+            const levelData = challengeData.levels.find(level => level.id === numericId);
+            if (levelData) {
+                levelData.unlocked = this.userProgress.levelProgress[numericId].unlocked;
+            }
+        });
+
+        this.updateLevelCompletionStatus();
+
         if (typeof window.loadChallenges === 'function') {
             window.loadChallenges();
         }

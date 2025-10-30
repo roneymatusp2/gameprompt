@@ -249,35 +249,44 @@
 
         // Check if Firebase is configured
         setTimeout(() => {
-            if (typeof firebase === 'undefined' || !firebase.apps || firebase.apps.length === 0) {
-                // Firebase not configured
-                document.querySelector('.auth-card').innerHTML = `
-                    <div class="text-center">
-                        <div class="text-6xl mb-4">🔧</div>
-                        <h2 class="text-3xl font-bold mb-4">Firebase Not Configured</h2>
-                        <p class="text-gray-600 mb-6">
-                            To enable user accounts and cloud sync, you need to configure Firebase. Follow the setup guide for instructions.
-                        </p>
-                        <a href="FIREBASE_SETUP.md" target="_blank" 
-                           class="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 mb-4">
-                            View Setup Guide
-                        </a>
-                        <br>
-                        <a href="index.html" class="text-gray-600 hover:text-gray-800">
-                            ← Continue in Local Mode
-                        </a>
-                    </div>
-                `;
-                return;
+            // First check if user is already authenticated (skip config check if authenticated)
+            if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (user) {
+                        // User is authenticated - redirect to game
+                        localStorage.removeItem('guestMode');
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                });
             }
             
-            // Check if already logged in
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                    localStorage.removeItem('guestMode');
-                    window.location.href = 'index.html';
-                }
-            });
+            // Only show error if Firebase is not available AND no user is authenticated
+            if (typeof firebase === 'undefined' || !firebase.apps || firebase.apps.length === 0) {
+                // Wait a bit more for Firebase to initialize
+                setTimeout(() => {
+                    if (typeof firebase === 'undefined' || !firebase.apps || firebase.apps.length === 0) {
+                        // Firebase not configured
+                        document.querySelector('.auth-card').innerHTML = `
+                            <div class="text-center">
+                                <div class="text-6xl mb-4">🔧</div>
+                                <h2 class="text-3xl font-bold mb-4">Firebase Not Configured</h2>
+                                <p class="text-gray-600 mb-6">
+                                    To enable user accounts and cloud sync, you need to configure Firebase. Follow the setup guide for instructions.
+                                </p>
+                                <a href="FIREBASE_SETUP.md" target="_blank" 
+                                   class="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 mb-4">
+                                    View Setup Guide
+                                </a>
+                                <br>
+                                <a href="index.html" class="text-gray-600 hover:text-gray-800">
+                                    ← Continue in Local Mode
+                                </a>
+                            </div>
+                        `;
+                    }
+                }, 1000);
+            }
         }, 500);
         
         // Handle guest mode link

@@ -284,6 +284,20 @@ class PromptQuestGame {
             const pointsAwarded = Math.round(evaluation.overallScore);
             progressSystem.awardPoints(pointsAwarded, this.currentChallenge.id);
             
+            // Track challenge completion in Firebase (if authenticated)
+            if (window.firebaseAuth && window.firebaseAuth.isLoggedIn()) {
+                try {
+                    await window.firebaseAuth.trackChallengeCompletion(
+                        this.currentChallenge.id,
+                        pointsAwarded,
+                        userPrompt,
+                        evaluation
+                    );
+                } catch (error) {
+                    console.error('Error tracking challenge completion:', error);
+                }
+            }
+            
             // Show feedback
             this.showFeedback(evaluation, userPrompt);
             

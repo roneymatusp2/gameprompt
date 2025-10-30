@@ -39,10 +39,10 @@
             <!-- Tab Switcher -->
             <div class="flex gap-2 mb-6 bg-gray-100 p-1 rounded-lg">
                 <button id="login-tab" class="flex-1 py-2 rounded-lg font-semibold transition-all bg-white shadow">
-                    Login
+                    Sign In
                 </button>
                 <button id="register-tab" class="flex-1 py-2 rounded-lg font-semibold transition-all text-gray-600">
-                    Register
+                    Create Account
                 </button>
             </div>
 
@@ -98,7 +98,7 @@
                     <input type="password" id="register-password" required minlength="6"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                            placeholder="••••••••">
-                    <p class="text-xs text-gray-500 mt-1">Minimum 6 characters</p>
+                    <p class="text-xs text-gray-500 mt-1">Minimum 6 characters required</p>
                 </div>
 
                 <div>
@@ -143,7 +143,7 @@
             
             <div class="text-center mt-4">
                 <a href="index.html" class="text-sm text-gray-500 hover:text-gray-700">
-                    ← Continue as Guest (without saving progress)
+                    ← Continue as Guest (progress won't be saved)
                 </a>
             </div>
         </div>
@@ -205,7 +205,7 @@
             const confirm = document.getElementById('register-confirm').value;
 
             if (password !== confirm) {
-                alert('Passwords do not match!');
+                alert('Passwords do not match. Please try again.');
                 return;
             }
 
@@ -230,7 +230,7 @@
 
         // Forgot password
         document.getElementById('forgot-password').addEventListener('click', async () => {
-            const email = prompt('Enter your email address:');
+            const email = prompt('Please enter your email address:');
             if (email) {
                 try {
                     await firebaseAuth.resetPassword(email);
@@ -249,7 +249,7 @@
                         <div class="text-6xl mb-4">🔧</div>
                         <h2 class="text-3xl font-bold mb-4">Firebase Not Configured</h2>
                         <p class="text-gray-600 mb-6">
-                            To enable user accounts and cloud sync, you need to configure Firebase.
+                            To enable user accounts and cloud sync, you need to configure Firebase. Follow the setup guide for instructions.
                         </p>
                         <a href="FIREBASE_SETUP.md" target="_blank" 
                            class="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 mb-4">

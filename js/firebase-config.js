@@ -1,4 +1,7 @@
 // Firebase Configuration and Authentication System
+// Supports both Netlify environment variables and local configuration
+// All text in British English
+
 class FirebaseAuthSystem {
     constructor() {
         this.auth = null;
@@ -16,21 +19,13 @@ class FirebaseAuthSystem {
             return;
         }
 
-        // Firebase config - Replace these with your actual values
-        // Or set them in Netlify environment variables
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY", // Replace with your Firebase API key
-            authDomain: "promtgames.firebaseapp.com", // Replace with your domain
-            projectId: "promtgames", // Replace with your project ID
-            storageBucket: "promtgames.appspot.com", // Replace with your bucket
-            messagingSenderId: "YOUR_SENDER_ID", // Replace with your sender ID
-            appId: "YOUR_APP_ID" // Replace with your app ID
-        };
+        // Get Firebase config from environment variables (Netlify) or use local config
+        const firebaseConfig = this.getFirebaseConfig();
 
         // Check if config is set up
-        if (firebaseConfig.apiKey === "YOUR_API_KEY") {
+        if (!firebaseConfig || firebaseConfig.apiKey === "YOUR_API_KEY" || !firebaseConfig.apiKey) {
             console.log('Firebase not configured - running in local-only mode');
-            console.log('To enable cloud features, follow the guide in FIREBASE_SETUP.md');
+            console.log('To enable cloud features, configure Firebase in Netlify or update js/firebase-config.js');
             this.firebaseEnabled = false;
             return;
         }
@@ -46,21 +41,55 @@ class FirebaseAuthSystem {
             this.firebaseEnabled = true;
             
             this.setupAuthStateListener();
-            console.log('Firebase initialized successfully');
+            console.log('Firebase initialised successfully');
         } catch (error) {
-            console.error('Firebase initialization failed:', error);
+            console.error('Firebase initialisation failed:', error);
             console.log('Running in local-only mode');
             this.firebaseEnabled = false;
         }
     }
 
+    getFirebaseConfig() {
+        // First, check if config was injected via inline script (Netlify build)
+        if (typeof window !== 'undefined' && window.__FIREBASE_CONFIG__) {
+            return window.__FIREBASE_CONFIG__;
+        }
+
+        // Check for Netlify environment variables (via injected script)
+        if (typeof window !== 'undefined' && window.netlify && window.netlify.env) {
+            const env = window.netlify.env;
+            if (env.FIREBASE_API_KEY) {
+                return {
+                    apiKey: env.FIREBASE_API_KEY,
+                    authDomain: env.FIREBASE_AUTH_DOMAIN,
+                    projectId: env.FIREBASE_PROJECT_ID,
+                    storageBucket: env.FIREBASE_STORAGE_BUCKET,
+                    messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID,
+                    appId: env.FIREBASE_APP_ID
+                };
+            }
+        }
+
+        // Local/fallback configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBuzlggCmuCkOgorMnLFw6aAmgh25b8FIs",
+            authDomain: "promptgames-65e49.firebaseapp.com",
+            projectId: "promptgames-65e49",
+            storageBucket: "promptgames-65e49.firebasestorage.app",
+            messagingSenderId: "617690670802",
+            appId: "1:617690670802:web:3c5be7009be9af5238ef0b"
+        };
+
+        return firebaseConfig;
+    }
+
     setupAuthStateListener() {
         if (!this.firebaseEnabled || !this.auth) return;
         
-        this.auth.onAuthStateChanged((user) => {
+        this.auth.onAuthStateChanged(async (user) => {
             if (user) {
                 this.currentUser = user;
-                this.onUserLoggedIn(user);
+                await this.onUserLoggedIn(user);
             } else {
                 this.currentUser = null;
                 this.onUserLoggedOut();
@@ -108,6 +137,11 @@ class FirebaseAuthSystem {
     }
 
     async register(email, password, displayName) {
+        if (!this.firebaseEnabled) {
+            this.showNotification('Firebase not configured. Running in local-only mode.', 'error');
+            throw new Error('Firebase not enabled');
+        }
+
         try {
             const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
@@ -115,11 +149,13 @@ class FirebaseAuthSystem {
             // Update profile
             await user.updateProfile({ displayName });
             
-            // Create user document in Firestore
+            // Create user document in Firestore with student tracking
             await this.createUserDocument(user.uid, {
                 email,
                 displayName,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                role: 'student',
                 stats: {
                     totalPrompts: 0,
                     successRate: 0,
@@ -128,19 +164,29 @@ class FirebaseAuthSystem {
                     totalPoints: 0,
                     level: 1,
                     streak: 0,
-                    bestStreak: 0
+                    bestStreak: 0,
+                    averageScore: 0,
+                    totalChallengesCompleted: 0
                 },
                 progress: {
                     completedChallenges: [],
                     challengeScores: {},
-                    unlockedLevels: [1]
+                    unlockedLevels: [1],
+                    lastChallengeCompleted: null,
+                    sessionHistory: []
+                },
+                analytics: {
+                    totalSessions: 1,
+                    totalTimeSpent: 0,
+                    firstSession: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastSession: firebase.firestore.FieldValue.serverTimestamp()
                 }
             });
             
             // Send verification email
             await user.sendEmailVerification();
             
-            this.showNotification('Account created! Please verify your email.', 'success');
+            this.showNotification('Account created! Please check your email to verify your account.', 'success');
             return user;
         } catch (error) {
             console.error('Registration error:', error);
@@ -162,9 +208,14 @@ class FirebaseAuthSystem {
     }
 
     async resetPassword(email) {
+        if (!this.firebaseEnabled) {
+            this.showNotification('Firebase not configured. Running in local-only mode.', 'error');
+            throw new Error('Firebase not enabled');
+        }
+
         try {
             await this.auth.sendPasswordResetEmail(email);
-            this.showNotification('Password reset email sent!', 'success');
+            this.showNotification('Password reset email sent! Please check your inbox.', 'success');
         } catch (error) {
             console.error('Password reset error:', error);
             this.showNotification(this.getErrorMessage(error.code), 'error');
@@ -174,6 +225,11 @@ class FirebaseAuthSystem {
 
     // Google Sign-In
     async loginWithGoogle() {
+        if (!this.firebaseEnabled) {
+            this.showNotification('Firebase not configured. Running in local-only mode.', 'error');
+            throw new Error('Firebase not enabled');
+        }
+
         try {
             const provider = new firebase.auth.GoogleAuthProvider();
             const result = await this.auth.signInWithPopup(provider);
@@ -186,6 +242,8 @@ class FirebaseAuthSystem {
                     displayName: result.user.displayName,
                     photoURL: result.user.photoURL,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    role: 'student',
                     stats: {
                         totalPrompts: 0,
                         successRate: 0,
@@ -194,13 +252,29 @@ class FirebaseAuthSystem {
                         totalPoints: 0,
                         level: 1,
                         streak: 0,
-                        bestStreak: 0
+                        bestStreak: 0,
+                        averageScore: 0,
+                        totalChallengesCompleted: 0
                     },
                     progress: {
                         completedChallenges: [],
                         challengeScores: {},
-                        unlockedLevels: [1]
+                        unlockedLevels: [1],
+                        lastChallengeCompleted: null,
+                        sessionHistory: []
+                    },
+                    analytics: {
+                        totalSessions: 1,
+                        totalTimeSpent: 0,
+                        firstSession: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastSession: firebase.firestore.FieldValue.serverTimestamp()
                     }
+                });
+            } else {
+                // Update last login time
+                await this.db.collection('users').doc(result.user.uid).update({
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    'analytics.lastSession': firebase.firestore.FieldValue.serverTimestamp()
                 });
             }
             
@@ -262,18 +336,93 @@ class FirebaseAuthSystem {
                 totalPoints: parseInt(localStorage.getItem('totalPoints') || '0'),
                 level: parseInt(localStorage.getItem('currentLevel') || '1'),
                 streak: parseInt(localStorage.getItem('currentStreak') || '0'),
-                bestStreak: parseInt(localStorage.getItem('bestStreak') || '0')
+                bestStreak: parseInt(localStorage.getItem('bestStreak') || '0'),
+                averageScore: this.calculateAverageScore(progress),
+                totalChallengesCompleted: progress.completedChallenges?.length || 0
+            };
+
+            // Update analytics
+            const analytics = {
+                lastSession: firebase.firestore.FieldValue.serverTimestamp()
             };
 
             await this.db.collection('users').doc(this.currentUser.uid).update({
                 progress,
                 stats,
+                analytics,
                 lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
             });
 
             console.log('Progress synced to cloud');
         } catch (error) {
             console.error('Error syncing progress:', error);
+        }
+    }
+
+    calculateAverageScore(progress) {
+        if (!progress.challengeScores || Object.keys(progress.challengeScores).length === 0) {
+            return 0;
+        }
+        const scores = Object.values(progress.challengeScores);
+        const sum = scores.reduce((acc, score) => acc + score, 0);
+        return Math.round(sum / scores.length);
+    }
+
+    // Real-time progress tracking for students
+    async trackChallengeCompletion(challengeId, score, prompt, evaluation) {
+        if (!this.currentUser) return;
+
+        try {
+            // Save submission
+            await this.savePromptSubmission(challengeId, prompt, score, evaluation);
+            
+            // Update progress
+            const progress = JSON.parse(localStorage.getItem('userProgress') || '{}');
+            if (!progress.completedChallenges) {
+                progress.completedChallenges = [];
+            }
+            if (!progress.completedChallenges.includes(challengeId)) {
+                progress.completedChallenges.push(challengeId);
+            }
+            if (!progress.challengeScores) {
+                progress.challengeScores = {};
+            }
+            progress.challengeScores[challengeId] = score;
+            progress.lastChallengeCompleted = {
+                challengeId,
+                score,
+                timestamp: new Date().toISOString()
+            };
+
+            localStorage.setItem('userProgress', JSON.stringify(progress));
+
+            // Sync to cloud
+            await this.syncProgressToCloud();
+
+            // Update session history
+            await this.addSessionActivity('challenge_completed', {
+                challengeId,
+                score,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (error) {
+            console.error('Error tracking challenge completion:', error);
+        }
+    }
+
+    async addSessionActivity(activityType, data) {
+        if (!this.currentUser) return;
+
+        try {
+            await this.db.collection('users').doc(this.currentUser.uid).update({
+                'progress.sessionHistory': firebase.firestore.FieldValue.arrayUnion({
+                    type: activityType,
+                    ...data,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                })
+            });
+        } catch (error) {
+            console.error('Error adding session activity:', error);
         }
     }
     
@@ -288,6 +437,7 @@ class FirebaseAuthSystem {
             const shouldSignUp = confirm(
                 'Sign in to save your progress and unlock all features!\n\n' +
                 '✓ Save progress across devices\n' +
+                '✓ Track your learning journey\n' +
                 '✓ Unlock achievements\n' +
                 '✓ Compete on leaderboards\n\n' +
                 'Would you like to create an account now?'
@@ -319,6 +469,7 @@ class FirebaseAuthSystem {
             await this.db.collection('promptSubmissions').add({
                 userId: this.currentUser.uid,
                 userEmail: this.currentUser.email,
+                displayName: this.currentUser.displayName,
                 challengeId,
                 prompt,
                 score,
@@ -331,6 +482,8 @@ class FirebaseAuthSystem {
     }
 
     async getLeaderboard(limit = 10) {
+        if (!this.firebaseEnabled) return [];
+
         try {
             const snapshot = await this.db.collection('users')
                 .orderBy('stats.totalPoints', 'desc')
@@ -344,6 +497,22 @@ class FirebaseAuthSystem {
         } catch (error) {
             console.error('Error getting leaderboard:', error);
             return [];
+        }
+    }
+
+    // Get student progress for teacher/admin views
+    async getStudentProgress(studentId) {
+        if (!this.firebaseEnabled) return null;
+
+        try {
+            const doc = await this.db.collection('users').doc(studentId).get();
+            if (doc.exists) {
+                return doc.data();
+            }
+            return null;
+        } catch (error) {
+            console.error('Error getting student progress:', error);
+            return null;
         }
     }
 
@@ -369,7 +538,7 @@ class FirebaseAuthSystem {
                          alt="User avatar">
                     <span class="text-sm font-medium">${user.displayName || user.email}</span>
                     <button onclick="firebaseAuth.logout()" class="text-xs text-red-500 hover:text-red-700">
-                        Logout
+                        Sign Out
                     </button>
                 </div>
             `;
@@ -397,12 +566,14 @@ class FirebaseAuthSystem {
             'auth/email-already-in-use': 'This email is already registered',
             'auth/invalid-email': 'Invalid email address',
             'auth/operation-not-allowed': 'Operation not allowed',
-            'auth/weak-password': 'Password is too weak (min 6 characters)',
+            'auth/weak-password': 'Password is too weak (minimum 6 characters)',
             'auth/user-disabled': 'This account has been disabled',
             'auth/user-not-found': 'No account found with this email',
             'auth/wrong-password': 'Incorrect password',
-            'auth/too-many-requests': 'Too many attempts. Try again later',
-            'auth/network-request-failed': 'Network error. Check your connection'
+            'auth/too-many-requests': 'Too many attempts. Please try again later',
+            'auth/network-request-failed': 'Network error. Please check your connection',
+            'auth/popup-closed-by-user': 'Sign-in popup was closed',
+            'auth/cancelled-popup-request': 'Only one popup request is allowed at a time'
         };
         return messages[errorCode] || 'An error occurred. Please try again.';
     }

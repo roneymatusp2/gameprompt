@@ -1,0 +1,14 @@
+// Firebase Configuration - LOCAL FILE EXAMPLE
+// Copy this file and rename it to firebase-config.local.js
+// Add your actual Firebase credentials below
+// This file is NOT committed to Git (see .gitignore)
+
+window.__FIREBASE_LOCAL_CONFIG__ = {
+    apiKey: "YOUR_API_KEY_HERE",
+    authDomain: "promptgames-65e49.firebaseapp.com",
+    projectId: "promptgames-65e49",
+    storageBucket: "promptgames-65e49.firebasestorage.app",
+    messagingSenderId: "YOUR_SENDER_ID_HERE",
+    appId: "YOUR_APP_ID_HERE"
+};
+

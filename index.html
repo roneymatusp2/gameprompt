@@ -493,7 +493,7 @@
                         <!-- User info will be inserted here by Firebase -->
                     </div>
                     <div id="guest-upgrade-btn" class="hidden">
-                        <a href="auth.html" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:opacity-90 transition-opacity font-semibold">
+                        <a href="auth.html" class="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium">
                             <span>🔐</span>
                             <span>LOGIN/SIGN UP</span>
                         </a>
@@ -682,18 +682,7 @@
                 existingBanner.remove();
             }
             
-            const banner = document.createElement('div');
-            banner.className = 'guest-mode-banner fixed top-0 left-0 right-0 bg-gradient-to-r from-orange-500 to-red-500 text-white py-2 px-4 z-40 text-center text-sm';
-            banner.innerHTML = `
-                <span>🎮 Playing in Guest Mode - Progress won't be saved</span>
-                <button onclick="window.location.href='auth.html'" class="ml-4 bg-white text-orange-600 px-3 py-1 rounded font-semibold hover:bg-gray-100 transition-colours">
-                    Sign In to Save Progress
-                </button>
-                <button onclick="this.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">✕</button>
-            `;
-            document.body.insertBefore(banner, document.body.firstChild);
-            
-            // Show upgrade button in nav
+            // Show upgrade button in nav (more subtle than banner)
             const upgradeBtn = document.getElementById('guest-upgrade-btn');
             if (upgradeBtn) {
                 upgradeBtn.classList.remove('hidden');

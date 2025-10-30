@@ -787,7 +787,7 @@
                                     <span>No leaderboards</span>
                                 </li>
                             </ul>
-                            <button class="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colours">
+                            <button class="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colours" onclick="selectGuestMode(); event.stopPropagation();">
                                 Play as Guest
                             </button>
                         </div>
@@ -818,7 +818,7 @@
                                     <span>Multi-device sync</span>
                                 </li>
                             </ul>
-                            <button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                            <button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity" onclick="selectAuthMode(); event.stopPropagation();">
                                 Sign In / Register
                             </button>
                         </div>
@@ -836,21 +836,30 @@
             localStorage.setItem('guestMode', 'true');
             sessionStorage.setItem('modeSelected', 'true');
             console.log('Guest mode selected');
+            
+            // Remove modal
             const modal = document.getElementById('mode-selection-modal');
             if (modal) {
                 modal.remove();
             }
+            
+            // Show banner
             showGuestModeBanner();
-            // Small delay to ensure banner is shown before reload
+            
+            // Reload page to apply guest mode
             setTimeout(() => {
-                location.reload();
-            }, 100);
+                window.location.reload();
+            }, 300);
         }
         
         function selectAuthMode() {
             sessionStorage.setItem('modeSelected', 'true');
             window.location.href = 'auth.html';
         }
+        
+        // Make functions globally available
+        window.selectGuestMode = selectGuestMode;
+        window.selectAuthMode = selectAuthMode;
         
         function showLocalOnlyBanner() {
             const banner = document.createElement('div');

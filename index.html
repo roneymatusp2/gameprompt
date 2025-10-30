@@ -705,6 +705,16 @@
         // Immediate check on page load
         if (isGuestMode) {
             console.log('Guest mode detected on page load');
+            // Ensure game is visible immediately
+            const mainGameContainer = document.querySelector('.main-game-container');
+            if (mainGameContainer) {
+                mainGameContainer.classList.remove('hidden');
+            }
+            // Hide auth container if exists
+            const authContainer = document.getElementById('auth-container');
+            if (authContainer) {
+                authContainer.classList.add('hidden');
+            }
             // Show banner immediately if in guest mode
             setTimeout(() => {
                 if (!document.querySelector('.guest-mode-banner')) {
@@ -738,6 +748,16 @@
                         // Guest mode - limited features
                         console.log('Playing in Guest Mode');
                         showGuestModeBanner();
+                        // Ensure game is visible in guest mode
+                        const mainGameContainer = document.querySelector('.main-game-container');
+                        if (mainGameContainer) {
+                            mainGameContainer.classList.remove('hidden');
+                        }
+                        // Remove any auth container
+                        const authContainer = document.getElementById('auth-container');
+                        if (authContainer) {
+                            authContainer.classList.add('hidden');
+                        }
                     }
                 });
             } else {
@@ -746,6 +766,16 @@
                 if (!isGuestMode) {
                     localStorage.setItem('guestMode', 'true');
                     isGuestMode = true;
+                }
+                // Ensure game is visible
+                const mainGameContainer = document.querySelector('.main-game-container');
+                if (mainGameContainer) {
+                    mainGameContainer.classList.remove('hidden');
+                }
+                // Hide auth container if exists
+                const authContainer = document.getElementById('auth-container');
+                if (authContainer) {
+                    authContainer.classList.add('hidden');
                 }
                 showLocalOnlyBanner();
             }
@@ -841,6 +871,18 @@
             const modal = document.getElementById('mode-selection-modal');
             if (modal) {
                 modal.remove();
+            }
+            
+            // Ensure game container is visible
+            const mainGameContainer = document.querySelector('.main-game-container');
+            if (mainGameContainer) {
+                mainGameContainer.classList.remove('hidden');
+            }
+            
+            // Hide any auth container
+            const authContainer = document.getElementById('auth-container');
+            if (authContainer) {
+                authContainer.classList.add('hidden');
             }
             
             // Show banner

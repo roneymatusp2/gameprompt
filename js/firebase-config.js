@@ -134,7 +134,14 @@ class FirebaseAuthSystem {
 
     onUserLoggedOut() {
         console.log('User logged out');
-        this.showLoginScreen();
+        // Only show login screen if NOT in guest mode
+        const isGuestMode = localStorage.getItem('guestMode') === 'true';
+        if (!isGuestMode) {
+            this.showLoginScreen();
+        } else {
+            // In guest mode, keep the game visible
+            this.showMainGame();
+        }
     }
 
     // Authentication Methods

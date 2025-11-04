@@ -5,99 +5,99 @@ const challengeData = {
       name: "Stage 1 - The Art of Conversation",
       title: "Foundational Prompts",
       description: "Master the basics of clear communication with an AI. Learn to ask, instruct, and gently guide.",
-      color: "#4F46E5",
+      colour: "#4F46E5",
       unlocked: true,
       challenges: [
         {
           id: 1,
           type: "Single-Prompt",
-          title: "Your First Instruction",
-          description: "Let's start with a simple, clear instruction. Your goal is to ask the AI to perform a single, unambiguous task.",
-          task: "Write a prompt that asks the AI to explain the water cycle in three simple sentences, suitable for a child.",
+          title: "The Power of Words",
+          description: "A good prompt doesn't just ask for information, it can also inspire and persuade. Let's try to create a prompt with a purpose.",
+          task: "Write a prompt that asks the AI to explain the water cycle in a way that would make a 10-year-old want to save water.",
           difficulty: "Beginner",
-          points: 100,
+          points: 120,
           successCriteria: [
             "Clearly states the topic (the water cycle).",
-            "Specifies the desired length (three sentences).",
-            "Defines the target audience (a child).",
-            "Uses a polite and direct command."
+            "Defines the target audience (a 10-year-old).",
+            "Specifies the desired outcome (inspiring them to save water).",
+            "Uses evocative language to guide the AI's tone."
           ],
           hints: [
-            "Think about how you would ask a person. Start with 'Please explain...' or 'Tell me about...'.",
-            "Being specific about the audience helps the AI choose the right tone and vocabulary.",
-            "Constraints like 'three simple sentences' are powerful tools."
+            "Think about what a 10-year-old finds interesting. Maybe a story or a fun analogy?",
+            "Instead of just asking for facts, ask the AI to be creative and persuasive.",
+            "You could ask the AI to take on the persona of a water droplet on an adventure."
           ],
-          examplePrompt: "Please explain the water cycle to a seven-year-old in three simple sentences.",
+          examplePrompt: "Act as a friendly water droplet named Drip. Tell the story of your journey through the water cycle to a group of 10-year-olds, and explain why it's so important for them to help you and your friends stay clean and not be wasted.",
           commonMistakes: [
-            "Being too vague, e.g., 'Talk about the water cycle.'.",
-            "Forgetting to specify the audience, leading to an overly complex answer.",
-            "Not providing a length constraint, which can result in a very long response."
+            "Just asking for a dry explanation of the water cycle.",
+            "Forgetting to mention the goal of inspiring action.",
+            "Not giving the AI enough creative freedom to make the story engaging."
           ]
         },
         {
           id: 2,
           type: "Multi-Step",
-          title: "Building a Story",
-          description: "Now, let's try a conversation. You'll guide the AI step-by-step to create a short story.",
-          task: "In three steps, prompt the AI to create a story about a brave knight and a friendly dragon.",
-          difficulty: "Beginner",
-          points: 150,
+          title: "A Knight's Dilemma",
+          description: "Great stories have conflict and choices. Let's guide the AI to create a story with a moral dilemma.",
+          task: "In three steps, prompt the AI to create a story about a knight sent to deal with a 'dangerous' dragon, only to discover the dragon is protecting a village's only source of clean water.",
+          difficulty: "Intermediate",
+          points: 180,
           steps: [
             {
               step: 1,
-              instruction: "Write a prompt to create a character profile for a brave but kind knight named Sir Reginald.",
-              example: "Describe a brave and kind knight named Sir Reginald. Mention his appearance and his most prized possession."
+              instruction: "Write a prompt to set the scene: a brave knight is ordered by a greedy king to slay a dragon that is 'hoarding' a river.",
+              example: "Set the scene for a fantasy story. A brave knight, Sir Gideon, is commanded by a greedy king to slay a dragon that has blocked a river, causing a water shortage in the kingdom."
             },
             {
               step: 2,
-              instruction: "Now, write a prompt to introduce a friendly, misunderstood dragon named Sparky.",
-              example: "Now, introduce a friendly dragon named Sparky who is feared by the local villagers but is actually very gentle."
+              instruction: "Now, write a prompt where Sir Gideon confronts the dragon and learns the truth: the dragon is actually protecting the river from being poisoned by the king's factories upstream.",
+              example: "Sir Gideon reaches the river and confronts the dragon. Write the scene where the dragon reveals that it has blocked the river to protect a small village downstream from the king's industrial waste, which is poisoning the water."
             },
             {
               step: 3,
-              instruction: "Finally, write a prompt that makes Sir Reginald and Sparky meet and become friends.",
-              example: "Write a short scene where Sir Reginald meets Sparky and, instead of fighting, they discover they both love biscuits and become friends."
+              instruction: "Finally, write a prompt that forces Sir Gideon to make a choice: obey the king or protect the village. The prompt should ask for a description of his decision and its immediate consequences.",
+              example: "Sir Gideon is now faced with a choice: obey his king or protect the innocent villagers. Write the conclusion of the story, describing his decision and what happens immediately after."
             }
           ],
           successCriteria: [
-            "Each prompt clearly defines the goal for that step.",
-            "The prompts build upon each other to create a coherent narrative.",
-            "The final prompt successfully brings the two characters together."
+            "Each prompt clearly guides the AI through the narrative arc.",
+            "The prompts successfully introduce and resolve the moral dilemma.",
+            "The final prompt leads to a clear and impactful conclusion."
           ],
           hints: [
-            "Think of it as a relay race; each prompt passes the baton to the next.",
-            "You don't need to repeat all the information from previous steps. The AI has short-term memory.",
-            "Use connecting phrases like 'Now, ...' or 'Next, ...' to guide the flow."
+            "Think about the story's message. What do you want the reader to feel?",
+            "Use the prompts to build suspense and emotional weight.",
+            "The final prompt is the most important. Make sure it asks for a resolution to the dilemma."
           ],
           commonMistakes: [
-            "Trying to do everything in the first prompt.",
-            "Writing contradictory instructions in different steps.",
-            "Forgetting the final goal of the story."
+            "Making the story too simple, with a clear good guy and bad guy.",
+            "Not creating a real dilemma for the knight.",
+            "Forgetting to ask for the consequences of the knight's decision."
           ]
         },
         {
           id: 3,
-          title: "The Perfect Weekend Itinerary",
-          description: "Plan a detailed weekend trip. This challenge focuses on providing clear, specific constraints to get a useful, actionable response.",
-          task: "Write a prompt to generate a weekend itinerary for a couple visiting London for the first time. The itinerary should be for a Saturday and Sunday, include a mix of famous landmarks and local experiences, have a budget of £150 per person (excluding accommodation), and suggest at least one restaurant for each day.",
-          difficulty: "Beginner",
-          points: 140,
+          title: "The Compromise Itinerary",
+          description: "A great prompt can solve a problem. Let's use AI to plan a trip for two people with very different tastes.",
+          task: "Write a prompt to generate a weekend itinerary for a couple visiting York. One person is a history buff who loves museums and quiet walks. The other is a thrill-seeker who loves adventure sports and lively pubs. They have a combined budget of £250 for activities and food.",
+          difficulty: "Intermediate",
+          points: 200,
           successCriteria: [
-            "Specifies the location (London) and duration (weekend).",
-            "Defines the travellers (a couple, first-time visitors).",
-            "Sets a clear budget constraint (£150 per person).",
-            "Requests a mix of activities and specific meal suggestions."
+            "Clearly defines the two conflicting personas and their interests.",
+            "Specifies the location (York) and duration (weekend).",
+            "Sets a clear budget constraint (£250 combined).",
+            "Asks the AI to create a balanced itinerary that satisfies both people."
           ],
           hints: [
-            "The more specific your constraints, the more tailored the result. Mention interests like 'art' or 'history' for an even better plan.",
-            "Tell the AI the desired output format, e.g., 'a day-by-day list'.",
-            "You can ask for practical tips like transport advice."
+            "You're not just asking for a list of places; you're asking the AI to solve a puzzle.",
+            "You could ask the AI to suggest activities they can do together and some they can do separately.",
+            "Think about how you can frame the prompt to encourage the AI to be creative in its suggestions."
           ],
-          examplePrompt: "Create a detailed weekend itinerary for a couple on their first visit to London. The budget is £150 per person for the two days (excluding hotel). Please include a mix of major sights and local gems, and recommend one mid-range restaurant for dinner each night. Present the plan as a schedule for Saturday and Sunday.",
+          examplePrompt: "Create a balanced weekend itinerary for a couple visiting York. She is a history graduate who wants to explore the city's Roman and Viking past. He is an adrenaline junkie who wants to try something exciting like rock climbing or kayaking. Their total budget for activities and food is £250. The itinerary should include at least one activity they can enjoy together.",
           commonMistakes: [
-            "Forgetting the budget, leading to unrealistic suggestions.",
-            "Being too general, like 'plan a trip to London'.",
-            "Not specifying the travellers' interests or that it's their first time."
+            "Focusing on only one person's interests.",
+            "Forgetting to mention the budget.",
+            "Not asking the AI to find a compromise, but just listing options for each person."
           ]
         },
         {
@@ -341,9 +341,9 @@ const challengeData = {
         },
         {
             id: 89,
-            title: "Capital City Quiz",
-            description: "Ask the AI a simple factual question.",
-            task: "Write a prompt that asks the AI for the capital city of Australia.",
+            title: "UK Capital City Quiz",
+            description: "Ask the AI a simple factual question about the UK.",
+            task: "Write a prompt that asks the AI for the capital city of Scotland.",
             difficulty: "Beginner",
             points: 100,
             successCriteria: [
@@ -351,9 +351,9 @@ const challengeData = {
             ],
             hints: [
                 "The AI is very good at answering questions that have a single correct answer.",
-                "Try asking it other simple trivia questions!"
+                "Try asking it other simple trivia questions about the UK!"
             ],
-            examplePrompt: "What is the capital city of Australia?",
+            examplePrompt: "What is the capital city of Scotland?",
             commonMistakes: [
                 "Asking a question that is too ambiguous or subjective."
             ]
@@ -365,7 +365,7 @@ const challengeData = {
       name: "Stage 2 - The Director's Chair",
       title: "Roles, Tone, and Style",
       description: "Learn to give the AI a persona and a specific voice. Become the director of your own AI-powered performance.",
-      color: "#059669",
+      colour: "#059669",
       unlocked: false,
       challenges: [
         {
@@ -722,7 +722,7 @@ const challengeData = {
       name: "Stage 3 - The Architect's Blueprint",
       title: "Structure and Formatting",
       description: "Command the AI to organise its output exactly as you want it. Learn to request tables, lists, and other structured formats.",
-      color: "#F59E0B",
+      colour: "#F59E0B",
       unlocked: false,
       challenges: [
         {
@@ -1050,7 +1050,7 @@ const challengeData = {
       name: "Stage 4 - The Creative Spark",
       title: "Ideation and Brainstorming",
       description: "Use the AI as a creative partner to generate ideas, explore concepts, and overcome creative blocks.",
-      color: "#EF4444",
+      colour: "#EF4444",
       unlocked: false,
       challenges: [
         {
@@ -1379,7 +1379,7 @@ const challengeData = {
       name: "Stage 5 - The Prompt Medic",
       title: "Debugging and Refinement",
       description: "Analyse and improve weak prompts. Learn to diagnose issues and iterate towards a perfect instruction.",
-      color: "#7C3AED",
+      colour: "#7C3AED",
       unlocked: false,
       challenges: [
         {
@@ -1716,7 +1716,7 @@ const challengeData = {
       name: "Stage 6 - The Code Whisperer",
       title: "Introduction to Code Generation",
       description: "Learn how to use AI as a powerful coding assistant to write scripts, explain code, and debug issues.",
-      color: "#10B981",
+      colour: "#10B981",
       unlocked: false,
       challenges: [
         {
@@ -2495,6 +2495,95 @@ const challengeData = {
       description: "Completed 5 challenges with a top score in clarity.",
       icon: "💎",
       condition: "clarity_score >= 90 for 5 challenges"
+    }
+    },
+    {
+      id: 7,
+      name: "Stage 7 - The Responsible Prompter",
+      title: "AI for Good",
+      description: "Learn how to use your prompt engineering skills responsibly and ethically.",
+      colour: "#9333EA",
+      unlocked: false,
+      challenges: [
+        {
+          id: 98,
+          type: "Prompt-Rescue",
+          title: "The Biased Job Description",
+          description: "AI models learn from the real world, which sometimes contains biases. Your job is to spot and correct them.",
+          task: "You have an AI-generated job description for a software developer that contains subtle gender bias. Rewrite the prompt to ask for a more inclusive and unbiased description.",
+          originalPrompt: "We are looking for a top-tier software developer to join our team. He should be a coding ninja, able to work long hours and be a true rockstar programmer.",
+          difficulty: "Expert",
+          points: 500,
+          successCriteria: [
+            "Identifies the gender bias in the original text.",
+            "Rewrites the prompt to ask for a gender-neutral and inclusive job description.",
+            "Focuses on skills and qualifications rather than stereotypes."
+          ],
+          hints: [
+            "Avoid using gendered pronouns like 'he'.",
+            "Think about the kind of language that would make everyone feel welcome to apply.",
+            "Focus on the actual skills needed for the job, not on cultural fit or personality traits."
+          ],
+          examplePrompt: "Please rewrite this job description for a software developer to be more inclusive and welcoming to people of all genders and backgrounds. Remove the stereotypes and focus on the essential skills and responsibilities. Original text: 'We are looking for a top-tier software developer to join our team. He should be a coding ninja, able to work long hours and be a true rockstar programmer.'",
+          commonMistakes: [
+            "Only removing the pronoun but keeping the biased language.",
+            "Making the description too generic and losing the sense of what the job is.",
+            "Not explaining why the original prompt was problematic."
+          ]
+        },
+        {
+          id: 99,
+          type: "Prompt-Rescue",
+          title: "The Personal Information Leak",
+          description: "It's important to protect your personal information when using AI. Let's practise removing sensitive data from a prompt.",
+          task: "You want to ask an AI for advice on a personal situation, but your prompt contains sensitive information. Rewrite the prompt to ask for the same advice without revealing any personal details.",
+          originalPrompt: "My name is John Smith, I live at 123 Fake Street, London, and I'm having a disagreement with my neighbour, Jane Doe, about her dog barking. My phone number is 07123456789. What should I do?",
+          difficulty: "Expert",
+          points: 500,
+          successCriteria: [
+            "Identifies all the personal information in the prompt.",
+            "Rewrites the prompt to be about a hypothetical situation.",
+            "The rewritten prompt still gets the user the advice they need."
+          ],
+          hints: [
+            "You can replace specific details with generic terms like 'a person' or 'a neighbour'.",
+            "Focus on the core of the problem, not the specific people involved.",
+            "Think about what information is actually necessary for the AI to answer the question."
+          ],
+          examplePrompt: "I'm having a disagreement with a neighbour about their dog barking loudly and frequently. What are some constructive and legal steps I can take to resolve this issue in the UK?",
+          commonMistakes: [
+            "Removing some but not all of the personal information.",
+            "Making the prompt so vague that the AI can't give useful advice.",
+            "Forgetting to ask for advice that is relevant to your location (e.g., UK law)."
+          ]
+        },
+        {
+          id: 100,
+          type: "Prompt-Rescue",
+          title: "The Homework Helper",
+          description: "AI can be a powerful learning tool, but it's important to use it honestly. Let's turn a cheating prompt into a learning prompt.",
+          task: "You have a history question for homework. Instead of asking the AI for the answer, rewrite the prompt to ask the AI to help you understand the topic so you can answer it yourself.",
+          originalPrompt: "What were the three main causes of the English Civil War?",
+          difficulty: "Expert",
+          points: 500,
+          successCriteria: [
+            "Changes the prompt from asking for an answer to asking for help.",
+            "Asks for key concepts, discussion points, or a summary of the topic.",
+            "The new prompt helps the user to learn, not to cheat."
+          ],
+          hints: [
+            "Instead of asking 'What is the answer?', try asking 'Can you explain the key concepts of...?'.",
+            "You can ask the AI to give you a study guide or a list of important events.",
+            "Think about how a teacher would help you with a difficult question."
+          ],
+          examplePrompt: "I'm writing an essay on the causes of the English Civil War. Could you explain the three main causes in simple terms and give me some key dates and figures I should research further?",
+          commonMistakes: [
+            "Asking for the answer in a slightly different way.",
+            "Not asking for explanations or concepts.",
+            "Copying the AI's response directly into your homework."
+          ]
+        }
+      ]
     }
   ]
 };

@@ -67,11 +67,9 @@ class PromptQuestGame {
     }
 
     loadInitialChallenge() {
-        // Load the first available challenge
-        const firstLevel = challengeData.levels.find(level => level.unlocked);
-        if (firstLevel && firstLevel.challenges.length > 0) {
-            this.selectChallenge(firstLevel.challenges[0].id);
-        }
+        // Don't auto-load any challenge - let user choose
+        // Just load the challenge list
+        console.log('Challenges loaded. Select one to begin.');
     }
 
     loadChallenges() {
@@ -239,6 +237,7 @@ class PromptQuestGame {
             const textarea = document.getElementById('user-prompt');
             if (textarea) {
                 textarea.value = '';
+                textarea.focus(); // Auto-focus on the textarea
             }
             
             // Hide feedback section
@@ -246,6 +245,12 @@ class PromptQuestGame {
             if (feedbackSection) {
                 feedbackSection.classList.add('hidden');
             }
+        }
+        
+        // Hide the welcome message
+        const welcomeContent = document.querySelector('#challenge-content .text-center');
+        if (welcomeContent) {
+            welcomeContent.style.display = 'none';
         }
     }
 

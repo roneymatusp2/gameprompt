@@ -8,6 +8,15 @@ class AIPreviewSystem {
     }
 
     init() {
+        // Disabled by default - AI Preview not needed for main flow
+        console.log('AI Preview System initialized (disabled by default)');
+        // this.createPreviewPanel();
+        // this.setupEventListeners();
+        // this.initializeAIConnection();
+    }
+    
+    // Method to enable if needed
+    enable() {
         this.createPreviewPanel();
         this.setupEventListeners();
         this.initializeAIConnection();

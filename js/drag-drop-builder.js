@@ -51,16 +51,36 @@ class DragDropPromptBuilder {
     }
 
     init() {
-        this.createBlockPalette();
-        this.createDropZone();
+        // Don't auto-create the builder - only create when explicitly requested
         this.setupEventHandlers();
-        this.createSandboxMode();
+        console.log('Drag-drop builder initialized (hidden by default)');
+    }
+    
+    // Method to show the builder when needed
+    showBuilder() {
+        if (!document.querySelector('.prompt-builder-palette')) {
+            this.createBlockPalette();
+            this.createDropZone();
+            this.createSandboxMode();
+        }
+    }
+    
+    // Method to hide the builder
+    hideBuilder() {
+        const palette = document.querySelector('.prompt-builder-palette');
+        const dropZone = document.querySelector('.prompt-drop-zone');
+        const sandbox = document.querySelector('.sandbox-mode-container');
+        
+        if (palette) palette.remove();
+        if (dropZone) dropZone.remove();
+        if (sandbox) sandbox.remove();
     }
 
     createBlockPalette() {
         const paletteHTML = `
             <div class="prompt-builder-palette bg-white rounded-xl shadow-xl p-6 mb-8">
                 <h3 class="text-2xl font-bold mb-4 gradient-text">Prompt Block Palette</h3>
+                <p class="text-gray-600 mb-4">Drag blocks to build your prompt visually</p>
                 <div class="block-categories">
                     ${Object.entries(this.promptBlocks).map(([category, blocks]) => `
                         <div class="block-category mb-6">
@@ -74,9 +94,11 @@ class DragDropPromptBuilder {
             </div>
         `;
 
-        const container = document.createElement('div');
-        container.innerHTML = paletteHTML;
-        document.querySelector('.challenge-display').prepend(container);
+        const builderSection = document.getElementById('prompt-builder-section');
+        if (builderSection) {
+            builderSection.innerHTML = paletteHTML;
+            builderSection.classList.remove('hidden');
+        }
     }
 
     createBlock(block, category) {
@@ -111,9 +133,9 @@ class DragDropPromptBuilder {
             </div>
         `;
 
-        const existingPromptInput = document.querySelector('.prompt-input-section');
-        if (existingPromptInput) {
-            existingPromptInput.insertAdjacentHTML('beforebegin', dropZoneHTML);
+        const builderSection = document.getElementById('prompt-builder-section');
+        if (builderSection) {
+            builderSection.insertAdjacentHTML('beforeend', dropZoneHTML);
         }
     }
 
@@ -139,7 +161,10 @@ class DragDropPromptBuilder {
             </div>
         `;
 
-        document.querySelector('.challenge-display')?.insertAdjacentHTML('beforeend', sandboxHTML);
+        const builderSection = document.getElementById('prompt-builder-section');
+        if (builderSection) {
+            builderSection.insertAdjacentHTML('beforeend', sandboxHTML);
+        }
     }
 
     setupEventHandlers() {

@@ -26,20 +26,47 @@
     
     <style>
         :root {
+            /* Core Palette */
             --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --primary-light: #818CF8;
             --secondary: #059669;
             --accent: #F59E0B;
-            --neutral: #64748B;
-            --background: #0F0F1E;
-            --card-bg: rgba(255, 255, 255, 0.05);
+            --danger: #EF4444;
+            
+            /* Semantic Colors */
+            --bg-main: #0F0F1E;
+            --bg-card: rgba(30, 41, 59, 0.95);
+            --bg-card-hover: rgba(30, 41, 59, 1);
+            
+            --text-primary: #F9FAFB;
+            --text-secondary: #D1D5DB;
+            --text-muted: #9CA3AF;
+            
+            --border-light: rgba(75, 85, 99, 0.4);
+            --border-focus: rgba(79, 70, 229, 0.6);
+        }
+        
+        /* Light Theme Override Class */
+        body.light-theme {
+            --bg-main: #FEFBF3;
+            --bg-card: rgba(255, 255, 255, 0.95);
+            --bg-card-hover: #FFFFFF;
+            
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #6B7280;
+            
+            --border-light: rgba(229, 231, 235, 1);
         }
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--background);
-            color: #E5E7EB;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
             position: relative;
             min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         #vanta-background {
@@ -481,6 +508,13 @@
                         <span>🏆</span>
                         <span>Achievements</span>
                     </button>
+                    <button onclick="window.audioSystem.toggleMute()" class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Toggle Sound">
+                        <span class="sound-on hidden">🔊</span>
+                        <span class="sound-off">🔇</span>
+                    </button>
+                    <button onclick="document.body.classList.toggle('light-theme')" class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Toggle Theme">
+                        <span>🌓</span>
+                    </button>
                     <a href="progress.html" class="text-gray-600 hover:text-gray-900 font-medium">Progress</a>
                     <a href="tutorial.html" class="text-gray-600 hover:text-gray-900 font-medium">Tutorial</a>
                     <div class="relative">
@@ -660,7 +694,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
     
     <!-- Firebase Local Config (if exists, not committed to git) -->
-    <script src="js/firebase-config.local.js" onerror="console.log('Local config not found, using defaults')"></script>
+    <script src="js/firebase-config.local.js" onerror="console.log('Local Firebase config not found, using defaults')"></script>
+    <!-- Gemini Local Config (if exists, not committed to git) -->
+    <script src="js/gemini-config.local.js" onerror="console.log('Local Gemini config not found, using defaults')"></script>
+    
     
     <!-- Load scripts -->
     <script src="js/firebase-config.js"></script>
@@ -673,12 +710,12 @@
     <script src="js/mini-games.js"></script>
     <script src="js/achievements.js"></script>
     
-    <!-- Optional feature scripts (loaded but not auto-initialized) -->
-    <!-- <script src="js/drag-drop-builder.js"></script> --> <!-- Visual prompt builder - disabled -->
-    <!-- <script src="js/ai-preview.js"></script> --> <!-- Live AI preview - disabled -->
-    <!-- <script src="js/multiplayer.js"></script> --> <!-- Multiplayer features - disabled -->
-    <!-- <script src="js/audio-system.js"></script> --> <!-- Sound effects - disabled -->
-    <!-- <script src="js/game-integration.js"></script> --> <!-- Game integration - disabled -->
+    <!-- Optional feature scripts -->
+    <script src="js/drag-drop-builder.js"></script>
+    <script src="js/ai-preview.js"></script>
+    <script src="js/multiplayer.js"></script>
+    <script src="js/audio-system.js"></script>
+    <script src="js/game-integration.js"></script>
     
     <!-- Auth Check (Optional Mode) -->
     <script>

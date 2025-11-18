@@ -327,28 +327,18 @@ class ProgressSystem {
     }
 
     updateLevelProgress() {
-        const unlockThresholds = {
-            1: 1,
-            2: 2,
-            3: 3,
-            4: 4,
-            5: 5
-        };
-
-        Object.entries(unlockThresholds).forEach(([levelId, requiredPlayerLevel]) => {
-            const numericId = parseInt(levelId, 10);
+        challengeData.levels.forEach(level => {
+            const numericId = Number(level.id);
+            const requiredPlayerLevel = level.unlockLevel || Math.min(numericId, 5);
             const isUnlocked = this.userProgress.currentLevel >= requiredPlayerLevel;
 
             if (!this.userProgress.levelProgress[numericId]) {
                 this.userProgress.levelProgress[numericId] = { unlocked: isUnlocked, completed: false };
-            } else if (isUnlocked && !this.userProgress.levelProgress[numericId].unlocked) {
-                this.userProgress.levelProgress[numericId].unlocked = true;
+            } else if (this.userProgress.levelProgress[numericId].unlocked !== isUnlocked) {
+                this.userProgress.levelProgress[numericId].unlocked = isUnlocked;
             }
 
-            const levelData = challengeData.levels.find(level => level.id === numericId);
-            if (levelData) {
-                levelData.unlocked = this.userProgress.levelProgress[numericId].unlocked;
-            }
+            level.unlocked = this.userProgress.levelProgress[numericId].unlocked;
         });
 
         this.updateLevelCompletionStatus();

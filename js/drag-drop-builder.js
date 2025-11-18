@@ -232,6 +232,66 @@ class DragDropPromptBuilder {
                 this.removeBlock(e.target.parentElement);
             }
         });
+
+        // --- Touch Support for Mobile ---
+        let touchDragItem = null;
+        let touchClone = null;
+
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.classList.contains('prompt-block')) {
+                e.preventDefault(); // Prevent scrolling
+                touchDragItem = e.target;
+                
+                // Create a clone for visual feedback
+                touchClone = touchDragItem.cloneNode(true);
+                touchClone.style.position = 'absolute';
+                touchClone.style.opacity = '0.8';
+                touchClone.style.zIndex = '1000';
+                touchClone.style.pointerEvents = 'none';
+                document.body.appendChild(touchClone);
+                
+                // Move clone to finger position
+                const touch = e.touches[0];
+                touchClone.style.left = `${touch.clientX - 50}px`;
+                touchClone.style.top = `${touch.clientY - 25}px`;
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', (e) => {
+            if (touchDragItem && touchClone) {
+                const touch = e.touches[0];
+                touchClone.style.left = `${touch.clientX - 50}px`;
+                touchClone.style.top = `${touch.clientY - 25}px`;
+                
+                // Highlight drop zone if hovering
+                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                const dropZone = elementBelow?.closest('.prompt-drop-zone');
+                
+                document.querySelectorAll('.prompt-drop-zone').forEach(z => z.classList.remove('drag-over'));
+                if (dropZone) {
+                    dropZone.classList.add('drag-over');
+                }
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', (e) => {
+            if (touchDragItem) {
+                const touch = e.changedTouches[0];
+                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                const dropZone = elementBelow?.closest('.prompt-drop-zone');
+                
+                if (dropZone) {
+                    dropZone.classList.remove('drag-over');
+                    this.addBlockToPrompt(touchDragItem);
+                    this.createSuccessAnimation(dropZone);
+                }
+                
+                // Cleanup
+                if (touchClone) touchClone.remove();
+                touchDragItem = null;
+                touchClone = null;
+            }
+        });
     }
 
     addBlockToPrompt(blockElement) {

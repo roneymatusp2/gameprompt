@@ -1,0 +1,8 @@
+// Gemini Configuration - LOCAL FILE EXAMPLE
+// Copy this file and rename it to gemini-config.local.js
+// Add your actual Gemini API key below
+// This file is NOT committed to Git (see .gitignore)
+
+window.__GEMINI_LOCAL_CONFIG__ = {
+    apiKey: "YOUR_GEMINI_API_KEY_HERE"
+};

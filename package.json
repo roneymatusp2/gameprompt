@@ -4,8 +4,8 @@
   "description": "A gamified web application to teach students AI prompt engineering through interactive challenges",
   "main": "index.html",
   "scripts": {
-    "dev": "python -m http.server 8000",
-    "start": "python -m http.server 8000",
+    "dev": "python development-server.py",
+    "start": "python development-server.py",
     "build": "echo 'Build completed - ready for deployment'",
     "test": "echo 'No tests specified'"
   },

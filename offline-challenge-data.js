@@ -1613,6 +1613,82 @@ const offlineChallengeLibrary = {
           ]
         }
       ]
+    },
+    {
+      "id": "Offline 3",
+      "name": "Offline Stage 3 - Junior Sandbox",
+      "title": "Junior Explorers",
+      "description": "Simple, fun prompts for young learners to practice without logging in.",
+      "color": "#F472B6",
+      "unlocked": true,
+      "difficultyBand": "Beginner",
+      "challenges": [
+        {
+          "id": 2001,
+          "title": "Junior Drill: The Polite Robot",
+          "description": "Teach the AI to be a polite robot helper.",
+          "task": "Write a prompt that asks the AI to introduce itself as a robot named 'Beep'. It should ask the user how their day is going in a very polite and kind way.",
+          "difficulty": "Beginner",
+          "points": 100,
+          "successCriteria": [
+            "Introduces itself as 'Beep'.",
+            "Asks 'how is your day?'.",
+            "Uses polite words like 'please' or 'kindly'."
+          ],
+          "hints": [
+            "Use 'Act as...'",
+            "Tell it to be super polite."
+          ],
+          "examplePrompt": "Act as a polite robot named Beep. Introduce yourself and kindly ask me how my day is going.",
+          "commonMistakes": [
+            "Forgetting the name 'Beep'.",
+            "Not asking the question."
+          ]
+        },
+        {
+          "id": 2002,
+          "title": "Junior Drill: Animal Facts",
+          "description": "Get three cool facts about an animal.",
+          "task": "Write a prompt asking for 3 interesting facts about elephants. Ask for them to be in a list.",
+          "difficulty": "Beginner",
+          "points": 100,
+          "successCriteria": [
+            "Topic is elephants.",
+            "Asks for 3 facts.",
+            "Requests a list format."
+          ],
+          "hints": [
+            "Be specific about the number (3).",
+            "Use the word 'list'."
+          ],
+          "examplePrompt": "Give me a list of 3 interesting facts about elephants.",
+          "commonMistakes": [
+            "Asking for 'some' facts instead of '3'.",
+            "Forgetting the list format."
+          ]
+        },
+        {
+          "id": 2003,
+          "title": "Junior Drill: The Rhyme Time",
+          "description": "Make the AI write a rhyme.",
+          "task": "Write a prompt asking the AI to write a short rhyme about a cat sitting on a mat.",
+          "difficulty": "Beginner",
+          "points": 100,
+          "successCriteria": [
+            "Topic is a cat on a mat.",
+            "Asks for a rhyme or poem.",
+            "Keeps it short."
+          ],
+          "hints": [
+            "Use words like 'poem' or 'rhyme'.",
+            "Keep it simple."
+          ],
+          "examplePrompt": "Write a short rhyme about a cat sitting on a mat.",
+          "commonMistakes": [
+            "Asking for a story instead of a rhyme."
+          ]
+        }
+      ]
     }
   ]
 };

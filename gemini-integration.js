@@ -1,28 +1,40 @@
 class GeminiIntegration {
     constructor() {
-        this.apiKey = null; // Would be set from environment variable
-        this.mockMode = true; // Use mock responses for demo
+        this.apiKey = null;
+        this.mockMode = true; // Default to mock responses
         this.init();
     }
 
     init() {
-        // In a real implementation, this would load the API key
-        // this.apiKey = process.env.GEMINI_API_KEY;
-        console.log('Gemini Integration initialized in mock mode');
+        // Attempt to load API key from Netlify environment variables
+        if (typeof window !== 'undefined' && window.netlify && window.netlify.env) {
+            const env = window.netlify.env;
+            if (env.GEMINI_PROMPT) {
+                this.apiKey = env.GEMINI_PROMPT;
+                this.mockMode = false;
+                console.log('✅ Gemini Integration initialized with Netlify environment key. Mock mode disabled.');
+                console.warn('⚠️ WARNING: Gemini API key is exposed client-side. For production, consider using a server-side proxy (e.g., Netlify Functions) to protect your key and prevent abuse.');
+            }
+        }
+
+        // Fallback for local development or if Netlify env not found
+        if (this.apiKey === null) {
+            // Check for local file config (similar to firebase-config.local.js)
+            if (typeof window !== 'undefined' && window.__GEMINI_LOCAL_CONFIG__ && window.__GEMINI_LOCAL_CONFIG__.apiKey) {
+                this.apiKey = window.__GEMINI_LOCAL_CONFIG__.apiKey;
+                this.mockMode = false;
+                console.log('✅ Gemini Integration initialized with local config. Mock mode disabled.');
+                console.warn('⚠️ WARNING: Gemini API key is exposed client-side. For production, consider using a server-side proxy (e.g., Netlify Functions) to protect your key and prevent abuse.');
+            } else {
+                console.log('Gemini Integration initialized in mock mode. No real API key found.');
+                this.mockMode = true;
+            }
+        }
     }
 
     async evaluatePrompt(userPrompt, challenge) {
-        try {
-            if (this.mockMode) {
-                return this.generateMockEvaluation(userPrompt, challenge);
-            } else {
-                return await this.callGeminiAPI(userPrompt, challenge);
-            }
-        } catch (error) {
-            console.error('Error evaluating prompt:', error);
-            return this.getErrorResponse();
-        }
-    }
+        if (this.mockMode || !this.apiKey) {
+            console.log('Running mock evaluation...');
 
     async callGeminiAPI(userPrompt, challenge) {
         // This would be the actual API call in production
@@ -52,12 +64,41 @@ class GeminiIntegration {
     }
 
     buildEvaluationPrompt(userPrompt, challenge) {
+        const contextSections = [];
+        
+        if (Array.isArray(challenge.learningFocus) && challenge.learningFocus.length) {
+            contextSections.push(`Learning focus: ${challenge.learningFocus.join(' | ')}`);
+        }
+        
+        if (Array.isArray(challenge.skillFocus) && challenge.skillFocus.length) {
+            contextSections.push(`Skill tags: ${challenge.skillFocus.join(', ')}`);
+        }
+        
+        if (challenge.promptBlueprint?.steps?.length) {
+            const title = challenge.promptBlueprint.title || 'Prompt blueprint';
+            const summary = challenge.promptBlueprint.steps
+                .map(step => `${step.name || step.label || 'Step'} - ${step.detail || step.instruction || ''}`)
+                .join(' | ');
+            contextSections.push(`${title}: ${summary}`);
+        }
+        
+        if (Array.isArray(challenge.curriculumLinks) && challenge.curriculumLinks.length) {
+            contextSections.push(`Curriculum links: ${challenge.curriculumLinks.join(' | ')}`);
+        }
+        
+        if (challenge.reflectionPrompt) {
+            contextSections.push(`Reflection question students will answer: ${challenge.reflectionPrompt}`);
+        }
+        
+        const additionalContext = contextSections.length ? `\nAdditional challenge context:\n${contextSections.join('\n')}\n` : '';
+        
         return `You are an expert prompt engineering evaluator. Analyze the following user prompt for the given challenge and provide a detailed evaluation.
 
 Challenge: ${challenge.title}
 Description: ${challenge.description}
 Task: ${challenge.task}
 Success Criteria: ${challenge.successCriteria.join(', ')}
+${additionalContext}
 
 User Prompt: """${userPrompt}"""
 
@@ -136,97 +177,75 @@ Be constructive and specific in your feedback. Focus on helping the user improve
     }
 
     evaluateClarity(prompt, wordCount) {
-        let score = 8; // Lower base score
+        let score = 10; // Base score
         
         // Check for clear action verbs
-        const actionVerbs = ['explain', 'describe', 'create', 'write', 'generate', 'analyze', 'summarize', 'provide', 'list'];
+        const actionVerbs = ['explain', 'describe', 'create', 'write', 'generate', 'analyze', 'summarize', 'provide', 'list', 'draft', 'outline', 'compare'];
         const hasActionVerb = actionVerbs.some(verb => prompt.includes(verb));
         if (hasActionVerb) score += 4;
-        else score -= 3; // Penalty for no action verb
         
-        // Check for vague language - stricter penalties
-        const vagueWords = ['something', 'stuff', 'things', 'good', 'bad', 'nice', 'some', 'any'];
+        // Check for vague language
+        const vagueWords = ['something', 'stuff', 'things', 'good', 'bad', 'nice', 'some', 'any', 'maybe'];
         const vagueCount = vagueWords.filter(word => prompt.includes(word)).length;
-        score -= vagueCount * 3;
+        score -= vagueCount * 2;
         
-        // Check length (too short or too long can hurt clarity)
-        if (wordCount < 8) score -= 5; // Stricter minimum
-        if (wordCount < 5) score -= 8; // Very short prompts
-        if (wordCount > 100) score -= 4; // Too verbose
+        // Check length - balance between too short and too verbose
+        if (wordCount < 5) score -= 5; // Too short
+        else if (wordCount < 10) score -= 2; // A bit short
+        else if (wordCount > 15 && wordCount < 80) score += 3; // Sweet spot
+        else if (wordCount > 150) score -= 2; // Getting verbose
         
-        // Bonus for proper sentence structure
-        if (prompt.includes('.') || prompt.includes('?')) score += 2;
+        // Bonus for proper sentence structure and punctuation
+        if (prompt.match(/[.?!]$/)) score += 2; // Ends with punctuation
+        if (prompt.match(/[A-Z]/)) score += 1; // Uses capitalization (heuristic)
         
         return Math.max(0, Math.min(20, score));
     }
 
     evaluateSpecificity(prompt, challenge) {
-        let score = 5; // Much lower base score
+        let score = 8; // Base score
         let requiredMatches = 0;
         let totalRequired = challenge.successCriteria.length;
         
         // Check if prompt addresses the specific challenge requirements
+        // Using a more flexible matching approach
         challenge.successCriteria.forEach(criterion => {
-            const keywords = criterion.toLowerCase().split(' ').filter(w => w.length > 3);
-            const hasKeyword = keywords.some(keyword => prompt.includes(keyword));
-            if (hasKeyword) {
+            // Extract significant words (len > 3) from criterion
+            const keywords = criterion.toLowerCase().replace(/[.,]/g, '').split(' ').filter(w => w.length > 3);
+            // Check if a good portion of these keywords exist in the prompt
+            const matches = keywords.filter(keyword => prompt.includes(keyword));
+            if (matches.length >= Math.ceil(keywords.length * 0.5)) {
                 requiredMatches++;
-                score += 3;
+                score += 4; // Good match
+            } else if (matches.length > 0) {
+                score += 1; // Partial match
             }
         });
         
-        // Penalty if not addressing challenge requirements
-        if (requiredMatches === 0) score -= 5;
-        if (requiredMatches < totalRequired / 2) score -= 3;
-        
-        // Check for specific details based on challenge
-        if (challenge.id === 1) { // Photosynthesis for 10-year-old
-            if (prompt.includes('10') || prompt.includes('child') || prompt.includes('kid') || prompt.includes('year')) score += 3;
-            else score -= 4; // Penalty for missing age specification
-            if (prompt.includes('simple') || prompt.includes('easy') || prompt.includes('basic')) score += 2;
-        } else if (challenge.id === 2) { // Recipe with dietary restrictions
-            if (prompt.includes('gluten') || prompt.includes('vegan') || prompt.includes('allerg')) score += 3;
-            else score -= 4; // Penalty for missing dietary info
-            if (prompt.includes('measure') || prompt.includes('ingredient')) score += 2;
-        } else if (challenge.id === 3) { // Science fair project
-            if (prompt.includes('school') || prompt.includes('student')) score += 2;
-            if (prompt.includes('step') || prompt.includes('guide')) score += 2;
-        } else if (challenge.id === 4) { // Travel recommendations
-            if (prompt.includes('local') || prompt.includes('expert') || prompt.includes('guide')) score += 3;
-        } else if (challenge.id === 5) { // Business advice
-            if (prompt.includes('freelance') || prompt.includes('budget') || prompt.includes('experience')) score += 3;
-        }
-        
-        // Check for constraints and requirements
-        if (prompt.includes('include') || prompt.includes('provide') || prompt.includes('add')) score += 1;
-        
-        // Bonus for numbers and specific measurements
-        if (/\d+/.test(prompt)) score += 2;
+        // Bonus for quotes or specific values if likely required
+        if (prompt.includes('"') || prompt.includes("'")) score += 2;
+        if (/\d+/.test(prompt)) score += 2; // Contains numbers
         
         return Math.max(0, Math.min(20, score));
     }
 
     evaluateContext(prompt, challenge) {
-        let score = 4; // Much lower base score
+        let score = 6; // Base score
         
-        // Check for audience specification - now required
-        const audienceIndicators = ['student', 'child', 'beginner', 'expert', 'professional', 'teacher', 'audience', 'reader'];
+        // Check for audience specification
+        const audienceIndicators = ['student', 'child', 'beginner', 'expert', 'professional', 'teacher', 'audience', 'reader', 'class', 'team', 'colleague'];
         const hasAudience = audienceIndicators.some(indicator => prompt.includes(indicator));
         if (hasAudience) score += 5;
-        else score -= 3; // Penalty for missing audience
         
-        // Check for role/persona definition - highly valued
-        if (prompt.includes('act as') || prompt.includes('imagine you are') || prompt.includes('pretend') || prompt.includes('you are')) score += 6;
-        else score -= 2; // Penalty for no role definition
+        // Check for role/persona definition - expanded list
+        const personaIndicators = ['act as', 'imagine you are', 'pretend', 'you are', 'role of', 'expert in', 'consultant', 'coach', 'guide', 'teacher'];
+        if (personaIndicators.some(p => prompt.includes(p))) score += 6;
         
-        // Check for background context
-        if (prompt.includes('background') || prompt.includes('context') || prompt.includes('situation')) score += 3;
+        // Check for background context or scenario setting
+        if (prompt.includes('context') || prompt.includes('background') || prompt.includes('situation') || prompt.includes('scenario') || prompt.includes('because') || prompt.includes('so that')) score += 3;
         
         // Check for tone/style specification
-        if (prompt.includes('tone') || prompt.includes('style') || prompt.includes('formal') || prompt.includes('casual')) score += 2;
-        
-        // Check for purpose/goal
-        if (prompt.includes('purpose') || prompt.includes('goal') || prompt.includes('objective') || prompt.includes('aim')) score += 2;
+        if (prompt.includes('tone') || prompt.includes('style') || prompt.includes('voice') || prompt.includes('mood') || prompt.includes('formal') || prompt.includes('casual') || prompt.includes('friendly')) score += 2;
         
         return Math.max(0, Math.min(20, score));
     }
@@ -295,30 +314,59 @@ Be constructive and specific in your feedback. Focus on helping the user improve
     generateFeedback(scores, prompt, challenge) {
         const feedback = [];
         
-        if (scores.clarity >= 16) {
-            feedback.push("Excellent clarity! Your prompt is very clear and easy to understand.");
-        } else if (scores.clarity >= 12) {
-            feedback.push("Good clarity, but consider using more direct language.");
-        } else {
-            feedback.push("Your prompt could be clearer. Try using simpler words and direct instructions.");
+        // 1. Clarity Evidence
+        if (scores.clarity >= 15) {
+            const actionVerb = ['explain', 'describe', 'create', 'write', 'generate', 'analyze', 'summarize', 'provide', 'list', 'draft', 'outline', 'compare'].find(v => prompt.includes(v));
+            if (actionVerb) {
+                feedback.push(`✅ **Clarity**: Excellent start using the strong action verb "${actionVerb}".`);
+            } else {
+                feedback.push("✅ **Clarity**: Your instruction is direct and unambiguous.");
+            }
+        } else if (scores.clarity < 12) {
+            feedback.push("⚠️ **Clarity**: The prompt feels a bit vague. Try starting with a specific command like 'Create', 'Write', or 'Explain'.");
         }
         
-        if (scores.specificity >= 16) {
-            feedback.push("Great specificity! You've provided excellent detail and constraints.");
-        } else if (scores.specificity >= 12) {
-            feedback.push("Good detail, but you could add more specific requirements.");
-        } else {
-            feedback.push("Try to include more specific details about what you want.");
+        // 2. Specificity Evidence
+        if (scores.specificity >= 15) {
+            const matches = challenge.successCriteria.filter(c => {
+                const keywords = c.toLowerCase().replace(/[.,]/g, '').split(' ').filter(w => w.length > 3);
+                return keywords.some(k => prompt.includes(k));
+            });
+            
+            if (matches.length > 0) {
+                feedback.push(`✅ **Specificity**: You successfully included key details like "${matches[0].split(' ').slice(0, 3).join(' ')}...".`);
+            } else {
+                feedback.push("✅ **Specificity**: Good job including specific constraints.");
+            }
+        } else if (scores.specificity < 12) {
+            feedback.push("⚠️ **Specificity**: You missed some specific requirements from the challenge description.");
         }
         
-        if (scores.context >= 16) {
-            feedback.push("Perfect context! You've set up the situation beautifully.");
-        } else if (scores.context >= 12) {
-            feedback.push("Good context, but consider adding more background information.");
-        } else {
-            feedback.push("Add more context to help the AI understand the situation better.");
+        // 3. Context Evidence
+        if (scores.context >= 15) {
+            const persona = ['act as', 'imagine', 'you are', 'role of', 'expert'].find(p => prompt.includes(p));
+            const audience = ['student', 'child', 'beginner', 'expert', 'professional', 'teacher', 'audience'].find(a => prompt.includes(a));
+            
+            if (persona) {
+                feedback.push(`✅ **Context**: Great use of persona setting ("${persona}").`);
+            } else if (audience) {
+                feedback.push(`✅ **Context**: You clearly defined the audience ("${audience}").`);
+            } else {
+                feedback.push("✅ **Context**: The background information provided is very helpful.");
+            }
+        } else if (scores.context < 12) {
+            feedback.push("⚠️ **Context**: Who is this for? Who is the AI pretending to be? Adding a persona or audience would help.");
         }
         
+        // 4. Structure Evidence
+        if (scores.structure >= 15) {
+            if (prompt.includes('1.') || prompt.includes('bullet')) {
+                feedback.push("✅ **Structure**: Explicitly asking for a list/bullets guarantees a clean output.");
+            } else {
+                feedback.push("✅ **Structure**: Your prompt is well-organized and easy for the AI to parse.");
+            }
+        }
+
         return feedback;
     }
 
@@ -345,11 +393,41 @@ Be constructive and specific in your feedback. Focus on helping the user improve
             suggestions.push("Use formatting to separate different requirements");
         }
         
+        this.addSkillFocusSuggestions(challenge, scores, suggestions);
+        
         if (suggestions.length === 0) {
             suggestions.push("Excellent work! Your prompt demonstrates strong prompt engineering skills.");
         }
         
         return suggestions;
+    }
+    
+    addSkillFocusSuggestions(challenge, scores, suggestions) {
+        if (!challenge?.skillFocus?.length) return;
+        
+        const skillMap = {
+            audience: { scoreKey: 'context', threshold: 14, message: "Spell out the age, prior knowledge, or perspective of your audience so the AI can tailor its voice." },
+            tone: { scoreKey: 'context', threshold: 14, message: "Describe the tone or persona you want (e.g., celebratory, formal) to shape delivery." },
+            constraints: { scoreKey: 'specificity', threshold: 15, message: "Layer clear constraints such as word counts, formats, budgets, or timing to focus the output." },
+            structure: { scoreKey: 'structure', threshold: 14, message: "Break the request into labelled steps or sections so each requirement is unmistakable." },
+            reflection: { scoreKey: 'effectiveness', threshold: 15, message: "Ask the AI to include a self-check, reflection question, or success criteria at the end." },
+            ethics: { scoreKey: 'effectiveness', threshold: 15, message: "State any safety, fairness, or safeguarding boundaries you expect the AI to respect." },
+            evidence: { scoreKey: 'specificity', threshold: 15, message: "Request citations, data points, or observations so arguments stay grounded." },
+            iteration: { scoreKey: 'structure', threshold: 14, message: "Encourage the AI to suggest the next iteration or improvement checklist, not only the first draft." }
+        };
+        
+        const added = new Set();
+        
+        challenge.skillFocus.forEach(skill => {
+            if (added.has(skill)) return;
+            const config = skillMap[skill];
+            if (!config) return;
+            const scoreValue = scores[config.scoreKey] ?? 0;
+            if (scoreValue < config.threshold) {
+                suggestions.push(config.message);
+                added.add(skill);
+            }
+        });
     }
 
     generateImprovement(prompt, challenge, scores) {

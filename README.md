@@ -85,6 +85,8 @@ prompt-quest/
 - **Real-time Evaluation**: AI-powered prompt assessment
 - **Gamification**: XP system, badges, and streaks
 - **Educational Content**: Comprehensive tutorial and examples
+- **St Paul's Scholar Studio**: Dedicated questline rooted in real St Paul's School contexts (House mags, GCSE prep, parliamentary debates, engineering challenges).
+- **Learning Blueprints & Reflection**: Each challenge now highlights learning focus tags, curriculum links, and a reflection question to cement metacognition.
 
 ### Visual Design
 - **Modern UI**: Clean, colorful, game-like interface
@@ -97,6 +99,17 @@ prompt-quest/
 - **Mock AI System**: Simulated Gemini API for demonstration
 - **Modular Architecture**: Clean, maintainable code structure
 - **Performance Optimized**: Fast loading and smooth interactions
+
+## 🏫 St Paul's Scholar Studio
+
+Stage 9 introduces five premium challenges tailored to pupils at St Paul's School:
+- **House Magazine Feature Coach**: Turn real sustainability projects into data-backed storytelling.
+- **GCSE Revision Studio**: Guide Year 11 historians through diagnose → teach → practise prompt flows.
+- **Debate Captain's Fact Pack**: Structure evidence-led arguments for Thames-focused parliamentary debates.
+- **Engineering Sprint Log**: Translate prototype tinkering into rigorous design logs with constraints.
+- **Digital Citizenship Charter**: Balance innovation and safeguarding for generative AI in study groups.
+
+Each quest includes learning focus callouts, curriculum links, blueprint cards, and reflection prompts so pupils understand not just what to write, but why it works.
 
 ## 🛠️ Development
 

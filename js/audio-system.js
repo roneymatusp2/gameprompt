@@ -174,8 +174,8 @@ class AudioSystem {
         // Mute all sounds by default
         this.isMuted = true;
         
-        // Sound triggers disabled
-        // this.attachSoundTriggers();
+        // Sound triggers
+        this.attachSoundTriggers();
         
         // Resume audio context on user interaction (but keep muted)
         document.addEventListener('click', () => {

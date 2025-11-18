@@ -32,7 +32,26 @@ const challengeData = {
             "Just asking for a dry explanation of the water cycle.",
             "Forgetting to mention the goal of inspiring action.",
             "Not giving the AI enough creative freedom to make the story engaging."
-          ]
+          ],
+          learningFocus: [
+            "Link audience, tone, and impact in the opening line.",
+            "Use persona cues (e.g., friendly droplet guide) to nudge creativity.",
+            "End with a call-to-action that makes saving water feel achievable."
+          ],
+          skillFocus: ["audience", "tone", "constraints"],
+          curriculumLinks: [
+            "Science KS2/3: Water cycle and sustainability",
+            "English: Persuasive speech techniques"
+          ],
+          promptBlueprint: {
+            title: "ROLE • ACTION • IMPACT",
+            steps: [
+              { name: "Role", detail: "Ask the AI to become a friendly guide (e.g., a water droplet)." },
+              { name: "Action", detail: "Describe the journey through the water cycle with vivid details." },
+              { name: "Impact", detail: "Finish with a pupil-friendly challenge to save water." }
+            ]
+          },
+          reflectionPrompt: "Which instruction guarantees the AI explains both science and motivation for a 10-year-old audience?"
         },
         {
           id: 2,
@@ -116,7 +135,7 @@ const challengeData = {
           hints: [
             "Numbers are your friend. Asking for a specific quantity (e.g., 5 facts, 3 ideas) leads to predictable and well-structured output.",
             "Adjectives matter! Words like 'surprising', 'lesser-known', or 'unusual' can guide the AI to give you more interesting results.",
-            "Always specify the format if you need one. 'Numbered list', 'bullet points', 'a single paragraph'.''"
+            "Always specify the format if you need one. 'Numbered list', 'bullet points', 'a single paragraph'."
           ],
           examplePrompt: "Please provide me with five fun and surprising facts about the planet Jupiter, presented as a numbered list.",
           commonMistakes: [
@@ -139,7 +158,7 @@ const challengeData = {
           ],
           hints: [
             "Think about the key information: what, when, who.",
-            "You can ask for a specific tone, like 'friendly and informal' or 'professional'.''"
+            "You can ask for a specific tone, like 'friendly and informal' or 'professional'."
           ],
           examplePrompt: "Generate 5 friendly and informal subject lines for an email inviting my team to a casual lunch next Friday.",
           commonMistakes: [
@@ -385,7 +404,7 @@ const challengeData = {
           hints: [
             "Start your prompt with 'Act as...' or 'You are a...'. This is a powerful way to set a persona.",
             "You can even give the AI a name to help it get into character.",
-            "Be explicit about the style: '...speak as if you are a character in a Shakespearean play.''.''"
+            "Be explicit about the style: '...speak as if you are a character in a Shakespearean play.'"
           ],
           examplePrompt: "I want you to act as a cat named Tiberius. You are dramatic, eloquent, and speak in the style of William Shakespeare. Describe your urgent need for a morning meal.",
           commonMistakes: [
@@ -462,7 +481,7 @@ const challengeData = {
           hints: [
             "Words like 'enthusiastic', 'passionate', and 'joyful' can shape the AI's tone.",
             "Mentioning the audience is crucial for getting the complexity right.",
-            "You can ask the AI to end with a fun question for the 'children'.'.''"
+            "You can ask the AI to end with a fun question for the 'children'."
           ],
           examplePrompt: "You are an enthusiastic museum curator with a passion for ancient history. Explain what the Rosetta Stone is and why it's so important to a group of curious eight-year-olds. Use simple analogies and end with a fun question to keep them engaged.",
           commonMistakes: [
@@ -574,7 +593,7 @@ const challengeData = {
           ],
           hints: [
             "Think big hair, big promises, and lots of exclamation marks!",
-            "Use classic sales phrases like 'life-changing', 'revolutionary', and 'don't delay!'.'.''"
+            "Use classic sales phrases like 'life-changing', 'revolutionary', and 'don't delay!'."
           ],
           examplePrompt: "Act as a high-energy, fast-talking salesperson from the 1980s. Your job is to sell a simple pencil as if it were the most revolutionary piece of technology ever invented. Use lots of exclamation marks and persuasive language.",
           commonMistakes: [
@@ -596,7 +615,7 @@ const challengeData = {
           ],
           hints: [
             "Focus on the solution, not the problem.",
-            "Use phrases like 'I was wondering if we could look at this together' or 'I might have a suggestion'.'.''"
+            "Use phrases like 'I was wondering if we could look at this together' or 'I might have a suggestion'."
           ],
           examplePrompt: "Draft a polite and constructive email to a colleague named John. The email needs to gently point out a significant error in the quarterly report he just submitted, without making him feel defensive. The tone should be supportive and focus on finding a solution together.",
           commonMistakes: [
@@ -661,7 +680,7 @@ const challengeData = {
             "Encourages a calm, descriptive, and slightly dramatic tone."
           ],
           hints: [
-            "Think about the language used in nature documentaries: 'Here we see...', 'A magnificent specimen...'.'',
+            "Think about the language used in nature documentaries: 'Here we see...', 'A magnificent specimen...'.",
             "Treat the mundane activities of a house cat as if they were wild and fascinating behaviours."
           ],
           examplePrompt: "Act as a nature documentary narrator in the style of David Attenborough. Describe the daily rituals of a common house cat, from waking up to demanding food, as if it were a majestic wild animal in its natural habitat.",
@@ -766,7 +785,7 @@ const challengeData = {
           hints: [
             "Use headings or labels in your prompt to define the structure you want, e.g., 'Create the following sections: ...'",
             "Be explicit about list formats (bullet points vs. numbered list) as they serve different purposes.",
-            "You can add other constraints, like 'use metric measurements' or 'ready in under 45 minutes'.'.''"
+            "You can add other constraints, like 'use metric measurements' or 'ready in under 45 minutes'."
           ],
           examplePrompt: "Please generate a recipe for a hearty vegan chilli. The response must be structured with these exact headings in order: 'Description', 'Ingredients', 'Method', and 'Serving Suggestion'. The ingredients should be a bulleted list, and the method should be a numbered list.",
           commonMistakes: [
@@ -1211,7 +1230,7 @@ const challengeData = {
           ],
           hints: [
             "Mention the target audience to help the AI tailor the slogans.",
-            "You can specify a desired tone, like 'playful', 'sophisticated', or 'urgent'.'.''"
+            "You can specify a desired tone, like 'playful', 'sophisticated', or 'urgent'."
           ],
           examplePrompt: "Generate 5 catchy and memorable marketing slogans for a new brand of organic, fair-trade coffee aimed at environmentally conscious millennials.",
           commonMistakes: [
@@ -1521,7 +1540,7 @@ const challengeData = {
           ],
           hints: [
             "If the AI is too general, it's usually because your prompt was too general. Add more detail!",
-            "Give the AI a persona to adopt, e.g., 'Act as a local guide...'..''"
+            "Give the AI a persona to adopt, e.g., 'Act as a local guide...'."
           ],
           examplePrompt: "Thanks for the general advice. I'm planning a 5-day trip to Lisbon, Portugal, in May. I'm interested in history, food, and photography, and my budget is around £80 per day. Could you suggest a more specific itinerary based on this?",
           commonMistakes: [
@@ -2090,7 +2109,7 @@ const challengeData = {
           ],
           hints: [
             "The setting is your main constraint here. Be evocative in your description of it.",
-            "You can ask for lines with different tones: 'one hopeful, one mysterious, one action-packed...'.'.''"
+            "You can ask for lines with different tones: 'one hopeful, one mysterious, one action-packed...'."
           ],
           examplePrompt: "Generate five different opening lines for a science fiction novel. The story is set in a version of London that has been flooded for 200 years. The mood should be mysterious and slightly melancholic.",
           commonMistakes: [
@@ -2157,7 +2176,7 @@ const challengeData = {
           ],
           hints: [
             "This is a highly creative task. Encourage the AI to be imaginative.",
-            "You can guide it by suggesting a domain for the metaphor, e.g., 'using a metaphor related to music' or '...related to cooking'.'.''"
+            "You can guide it by suggesting a domain for the metaphor, e.g., 'using a metaphor related to music' or '...related to cooking'."
           ],
           examplePrompt: "Invent a new and original metaphor to describe the feeling of deja vu. After presenting the metaphor, explain why it is an effective comparison.",
           commonMistakes: [
@@ -2386,6 +2405,451 @@ const challengeData = {
             ]
         }
       ]
+    },
+    {
+      id: 8,
+      name: "Stage 8 - The Responsible Prompter",
+      title: "AI for Good",
+      description: "Learn how to use your prompt engineering skills responsibly and ethically.",
+      colour: "#9333EA",
+      unlocked: false,
+      unlockLevel: 5,
+      challenges: [
+        {
+          id: 98,
+          type: "Prompt-Rescue",
+          title: "The Biased Job Description",
+          description: "AI models learn from the real world, which sometimes contains biases. Your job is to spot and correct them.",
+          task: "You have an AI-generated job description for a software developer that contains subtle gender bias. Rewrite the prompt to ask for a more inclusive and unbiased description.",
+          originalPrompt: "We are looking for a top-tier software developer to join our team. He should be a coding ninja, able to work long hours and be a true rockstar programmer.",
+          difficulty: "Expert",
+          points: 500,
+          successCriteria: [
+            "Identifies the gender bias in the original text.",
+            "Rewrites the prompt to ask for a gender-neutral and inclusive job description.",
+            "Focuses on skills and qualifications rather than stereotypes."
+          ],
+          hints: [
+            "Avoid using gendered pronouns like 'he'.",
+            "Think about the kind of language that would make everyone feel welcome to apply.",
+            "Focus on the actual skills needed for the job, not on cultural fit or personality traits."
+          ],
+          examplePrompt: "Please rewrite this job description for a software developer to be more inclusive and welcoming to people of all genders and backgrounds. Remove the stereotypes and focus on the essential skills and responsibilities. Original text: 'We are looking for a top-tier software developer to join our team. He should be a coding ninja, able to work long hours and be a true rockstar programmer.'",
+          commonMistakes: [
+            "Only removing the pronoun but keeping the biased language.",
+            "Making the description too generic and losing the sense of what the job is.",
+            "Not explaining why the original prompt was problematic."
+          ],
+          skillFocus: ["ethics", "audience", "constraints"],
+          learningFocus: [
+            "Spot biased adjectives or metaphors rather than just deleting a pronoun.",
+            "Reframe the request around measurable skills, responsibilities, and outcomes.",
+            "Model inclusive tone that matches UK safeguarding expectations."
+          ],
+          reflectionPrompt: "Which instruction in your rewritten prompt forces the AI to check for inclusive, skill-based language?"
+        },
+        {
+          id: 99,
+          type: "Prompt-Rescue",
+          title: "The Personal Information Leak",
+          description: "It's important to protect your personal information when using AI. Let's practise removing sensitive data from a prompt.",
+          task: "You want to ask an AI for advice on a personal situation, but your prompt contains sensitive information. Rewrite the prompt to ask for the same advice without revealing any personal details.",
+          originalPrompt: "My name is John Smith, I live at 123 Fake Street, London, and I'm having a disagreement with my neighbour, Jane Doe, about her dog barking. My phone number is 07123456789. What should I do?",
+          difficulty: "Expert",
+          points: 500,
+          successCriteria: [
+            "Identifies all the personal information in the prompt.",
+            "Rewrites the prompt to be about a hypothetical situation.",
+            "The rewritten prompt still gets the user the advice they need."
+          ],
+          hints: [
+            "You can replace specific details with generic terms like 'a person' or 'a neighbour'.",
+            "Focus on the core of the problem, not the specific people involved.",
+            "Think about what information is actually necessary for the AI to answer the question."
+          ],
+          examplePrompt: "I'm having a disagreement with a neighbour about their dog barking loudly and frequently. What are some constructive and legal steps I can take to resolve this issue in the UK?",
+          commonMistakes: [
+            "Removing some but not all of the personal information.",
+            "Making the prompt so vague that the AI can't give useful advice.",
+            "Forgetting to ask for advice that is relevant to your location (e.g., UK law)."
+          ],
+          skillFocus: ["ethics", "constraints", "structure"],
+          learningFocus: [
+            "Strip out personally identifiable information and switch to safe hypotheticals.",
+            "Keep the geographical or legal context so the advice remains accurate.",
+            "Ask for organised, step-by-step guidance instead of open-ended tips."
+          ],
+          reflectionPrompt: "How did you remind the AI to give UK-relevant advice without exposing any personal identifiers?"
+        },
+        {
+          id: 100,
+          type: "Prompt-Rescue",
+          title: "The Homework Helper",
+          description: "AI can be a powerful learning tool, but it's important to use it honestly. Let's turn a cheating prompt into a learning prompt.",
+          task: "You have a history question for homework. Instead of asking the AI for the answer, rewrite the prompt to ask the AI to help you understand the topic so you can answer it yourself.",
+          originalPrompt: "What were the three main causes of the English Civil War?",
+          difficulty: "Expert",
+          points: 500,
+          successCriteria: [
+            "Changes the prompt from asking for an answer to asking for help.",
+            "Asks for key concepts, discussion points, or a summary of the topic.",
+            "The new prompt helps the user to learn, not to cheat."
+          ],
+          hints: [
+            "Instead of asking 'What is the answer?', try asking 'Can you explain the key concepts of...?'.",
+            "You can ask the AI to give you a study guide or a list of important events.",
+            "Think about how a teacher would help you with a difficult question."
+          ],
+          examplePrompt: "I'm writing an essay on the causes of the English Civil War. Could you explain the three main causes in simple terms and give me some key dates and figures I should research further?",
+          commonMistakes: [
+            "Asking for the answer in a slightly different way.",
+            "Not asking for explanations or concepts.",
+            "Copying the AI's response directly into your homework."
+          ],
+          skillFocus: ["reflection", "ethics", "audience"],
+          learningFocus: [
+            "Switch from 'give me the answer' to 'coach me through the reasoning'.",
+            "Ask for explanation styles that match your study goals (summary, flashcards, exemplar paragraphs).",
+            "Invite the AI to set follow-up questions so you can test yourself."
+          ],
+          reflectionPrompt: "Where does your new prompt encourage you to think for yourself before writing the final answer?"
+        }
+      ]
+    },
+    {
+      id: 9,
+      name: "Stage 9 - St Paul's Scholar Studio",
+      title: "Curriculum-Ready Challenges",
+      description: "Applied prompt engineering quests built around real St Paul's School learning moments.",
+      colour: "#0F172A",
+      unlocked: false,
+      unlockLevel: 3,
+      challenges: [
+        {
+          id: 501,
+          type: "StPauls",
+          title: "House Magazine Feature Coach",
+          description: "Turn House achievements into vivid, data-backed storytelling.",
+          task: "Write a prompt that produces a 250-word feature for the St Paul's School House magazine about a joint sustainability project between Roxburgh and Grantell Houses. The piece must open with a hook, weave in one quote from a pupil leader, reference a measurable improvement to Thames-side biodiversity, and finish with an invitation for other Houses to contribute ideas.",
+          difficulty: "Advanced",
+          points: 360,
+          successCriteria: [
+            "Assigns a clear persona such as the St Paul's House magazine editor.",
+            "Names both Houses and the sustainability focus linked to the Thames.",
+            "Requests a structure that includes a hook, pupil quote, quantified impact, and closing call-to-action.",
+            "Specifies the target word count (around 250) and tone (celebratory yet authentic).",
+            "Asks for at least one concrete statistic or observation from the project."
+          ],
+          hints: [
+            "Reference sensory details from the playing fields or riverbank to anchor the story.",
+            "Quotes sound more authentic if you provide a pupil role, e.g., Eco Captain or House Vice-Captain.",
+            "Remind the AI to end with an invitation to the wider House community."
+          ],
+          examplePrompt: "Act as the editor of the St Paul's School House magazine. Write a 250-word feature on Roxburgh and Grantell Houses teaming up to replant pollinator-friendly borders along the Thames Path. Begin with a vivid hook, include one quote from a pupil Eco Captain, highlight a measurable biodiversity impact (e.g., increase in species spotted), and finish with an invitation for other Houses to share their next sustainability idea.",
+          commonMistakes: [
+            "Forgetting to name both Houses or the Thames connection.",
+            "Letting the AI write a generic sustainability article with no numbers.",
+            "Missing the call-to-action for other Houses."
+          ],
+          skillFocus: ["audience", "tone", "evidence"],
+          learningFocus: [
+            "Match the voice of a St Paul's publication while keeping it pupil-led.",
+            "Blend narrative colour with concrete impact data.",
+            "Finish with a specific invitation to drive further participation."
+          ],
+          curriculumLinks: [
+            "English Language Paper 2 – Viewpoint writing",
+            "Geography: Thames-side sustainability fieldwork"
+          ],
+          promptBlueprint: {
+            title: "HOUSE STORY ARC",
+            steps: [
+              { name: "Role", detail: "Set the AI as the St Paul's House magazine editor." },
+              { name: "Audience", detail: "Write for pupils who already care about inter-House projects." },
+              { name: "Story Beats", detail: "Hook → quote → measurable impact → invitation." },
+              { name: "Evidence", detail: "Require at least one statistic or observation from the project." },
+              { name: "Tone", detail: "Ask for celebratory yet authentic language." }
+            ]
+          },
+          reflectionPrompt: "Which line of your prompt guarantees a real pupil voice (not a generic adult narrator) leads the piece?"
+        },
+        {
+          id: 502,
+          type: "Multi-Step",
+          title: "GCSE Revision Studio",
+          description: "Sequence prompts that coach Year 11 pupils through diagnosis, teaching, and retrieval.",
+          task: "In three steps, design prompts that help Year 11 St Paul's pupils revise the Edexcel GCSE History unit on the Industrial Revolution. Step one should diagnose understanding with four retrieval questions, step two should deliver a concise explanation using two named case studies (factory reform and the Chartists), and step three should set a timed practice paragraph with a PEE scaffold and self-check rubric.",
+          difficulty: "Advanced",
+          points: 380,
+          steps: [
+            {
+              step: 1,
+              instruction: "Draft a prompt that asks the AI to quiz the pupil with four retrieval questions (mix of multiple choice and short answer) on the Industrial Revolution topic.",
+              example: "Act as an Edexcel GCSE History tutor. Ask me four retrieval questions about the Industrial Revolution (two multiple choice, two short answer) to diagnose gaps."
+            },
+            {
+              step: 2,
+              instruction: "Write a prompt that requests a concise teaching explanation referencing the Factory Acts and the Chartist movement, tailored to any gaps identified.",
+              example: "Using my responses, explain the two most significant Factory Acts and the key aims of the Chartists in no more than 200 words, highlighting why each mattered to working people."
+            },
+            {
+              step: 3,
+              instruction: "Create a prompt that sets a 12-minute practice paragraph with a Point-Evidence-Explanation scaffold plus a self-check list.",
+              example: "Set me a 12-minute practice paragraph question on how industrialisation changed urban life. Provide a PEE scaffold, a sentence starter, and a three-point checklist to review my answer."
+            }
+          ],
+          successCriteria: [
+            "Each step has a distinct goal: diagnose, teach, then practise.",
+            "References the Edexcel GCSE Industrial Revolution specification and the named case studies.",
+            "Includes timing or length constraints where needed (e.g., 12-minute write).",
+            "Asks for structured scaffolding such as PEE or checklists.",
+            "Keeps the tone encouraging and exam-focused."
+          ],
+          hints: [
+            "Tie every instruction back to real exam rubrics pupils recognise.",
+            "Name the case studies you want to appear so the AI can go deep, not broad.",
+            "End each step with what the pupil should do with the information."
+          ],
+          skillFocus: ["structure", "constraints", "reflection"],
+          learningFocus: [
+            "Break complex study sessions into purposeful AI interactions.",
+            "Layer concrete case studies to anchor explanations.",
+            "Bake in self-check moments so pupils reflect on progress."
+          ],
+          curriculumLinks: [
+            "GCSE History (Edexcel B): Industrialisation of Britain",
+            "Study Skills: Retrieval and spaced practice"
+          ],
+          promptBlueprint: {
+            title: "DIAGNOSE • TEACH • PRACTISE",
+            steps: [
+              { name: "Diagnose", detail: "Start with retrieval questions to surface misconceptions." },
+              { name: "Teach", detail: "Deliver concise explanations with named case studies." },
+              { name: "Practise", detail: "Set a timed task with scaffolds and reflection checks." }
+            ]
+          },
+          reflectionPrompt: "Where does your three-step flow encourage pupils to explain why each Industrial Revolution change mattered?"
+        },
+        {
+          id: 503,
+          title: "Debate Captain's Fact Pack",
+          description: "Ground persuasive speeches in real monitoring data.",
+          task: "Write a prompt that asks the AI to act as the St Paul's Parliamentary Society debate captain preparing a fact pack on reducing plastic litter along the Thames. Provide the following monitoring snapshot: Ashburton 86 pieces, Hampden 74, Roxburgh 63, Grantell 58 (average weekly pieces collected during the Spring survey) plus hazards noted (fishing line, food packaging, microplastics). The AI should return a markdown table summarising the data, two bullet-pointed arguments per side referencing exact numbers, and a closing recommendation for inter-House action.",
+          difficulty: "Advanced",
+          points: 370,
+          successCriteria: [
+            "Defines the persona (debate captain) and the Thames litter context.",
+            "Includes the dataset and requires it to be used explicitly.",
+            "Requests a markdown table plus evidence-backed arguments.",
+            "Asks for balanced viewpoints before the final recommendation.",
+            "Ends with a call-to-action for collaborative House action."
+          ],
+          hints: [
+            "Share the data in a neat list or mini-table so the AI can quote figures accurately.",
+            "Ask for argument bullets that cite at least two numbers each.",
+            "Remind the AI to reference the hazards recorded, not just the counts."
+          ],
+          examplePrompt: "Act as the debate captain for the St Paul's Parliamentary Society. Using this monitoring snapshot (Ashburton 86 pieces, Hampden 74, Roxburgh 63, Grantell 58 per week; hazards logged: fishing line, food packaging, microplastics), create a fact pack with: 1) a markdown table of the data, 2) two evidence-backed arguments for tougher House targets, 3) two arguments cautioning against overreach, and 4) a collaborative recommendation for all Houses.",
+          commonMistakes: [
+            "Letting the AI invent statistics instead of using the provided ones.",
+            "Providing arguments with no balance or counterpoint.",
+            "Forgetting the final collaborative recommendation."
+          ],
+          skillFocus: ["evidence", "constraints", "structure"],
+          learningFocus: [
+            "Quote exact numbers or observations when building arguments.",
+            "Use formatting (tables + bullets) to keep fact packs scannable.",
+            "End with an action that feels doable within a House system."
+          ],
+          curriculumLinks: [
+            "Politics & Society: British Parliamentary debating",
+            "Geography: River Thames field study data handling"
+          ],
+          promptBlueprint: {
+            title: "DATA → INSIGHT → ACTION",
+            steps: [
+              { name: "Data", detail: "Share the monitoring snapshot and hazards explicitly." },
+              { name: "Insight", detail: "Request balanced arguments that cite the figures." },
+              { name: "Action", detail: "Close with a collaborative recommendation for Houses." }
+            ]
+          },
+          reflectionPrompt: "How does your prompt guarantee that every argument cites the real monitoring numbers instead of vibes?"
+        },
+        {
+          id: 504,
+          title: "Engineering Sprint Log",
+          description: "Translate prototype tinkering into disciplined documentation.",
+          task: "Write a prompt that turns a Lower Eighth engineering team's notes about building a wind-powered phone charger into a sprint log. The AI should output a markdown table with the columns 'Sprint Stage', 'Measurement', 'Risk', and 'Next Experiment', reference the 3D-printed blade tests already completed, and respect the £60 materials budget and 30-minute testing window available on Field Day.",
+          difficulty: "Advanced",
+          points: 365,
+          successCriteria: [
+            "States the context (wind-powered charger for Field Day) and prior testing.",
+            "Requests the specific table columns with analysis + next steps.",
+            "Includes real-world constraints: materials budget and limited testing time.",
+            "Asks for at least one risk or failure point per row.",
+            "Keeps the tone practical and engineering-focused."
+          ],
+          hints: [
+            "Name the key measurements you care about (e.g., output voltage, stability).",
+            "Remind the AI to flag risks such as blade fatigue or weather limits.",
+            "Ask for next experiments that can be run within the time/budget envelope."
+          ],
+          examplePrompt: "Act as the engineering journal for a Lower Eighth team building a wind-powered phone charger for Field Day. Summarise today's 3D-printed blade tests in a markdown table with the columns 'Sprint Stage', 'Measurement', 'Risk', 'Next Experiment'. Respect the £60 remaining materials budget and 30-minute testing slots, and include at least one quantified reading per row.",
+          commonMistakes: [
+            "Requesting generic advice instead of structured log entries.",
+            "Ignoring the real constraints (budget/time).",
+            "Skipping risks, so the table becomes all positives."
+          ],
+          skillFocus: ["structure", "iteration", "constraints"],
+          learningFocus: [
+            "Capture prototype evidence in a reusable format.",
+            "Pair every observation with the next actionable experiment.",
+            "Keep constraints front and centre so ideas stay realistic."
+          ],
+          curriculumLinks: [
+            "Engineering Society rapid prototyping challenge",
+            "Physics: Energy transfer and efficiency"
+          ],
+          promptBlueprint: {
+            title: "OBSERVE • MEASURE • ADAPT",
+            steps: [
+              { name: "Observe", detail: "State what the team tested and the environment." },
+              { name: "Measure", detail: "Capture the data point or outcome." },
+              { name: "Adapt", detail: "Log risks and propose the very next experiment." }
+            ]
+          },
+          reflectionPrompt: "Which instruction stops the AI from glossing over failures or risks in the sprint log?"
+        },
+        {
+          id: 505,
+          title: "Digital Citizenship Charter",
+          description: "Balance innovation with safeguarding for AI use in study groups.",
+          task: "Write a prompt that helps the St Paul's Digital Leaders draft a six-bullet charter for using generative AI in pupil study groups. The charter must cover safeguarding, citation of AI-assisted ideas, tone of collaboration, weekly review checkpoints, and a transparent log of which tools were used during prep.",
+          difficulty: "Advanced",
+          points: 350,
+          successCriteria: [
+            "States the audience (St Paul's Digital Leaders) and purpose (study-group charter).",
+            "Requests exactly six bullets with specific thematic coverage (safeguarding, citation, tone, review, transparency).",
+            "Asks for actionable wording pupils can adopt immediately.",
+            "Encourages mention of review cadence or accountability measures.",
+            "Keeps language inclusive and student-centred."
+          ],
+          hints: [
+            "Name the non-negotiable themes so none are skipped.",
+            "Ask for verbs like 'agree to', 'log', or 'review' to keep it action-oriented.",
+            "Invite the AI to balance empowerment with safety reminders."
+          ],
+          examplePrompt: "Act as the St Paul's Digital Leaders coordinator. Draft six concise charter points for how pupils should use generative AI in study groups, covering safeguarding, how to log AI use, how to cite AI-influenced ideas, tone for feedback, and a weekly review checkpoint.",
+          commonMistakes: [
+            "Letting the AI write vague statements with no accountability.",
+            "Forgetting to include safeguarding or tone guidance.",
+            "Producing more or fewer than six bullet points."
+          ],
+          skillFocus: ["ethics", "audience", "reflection"],
+          learningFocus: [
+            "Balance innovation with responsible use expectations.",
+            "Tie each charter line to an action pupils can demonstrate.",
+            "Bake in reflection or review so the charter evolves."
+          ],
+          curriculumLinks: [
+            "PSHE: Digital wellbeing and online conduct",
+            "Computing: Responsible AI and data ethics"
+          ],
+          promptBlueprint: {
+            title: "VALUE • BOUNDARY • CHECK",
+            steps: [
+              { name: "Value", detail: "State the positive purpose of AI in study groups." },
+              { name: "Boundary", detail: "List the safeguards, tone expectations, and logging habits." },
+              { name: "Check", detail: "Schedule when and how the charter is reviewed." }
+            ]
+          },
+          reflectionPrompt: "How does your prompt pin the charter to St Paul's specific culture instead of a generic school?"
+        }
+      ]
+    },
+    {
+      id: 10,
+      name: "Stage 10 - Junior Prompter",
+      title: "Creative Kids' Corner",
+      description: "Fun and simple challenges designed for younger learners. Practice creativity and clear instructions!",
+      colour: "#F472B6",
+      unlocked: true,
+      challenges: [
+        {
+          id: 1001,
+          title: "The Magic Story Machine",
+          description: "Ask the AI to tell a funny story about an animal doing something unexpected.",
+          task: "Write a prompt that asks for a short story about a penguin who loves to dance ballet. Ask for the story to be funny and have a happy ending.",
+          difficulty: "Beginner",
+          points: 100,
+          successCriteria: [
+            "Mentions a penguin.",
+            "Mentions ballet dancing.",
+            "Asks for a funny story.",
+            "Requests a happy ending."
+          ],
+          hints: [
+            "Start with 'Write a story about...'",
+            "Don't forget to say it should be funny!"
+          ],
+          examplePrompt: "Write a short, funny story about a penguin named Pip who loves to dance ballet. Make sure it has a happy ending where he performs for his friends.",
+          commonMistakes: [
+            "Forgetting to mention the ballet dancing.",
+            "Not asking for a specific tone (funny)."
+          ],
+          learningFocus: ["creativity", "instruction"],
+          skillFocus: ["tone", "creativity"]
+        },
+        {
+          id: 1002,
+          title: "Homework Helper",
+          description: "Use AI to help understand a math problem in a fun way.",
+          task: "Write a prompt that asks the AI to explain 'multiplication' (like 3 x 4) using a metaphor about cookies or toys.",
+          difficulty: "Beginner",
+          points: 100,
+          successCriteria: [
+            "Asks to explain multiplication.",
+            "Requests a metaphor or example.",
+            "Mentions cookies or toys."
+          ],
+          hints: [
+            "Ask it to 'imagine' you have cookies.",
+            "Use the word 'explain'."
+          ],
+          examplePrompt: "Explain multiplication to me using chocolate chip cookies. If I have 3 plates and each plate has 4 cookies, how does that show 3 times 4?",
+          commonMistakes: [
+            "Just asking 'what is 3x4?' without the fun explanation.",
+            "Forgetting the metaphor."
+          ],
+          learningFocus: ["analogy", "explanation"],
+          skillFocus: ["analogy", "clarity"]
+        },
+        {
+          id: 1003,
+          title: "Design a Monster",
+          description: "Describe a friendly monster for the AI to imagine.",
+          task: "Write a detailed description of a friendly monster. Include its color, number of eyes, what it eats, and its name. Ask the AI to describe what it does for fun.",
+          difficulty: "Beginner",
+          points: 100,
+          successCriteria: [
+            "Describes the monster's appearance (color, eyes).",
+            "Mentions what it eats.",
+            "Gives the monster a name.",
+            "Asks what it does for fun."
+          ],
+          hints: [
+            "Be as descriptive as you can! Is it fuzzy or scaly?",
+            "Think of a fun name like 'Bloop' or 'Giggle'."
+          ],
+          examplePrompt: "I want you to imagine a friendly monster named Zog. He is bright purple with three green eyes and eats clouds. Describe what Zog does for fun on a sunny day.",
+          commonMistakes: [
+            "Not giving enough details about how it looks.",
+            "Forgetting to give it a name."
+          ],
+          learningFocus: ["description", "detail"],
+          skillFocus: ["description", "imagination"]
+        }
+      ]
     }
   ],
 
@@ -2495,95 +2959,6 @@ const challengeData = {
       description: "Completed 5 challenges with a top score in clarity.",
       icon: "💎",
       condition: "clarity_score >= 90 for 5 challenges"
-    }
-    },
-    {
-      id: 7,
-      name: "Stage 7 - The Responsible Prompter",
-      title: "AI for Good",
-      description: "Learn how to use your prompt engineering skills responsibly and ethically.",
-      colour: "#9333EA",
-      unlocked: false,
-      challenges: [
-        {
-          id: 98,
-          type: "Prompt-Rescue",
-          title: "The Biased Job Description",
-          description: "AI models learn from the real world, which sometimes contains biases. Your job is to spot and correct them.",
-          task: "You have an AI-generated job description for a software developer that contains subtle gender bias. Rewrite the prompt to ask for a more inclusive and unbiased description.",
-          originalPrompt: "We are looking for a top-tier software developer to join our team. He should be a coding ninja, able to work long hours and be a true rockstar programmer.",
-          difficulty: "Expert",
-          points: 500,
-          successCriteria: [
-            "Identifies the gender bias in the original text.",
-            "Rewrites the prompt to ask for a gender-neutral and inclusive job description.",
-            "Focuses on skills and qualifications rather than stereotypes."
-          ],
-          hints: [
-            "Avoid using gendered pronouns like 'he'.",
-            "Think about the kind of language that would make everyone feel welcome to apply.",
-            "Focus on the actual skills needed for the job, not on cultural fit or personality traits."
-          ],
-          examplePrompt: "Please rewrite this job description for a software developer to be more inclusive and welcoming to people of all genders and backgrounds. Remove the stereotypes and focus on the essential skills and responsibilities. Original text: 'We are looking for a top-tier software developer to join our team. He should be a coding ninja, able to work long hours and be a true rockstar programmer.'",
-          commonMistakes: [
-            "Only removing the pronoun but keeping the biased language.",
-            "Making the description too generic and losing the sense of what the job is.",
-            "Not explaining why the original prompt was problematic."
-          ]
-        },
-        {
-          id: 99,
-          type: "Prompt-Rescue",
-          title: "The Personal Information Leak",
-          description: "It's important to protect your personal information when using AI. Let's practise removing sensitive data from a prompt.",
-          task: "You want to ask an AI for advice on a personal situation, but your prompt contains sensitive information. Rewrite the prompt to ask for the same advice without revealing any personal details.",
-          originalPrompt: "My name is John Smith, I live at 123 Fake Street, London, and I'm having a disagreement with my neighbour, Jane Doe, about her dog barking. My phone number is 07123456789. What should I do?",
-          difficulty: "Expert",
-          points: 500,
-          successCriteria: [
-            "Identifies all the personal information in the prompt.",
-            "Rewrites the prompt to be about a hypothetical situation.",
-            "The rewritten prompt still gets the user the advice they need."
-          ],
-          hints: [
-            "You can replace specific details with generic terms like 'a person' or 'a neighbour'.",
-            "Focus on the core of the problem, not the specific people involved.",
-            "Think about what information is actually necessary for the AI to answer the question."
-          ],
-          examplePrompt: "I'm having a disagreement with a neighbour about their dog barking loudly and frequently. What are some constructive and legal steps I can take to resolve this issue in the UK?",
-          commonMistakes: [
-            "Removing some but not all of the personal information.",
-            "Making the prompt so vague that the AI can't give useful advice.",
-            "Forgetting to ask for advice that is relevant to your location (e.g., UK law)."
-          ]
-        },
-        {
-          id: 100,
-          type: "Prompt-Rescue",
-          title: "The Homework Helper",
-          description: "AI can be a powerful learning tool, but it's important to use it honestly. Let's turn a cheating prompt into a learning prompt.",
-          task: "You have a history question for homework. Instead of asking the AI for the answer, rewrite the prompt to ask the AI to help you understand the topic so you can answer it yourself.",
-          originalPrompt: "What were the three main causes of the English Civil War?",
-          difficulty: "Expert",
-          points: 500,
-          successCriteria: [
-            "Changes the prompt from asking for an answer to asking for help.",
-            "Asks for key concepts, discussion points, or a summary of the topic.",
-            "The new prompt helps the user to learn, not to cheat."
-          ],
-          hints: [
-            "Instead of asking 'What is the answer?', try asking 'Can you explain the key concepts of...?'.",
-            "You can ask the AI to give you a study guide or a list of important events.",
-            "Think about how a teacher would help you with a difficult question."
-          ],
-          examplePrompt: "I'm writing an essay on the causes of the English Civil War. Could you explain the three main causes in simple terms and give me some key dates and figures I should research further?",
-          commonMistakes: [
-            "Asking for the answer in a slightly different way.",
-            "Not asking for explanations or concepts.",
-            "Copying the AI's response directly into your homework."
-          ]
-        }
-      ]
     }
   ]
 };

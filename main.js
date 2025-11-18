@@ -185,46 +185,60 @@ class PromptQuestGame {
     displayChallenge(challenge, level) {
         const container = document.getElementById('challenge-content');
         if (!container) return;
+        
+        if (!challenge) {
+            console.error('Attempted to display null challenge');
+            return;
+        }
 
         container.innerHTML = `
-            <div class="mb-6">
+            <div class="mb-6 animate-scale-in">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold">
+                        <div class="w-10 h-10 bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
                             ${challenge.id}
                         </div>
                         <div>
                             <h3 class="font-display text-2xl font-bold text-gray-900">${challenge.title}</h3>
-                            <p class="text-gray-600">Level ${level.id} • ${challenge.difficulty}</p>
+                            <p class="text-gray-600">Level ${level?.id || '?'} • <span class="font-semibold text-indigo-600">${challenge.difficulty}</span></p>
                         </div>
                     </div>
                     <div class="text-right">
                         <div class="text-2xl font-bold gradient-text">${challenge.points} XP</div>
-                        <div class="text-sm text-gray-500">Available</div>
+                        <div class="text-sm text-gray-500">Reward</div>
                     </div>
                 </div>
                 
-                <div class="bg-blue-50 rounded-xl p-4 mb-6">
-                    <h4 class="font-semibold text-blue-900 mb-2">Challenge Description</h4>
-                    <p class="text-blue-800">${challenge.description}</p>
+                <div class="bg-blue-50 border-l-4 border-blue-500 rounded-r-xl p-4 mb-6 shadow-sm">
+                    <h4 class="font-semibold text-blue-900 mb-2 flex items-center">
+                        <span class="mr-2">📖</span> Mission
+                    </h4>
+                    <p class="text-blue-800 leading-relaxed">${challenge.description}</p>
                 </div>
                 
-                <div class="bg-amber-50 rounded-xl p-4 mb-6">
-                    <h4 class="font-semibold text-amber-900 mb-2">Your Task</h4>
-                    <p class="text-amber-800">${challenge.task}</p>
+                <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-xl p-4 mb-6 shadow-sm">
+                    <h4 class="font-semibold text-amber-900 mb-2 flex items-center">
+                        <span class="mr-2">⚡</span> Task
+                    </h4>
+                    <p class="text-amber-800 font-medium leading-relaxed">${challenge.task}</p>
                 </div>
                 
-                <div class="bg-gray-50 rounded-xl p-4 mb-6">
-                    <h4 class="font-semibold text-gray-900 mb-3">Success Criteria</h4>
-                    <ul class="space-y-2">
+                <div class="bg-gray-50 rounded-xl p-5 mb-6 border border-gray-200">
+                    <h4 class="font-semibold text-gray-900 mb-3 border-b pb-2">Checklist for Success</h4>
+                    <ul class="space-y-3">
                         ${challenge.successCriteria.map(criterion => `
-                            <li class="flex items-start text-gray-700">
-                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3 mt-2 flex-shrink-0"></span>
+                            <li class="flex items-start text-gray-700 group hover:text-gray-900 transition-colors">
+                                <span class="w-5 h-5 flex items-center justify-center bg-white border-2 border-green-500 rounded-full mr-3 mt-0.5 flex-shrink-0 text-green-600 text-xs font-bold group-hover:bg-green-50">✓</span>
                                 <span>${criterion}</span>
                             </li>
                         `).join('')}
                     </ul>
                 </div>
+
+                ${this.renderLearningFocus(challenge)}
+                ${this.renderPromptBlueprint(challenge)}
+                ${this.renderCurriculumLinks(challenge)}
+                ${this.renderReflectionPreview(challenge)}
             </div>
         `;
         
@@ -378,6 +392,106 @@ class PromptQuestGame {
         }
     }
 
+    renderLearningFocus(challenge) {
+        const focus = Array.isArray(challenge.learningFocus) ? challenge.learningFocus : [];
+        const skills = Array.isArray(challenge.skillFocus) ? challenge.skillFocus : [];
+        
+        if (!focus.length && !skills.length) return '';
+        
+        const focusList = focus.length ? `
+            <ul class="space-y-2 mt-2">
+                ${focus.map(item => `
+                    <li class="flex items-start text-indigo-900">
+                        <span class="w-2 h-2 bg-indigo-500 rounded-full mr-3 mt-2 flex-shrink-0"></span>
+                        <span>${item}</span>
+                    </li>
+                `).join('')}
+            </ul>
+        ` : '';
+        
+        const skillBadges = skills.length ? `
+            <div class="mt-4 flex flex-wrap gap-2">
+                ${skills.map(skill => `
+                    <span class="px-3 py-1 bg-white text-indigo-700 rounded-full text-xs font-semibold border border-indigo-200">
+                        ${this.formatSkillTag(skill)}
+                    </span>
+                `).join('')}
+            </div>
+        ` : '';
+        
+        return `
+            <div class="bg-indigo-50 rounded-xl p-4 mb-6 border border-indigo-100">
+                <h4 class="font-semibold text-indigo-900">Learning Focus</h4>
+                ${focusList}
+                ${skillBadges}
+            </div>
+        `;
+    }
+    
+    formatSkillTag(tag) {
+        const labels = {
+            audience: "Audience empathy",
+            tone: "Tone & voice",
+            constraints: "Constraint design",
+            structure: "Structured thinking",
+            reflection: "Metacognitive habits",
+            ethics: "Responsible AI",
+            evidence: "Evidence-first thinking",
+            iteration: "Iteration mindset"
+        };
+        return labels[tag] || tag;
+    }
+    
+    renderPromptBlueprint(challenge) {
+        const blueprint = challenge.promptBlueprint;
+        if (!blueprint || !Array.isArray(blueprint.steps) || blueprint.steps.length === 0) return '';
+        
+        return `
+            <div class="bg-white border border-indigo-100 rounded-xl p-4 mb-6 shadow-sm">
+                <h4 class="font-semibold text-indigo-900 mb-3">${blueprint.title || 'Prompt Blueprint'}</h4>
+                <div class="grid gap-3 md:grid-cols-2">
+                    ${blueprint.steps.map(step => `
+                        <div class="bg-indigo-50 rounded-lg p-3">
+                            <div class="text-sm font-semibold text-indigo-900">${step.name || step.label || 'Step'}</div>
+                            <p class="text-sm text-indigo-700 mt-1">${step.detail || step.instruction || ''}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+    
+    renderCurriculumLinks(challenge) {
+        const links = Array.isArray(challenge.curriculumLinks) ? challenge.curriculumLinks : [];
+        if (!links.length) return '';
+        
+        return `
+            <div class="bg-emerald-50 rounded-xl p-4 mb-6 border border-emerald-100">
+                <h4 class="font-semibold text-emerald-900 mb-2">Curriculum Links</h4>
+                <ul class="space-y-1">
+                    ${links.map(link => `
+                        <li class="flex items-start text-emerald-800 text-sm">
+                            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-3 mt-2"></span>
+                            ${link}
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        `;
+    }
+    
+    renderReflectionPreview(challenge) {
+        if (!challenge.reflectionPrompt) return '';
+        
+        return `
+            <div class="bg-purple-50 rounded-xl p-4 mb-6 border border-purple-100">
+                <h4 class="font-semibold text-purple-900 mb-2">Reflection Challenge</h4>
+                <p class="text-purple-800 text-sm">${challenge.reflectionPrompt}</p>
+                <p class="text-purple-600 text-xs mt-2">Tip: Revisit this question after you review your feedback to boost retention.</p>
+            </div>
+        `;
+    }
+
     showHint() {
         const hintSection = document.getElementById('hint-section');
         const hintContent = document.getElementById('hint-content');
@@ -420,6 +534,7 @@ class PromptQuestGame {
     showFeedback(evaluation, userPrompt) {
         const feedbackSection = document.getElementById('feedback-section');
         const content = document.getElementById('feedback-content');
+        const activeChallenge = this.currentChallenge;
         
         if (!feedbackSection || !content) {
             console.error('Feedback section not found');
@@ -494,6 +609,14 @@ class PromptQuestGame {
                         `).join('')}
                     </ul>
                 </div>
+                
+                ${activeChallenge?.reflectionPrompt ? `
+                    <div class="bg-indigo-50 rounded-xl p-4">
+                        <h5 class="font-semibold text-indigo-900 mb-2">Reflection Prompt</h5>
+                        <p class="text-indigo-800">${activeChallenge.reflectionPrompt}</p>
+                        <p class="text-indigo-600 text-sm mt-1">Jot a short response in your journal or share it with a classmate to reinforce the learning.</p>
+                    </div>
+                ` : ''}
                 
                 ${evaluation.exampleImprovement ? `
                     <div class="bg-amber-50 rounded-xl p-4">

@@ -247,6 +247,47 @@ class PromptQuestGame {
         if (promptSection) {
             promptSection.classList.remove('hidden');
             
+            // Ensure the form exists and has correct IDs
+            if (!document.getElementById('prompt-form')) {
+                promptSection.innerHTML = `
+                    <form id="prompt-form" class="space-y-6">
+                        <div>
+                            <label for="user-prompt" class="block text-lg font-semibold mb-2">Your Prompt:</label>
+                            <textarea 
+                                id="user-prompt" 
+                                class="w-full p-4 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all"
+                                rows="4"
+                                placeholder="Type your prompt here..."
+                                required
+                            ></textarea>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <button type="submit" id="submit-btn" class="btn btn-primary flex-1 flex justify-center items-center gap-2">
+                                <span id="submit-text">Submit Prompt</span>
+                                <span id="submit-loading" class="hidden animate-spin">⌛</span>
+                            </button>
+                            <button type="button" class="show-hint btn btn-secondary">
+                                💡 Hint
+                            </button>
+                            <button type="button" class="show-example btn btn-secondary">
+                                📝 Example
+                            </button>
+                        </div>
+                        
+                        <div id="hint-section" class="hidden bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-4">
+                            <h5 class="font-bold text-yellow-800 mb-1">Hint:</h5>
+                            <p id="hint-content" class="text-yellow-700"></p>
+                        </div>
+                        
+                        <div id="example-section" class="hidden bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+                            <h5 class="font-bold text-blue-800 mb-1">Example:</h5>
+                            <p id="example-content" class="text-blue-700 italic"></p>
+                        </div>
+                    </form>
+                `;
+            }
+            
             // Clear previous input
             const textarea = document.getElementById('user-prompt');
             if (textarea) {
@@ -259,6 +300,10 @@ class PromptQuestGame {
             if (feedbackSection) {
                 feedbackSection.classList.add('hidden');
             }
+            
+            // Reset hint/example sections
+            document.getElementById('hint-section')?.classList.add('hidden');
+            document.getElementById('example-section')?.classList.add('hidden');
         }
         
         // Hide the welcome message
@@ -381,14 +426,16 @@ class PromptQuestGame {
         const submitText = document.getElementById('submit-text');
         const submitLoading = document.getElementById('submit-loading');
         
+        if (!submitBtn) return; // Guard clause
+        
         if (loading) {
             submitBtn.disabled = true;
-            submitText.classList.add('hidden');
-            submitLoading.classList.remove('hidden');
+            if (submitText) submitText.classList.add('hidden');
+            if (submitLoading) submitLoading.classList.remove('hidden');
         } else {
             submitBtn.disabled = false;
-            submitText.classList.remove('hidden');
-            submitLoading.classList.add('hidden');
+            if (submitText) submitText.classList.remove('hidden');
+            if (submitLoading) submitLoading.classList.add('hidden');
         }
     }
 
@@ -496,19 +543,23 @@ class PromptQuestGame {
         const hintSection = document.getElementById('hint-section');
         const hintContent = document.getElementById('hint-content');
         
+        if (!hintSection || !hintContent) return;
+
         if (this.currentChallenge && this.currentChallenge.hints.length > 0) {
             const randomHint = this.currentChallenge.hints[Math.floor(Math.random() * this.currentChallenge.hints.length)];
             hintContent.textContent = randomHint;
             hintSection.classList.remove('hidden');
             
             // Animate in
-            anime({
-                targets: hintSection,
-                opacity: [0, 1],
-                translateY: [-10, 0],
-                duration: 300,
-                easing: 'easeOutQuart'
-            });
+            if (typeof anime !== 'undefined') {
+                anime({
+                    targets: hintSection,
+                    opacity: [0, 1],
+                    translateY: [-10, 0],
+                    duration: 300,
+                    easing: 'easeOutQuart'
+                });
+            }
         }
     }
 
@@ -516,18 +567,22 @@ class PromptQuestGame {
         const exampleSection = document.getElementById('example-section');
         const exampleContent = document.getElementById('example-content');
         
+        if (!exampleSection || !exampleContent) return;
+
         if (this.currentChallenge && this.currentChallenge.examplePrompt) {
             exampleContent.textContent = this.currentChallenge.examplePrompt;
             exampleSection.classList.remove('hidden');
             
             // Animate in
-            anime({
-                targets: exampleSection,
-                opacity: [0, 1],
-                translateY: [-10, 0],
-                duration: 300,
-                easing: 'easeOutQuart'
-            });
+            if (typeof anime !== 'undefined') {
+                anime({
+                    targets: exampleSection,
+                    opacity: [0, 1],
+                    translateY: [-10, 0],
+                    duration: 300,
+                    easing: 'easeOutQuart'
+                });
+            }
         }
     }
 

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Hub - Prompt Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Vanta.js dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --secondary: #059669;
+            --accent: #F59E0B;
+            --neutral: #64748B;
+            --background: #FEFBF3;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F0F1E;
+            color: #F9FAFB;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        #vanta-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        section, nav, footer {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .font-display { font-family: 'Poppins', sans-serif; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .example-card {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        
+        .code-block {
+            background: #1F2937;
+            color: #F9FAFB;
+            font-family: 'JetBrains Mono', monospace;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .badge {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Dark theme adjustments */
+        .bg-white {
+            background: rgba(30, 41, 59, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.2);
+        }
+        
+        .text-gray-700, .text-gray-600, .text-gray-500 {
+            color: #D1D5DB !important;
+        }
+        
+        .text-gray-900 {
+            color: #F9FAFB !important;
+        }
+        
+        nav {
+            background: rgba(17, 24, 39, 0.98) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .bg-indigo-50, .bg-emerald-50, .bg-amber-50, .bg-purple-50 {
+            background: rgba(30, 41, 59, 0.6) !important;
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .text-indigo-800, .text-emerald-800, .text-amber-800, .text-purple-800 {
+            color: #E5E7EB !important;
+        }
+        
+        .text-indigo-900, .text-emerald-900, .text-amber-900, .text-purple-900 {
+            color: #F9FAFB !important;
+        }
+        
+        .bg-gray-50 {
+            background: rgba(30, 41, 59, 0.6) !important;
+        }
+        
+        .text-gray-900 {
+            color: #F9FAFB !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div id="vanta-background"></div>
+    
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="font-display font-bold text-xl gradient-text">Prompt Quest</a>
+                    <span class="text-sm text-gray-500">Learning Hub</span>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg font-medium">Home</a>
+                    <a href="challenges.html" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-emerald-600 text-white rounded-lg hover:opacity-90 transition-opacity font-medium">
+                        Start Challenges
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-indigo-900/30 to-emerald-900/30 py-16 px-4 backdrop-blur-sm">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="font-display text-4xl md:text-5xl font-bold mb-6 gradient-text">
+                Your Guide to Prompt Engineering
+            </h1>
+            <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                Master the art of writing effective AI prompts with our friendly guide
+            </p>
+        </div>
+    </section>
+
+    <!-- Tutorial Content -->
+    <section class="py-16 px-4">
+        <div class="max-w-5xl mx-auto space-y-16">
+            
+            <!-- First Principles -->
+            <div class="fade-in">
+                <h2 class="font-display text-3xl font-bold mb-8 gradient-text">The First Rule of Prompt Club</h2>
+                <div class="bg-white rounded-2xl p-8 shadow-lg space-y-4">
+                    <p class="text-lg text-gray-300 leading-relaxed">
+                        The first rule of Prompt Club is: you talk to the AI like a helpful, super-smart friend. A prompt is just a clear and friendly instruction. The better the instruction, the better the result.
+                    </p>
+                    <p class="text-lg text-gray-300 leading-relaxed">
+                        We'll start with plain English, add some helpful context, give it a few clues about the format we want, and add any rules it needs to follow. By the end of this, you'll know exactly how to go from a fuzzy idea to a brilliant prompt.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Learning Journey -->
+            <div class="fade-in stagger-1">
+                <h2 class="font-display text-3xl font-bold mb-8 gradient-text">Your Adventure Map</h2>
+                <p class="text-gray-300 mb-6">
+                    Prompt Quest is a five-stage adventure. Each stage unlocks fun new challenges so you can practise your skills in bite-sized chunks.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge">Stage 1</span>
+                            <span class="text-sm text-gray-500">The Essentials</span>
+                        </div>
+                        <h3 class="font-display text-xl font-bold mb-2 text-gray-100">Prompt Basics</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            Learn how to tell the AI what you want, who it's for, and what format you need. Master the basics with simple challenges.
+                        </p>
+                    </div>
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge">Stage 2</span>
+                            <span class="text-sm text-gray-500">Playing Pretend</span>
+                        </div>
+                        <h3 class="font-display text-xl font-bold mb-2">Context & Personas</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Get the AI to act out a role. Practise giving it a personality and a point of view to get more creative results.
+                        </p>
+                    </div>
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge">Stage 3</span>
+                            <span class="text-sm text-gray-500">Getting Organised</span>
+                        </div>
+                        <h3 class="font-display text-xl font-bold mb-2">Formatting & Structure</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Learn how to ask for your response in a specific format, like a table, a list, or even a poem.
+                        </p>
+                    </div>
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge">Stage 4</span>
+                            <span class="text-sm text-gray-500">Thinking Inside the Box</span>
+                        </div>
+                        <h3 class="font-display text-xl font-bold mb-2">Creative Constraints</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Use rules and constraints to your advantage. Learn how to get more creative ideas by setting clever limits.
+                        </p>
+                    </div>
+                    <div class="example-card card-hover rounded-2xl p-6 md:col-span-2">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="badge">Stage 5</span>
+                            <span class="text-sm text-gray-500">Fixing & Improving</span>
+                        </div>
+                        <h3 class="font-display text-xl font-bold mb-2">Iteration & Rescue</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Learn how to spot a bad prompt, fix a wobbly response, and improve your prompts until they're perfect.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prompt Anatomy -->
+            <div class="fade-in stagger-2">
+                <h2 class="font-display text-3xl font-bold mb-8 gradient-text">Anatomy of a Great Prompt</h2>
+                <div class="bg-white rounded-2xl p-8 shadow-lg space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-indigo-50 rounded-xl p-5">
+                            <h3 class="font-display text-xl font-bold text-indigo-800 mb-2">1. The Task</h3>
+                            <p class="text-gray-700">Start with a clear instruction. Tell the AI what you want it to do: `explain`, `create`, `summarise`, `translate`.</p>
+                        </div>
+                        <div class="bg-emerald-50 rounded-xl p-5">
+                            <h3 class="font-display text-xl font-bold text-emerald-800 mb-2">2. The Persona</h3>
+                            <p class="text-gray-700">Ask the AI to act out a role. This helps it adopt the right tone of voice and level of knowledge for your task.</p>
+                        </div>
+                        <div class="bg-amber-50 rounded-xl p-5">
+                            <h3 class="font-display text-xl font-bold text-amber-800 mb-2">3. The Context</h3>
+                            <p class="text-gray-700">Give the AI the background information it needs. The more detail you provide, the less the AI has to guess.</p>
+                        </div>
+                        <div class="bg-purple-50 rounded-xl p-5">
+                            <h3 class="font-display text-xl font-bold text-purple-800 mb-2">4. The Format</h3>
+                            <p class="text-gray-700">Describe how you want the output to look: a numbered list, a table, a poem, a script, and so on.</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-6">
+                        <h4 class="font-display text-lg font-bold text-gray-900 mb-3">Sample Prompt</h4>
+                        <div class="code-block">
+Act as a museum curator preparing a guided tour for teenagers who love science fiction.
+Summarise three important artefacts from British space exploration in a fun timeline,
+include one quirky fact per artefact, and finish with a thoughtful question for the group.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The CRAFT Framework -->
+            <div class="fade-in stagger-3">
+                <h2 class="font-display text-3xl font-bold mb-6 gradient-text">🛠️ The CRAFT Framework</h2>
+                <p class="text-lg text-gray-700 mb-6">
+                    Use this simple framework to structure your prompts effectively:
+                </p>
+                
+                <div class="space-y-4">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold text-indigo-600 mb-2">C - Context</h3>
+                        <p class="text-gray-700">Provide background information and set the scene</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold text-purple-600 mb-2">R - Role</h3>
+                        <p class="text-gray-700">Define who the AI should act as (expert, teacher, friend)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold text-pink-600 mb-2">A - Action</h3>
+                        <p class="text-gray-700">Clearly state what you want the AI to do</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold text-orange-600 mb-2">F - Format</h3>
+                        <p class="text-gray-700">Specify how you want the output structured</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold text-emerald-600 mb-2">T - Tone</h3>
+                        <p class="text-gray-700">Set the voice and style of the response</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-6 bg-white rounded-xl shadow-lg">
+                    <h4 class="font-bold mb-2">Example using CRAFT:</h4>
+                    <p class="text-gray-700 italic">
+                        "You are an experienced fitness coach (Role). I'm a 35-year-old beginner who wants to lose weight (Context). 
+                        Create a 4-week workout plan (Action) as a weekly schedule with exercises, sets, and reps (Format). 
+                        Use encouraging and motivational language (Tone)."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Prompt Patterns -->
+            <div class="fade-in stagger-4">
+                <h2 class="font-display text-3xl font-bold mb-8 gradient-text">Prompt Patterns You Will Master</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="text-3xl mb-4">🧭</div>
+                        <h3 class="font-display text-xl font-bold mb-3">Briefing Prompts</h3>
+                        <p class="text-gray-700">Perfect for quick summaries and explanations. Get the AI up to speed on a new topic in seconds.</p>
+                    </div>
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="text-3xl mb-4">🧪</div>
+                        <h3 class="font-display text-xl font-bold mb-3">Analytical Prompts</h3>
+                        <p class="text-gray-700">Helps you compare ideas, weigh up the pros and cons, and make smart choices.</p>
+                    </div>
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="text-3xl mb-4">🎨</div>
+                        <h3 class="font-display text-xl font-bold mb-3">Creative Prompts</h3>
+                        <p class="text-gray-700">Your best friend for brainstorming ideas, writing stories, and coming up with something new.</p>
+                    </div>
+                    <div class="example-card card-hover rounded-2xl p-6">
+                        <div class="text-3xl mb-4">🩺</div>
+                        <h3 class="font-display text-xl font-bold mb-3">Diagnostic Prompts</h3>
+                        <p class="text-gray-700">Figure out what went wrong with a prompt and get clues on how to fix it.</p>
+                    </div>
+                    <div class="example-card card-hover rounded-2xl p-6 md:col-span-2">
+                        <div class="text-3xl mb-4">🔁</div>
+                        <h3 class="font-display text-xl font-bold mb-3">Iterative Prompts</h3>
+                        <p class="text-gray-700">The art of polishing. Learn to draft, critique, and improve your prompts until they shine.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ready to Practice -->
+            <div class="fade-in stagger-5">
+                <div class="bg-gradient-to-r from-indigo-600 to-emerald-600 rounded-2xl p-12 text-white text-center">
+                    <h2 class="font-display text-3xl font-bold mb-4">🎯 Ready to Put It Into Practice?</h2>
+                    <p class="text-xl mb-8 opacity-90">
+                        Now that you understand the fundamentals, it's time to test your skills with real challenges!
+                    </p>
+                    <div class="flex gap-4 justify-center">
+                        <a href="challenges.html" class="px-8 py-4 bg-white text-indigo-600 rounded-lg font-bold hover:bg-gray-100 transition-colors">
+                            Start Challenges
+                        </a>
+                        <a href="index.html" class="px-8 py-4 bg-white/20 text-white rounded-lg font-bold hover:bg-white/30 transition-colors">
+                            Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black/50 backdrop-blur-md py-8 px-4 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-sm text-gray-400">© 2025 Prompt Quest. Educational tool for AI literacy development.</p>
+        </div>
+    </footer>
+    
+    <!-- Initialize Vanta.js Background -->
+    <script>
+        if (typeof VANTA !== 'undefined') {
+            VANTA.NET({
+                el: "#vanta-background",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0x4f46e5,
+                backgroundColor: 0x0f0f1e,
+                points: 10.00,
+                maxDistance: 20.00,
+                spacing: 15.00
+            });
+        }
+    </script>
+</body>
+</html>

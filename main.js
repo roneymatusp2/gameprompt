@@ -190,6 +190,12 @@ class PromptQuestGame {
             console.error('Attempted to display null challenge');
             return;
         }
+        
+        // Show the work area when a challenge is selected
+        const workArea = document.getElementById('challenge-work-area');
+        if (workArea) {
+            workArea.classList.remove('hidden');
+        }
 
         container.innerHTML = `
             <div class="mb-6 animate-scale-in">

@@ -500,23 +500,11 @@
                     <span class="text-sm text-gray-500">v2.0 Enhanced</span>
                 </div>
                 <div class="flex items-center space-x-6">
-                    <button class="open-mini-games flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-lg hover:bg-purple-200 transition-colors">
-                        <span>🎮</span>
-                        <span>Mini-Games</span>
-                    </button>
-                    <button class="open-achievements flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-lg hover:bg-yellow-200 transition-colors">
-                        <span>🏆</span>
-                        <span>Achievements</span>
-                    </button>
-                    <button onclick="window.audioSystem.toggleMute()" class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Toggle Sound">
-                        <span class="sound-on hidden">🔊</span>
-                        <span class="sound-off">🔇</span>
-                    </button>
+                    <a href="learning.html" class="text-gray-600 hover:text-gray-900 font-medium">Learning</a>
+                    <a href="challenges.html" class="text-gray-600 hover:text-gray-900 font-medium">Challenges</a>
                     <button onclick="document.body.classList.toggle('light-theme')" class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Toggle Theme">
                         <span>🌓</span>
                     </button>
-                    <a href="progress.html" class="text-gray-600 hover:text-gray-900 font-medium">Progress</a>
-                    <a href="tutorial.html" class="text-gray-600 hover:text-gray-900 font-medium">Tutorial</a>
                     <div class="relative">
                         <div id="streak-counter" class="flex items-center space-x-2 bg-orange-100 px-3 py-1 rounded-full">
                             <span class="text-orange-600">🔥</span>
@@ -547,11 +535,14 @@
                     Master the art of AI communication through interactive challenges, mini-games, and real-time feedback
                 </p>
                 <div class="flex gap-4 justify-center">
-                    <button onclick="scrollToChallenges()" class="btn btn-primary text-lg">
-                        Start Learning
-                    </button>
+                    <a href="learning.html" class="btn btn-primary text-lg">
+                        📚 Start Learning
+                    </a>
+                    <a href="challenges.html" class="btn btn-secondary text-lg">
+                        🎯 Start Challenges
+                    </a>
                     <button onclick="openMiniGamesHub()" class="btn btn-secondary text-lg">
-                        Play Mini-Games
+                        🎮 Play Mini-Games
                     </button>
                 </div>
                 
@@ -587,94 +578,6 @@
             </div>
         </section>
 
-        <!-- Main Game Section -->
-        <main id="challenges" class="max-w-7xl mx-auto px-4 py-12">
-            <div class="text-center mb-12">
-                <h2 class="font-display text-4xl font-bold mb-4">Choose Your Challenge</h2>
-                <p class="text-xl text-gray-600">Start with beginner challenges and work your way up to advanced levels</p>
-            </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Challenge Selection -->
-                <div class="lg:col-span-1">
-                    <h3 class="font-display text-2xl font-bold mb-6 text-gray-900">Available Challenges</h3>
-                    <div id="challenge-grid" class="space-y-4">
-                        <!-- Challenge cards will be dynamically inserted here -->
-                    </div>
-                </div>
-
-                <!-- Challenge Display & Input -->
-                <div class="lg:col-span-2 challenge-display">
-                    <div class="bg-white rounded-2xl shadow-xl p-8">
-                        <div id="challenge-content" class="mb-8">
-                            <div class="text-center py-16">
-                                <div class="text-7xl mb-6">🎯</div>
-                                <h2 class="font-display text-3xl font-bold mb-4 text-gray-900">Welcome to Prompt Quest!</h2>
-                                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                                    Select a challenge from the left to begin your journey in mastering AI prompt engineering.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Prompt Builder Section (Initially Hidden) -->
-                        <div id="prompt-builder-section" class="hidden">
-                            <!-- Drag and drop builder will be inserted here -->
-                        </div>
-
-                        <!-- Traditional Input Section (Initially Hidden) -->
-                        <div class="prompt-input-section hidden" id="prompt-input-section">
-                            <form id="prompt-form" class="space-y-6">
-                                <div>
-                                    <label for="user-prompt" class="block text-lg font-semibold mb-2">Your Prompt:</label>
-                                    <textarea 
-                                        id="user-prompt" 
-                                        class="w-full p-4 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all"
-                                        rows="4"
-                                        placeholder="Type your prompt here..."
-                                        required
-                                    ></textarea>
-                                </div>
-                                
-                                <div class="flex gap-4">
-                                    <button type="submit" class="btn btn-primary flex-1">
-                                        Submit Prompt
-                                    </button>
-                                    <button type="button" class="show-hint btn btn-secondary">
-                                        💡 Hint
-                                    </button>
-                                    <button type="button" class="show-example btn btn-secondary">
-                                        📝 Example
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- AI Preview Section will be inserted here by ai-preview.js -->
-
-                        <!-- Feedback Section -->
-                        <div id="feedback-section" class="hidden mt-8">
-                            <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6">
-                                <h3 class="font-display text-2xl font-bold mb-4">Feedback</h3>
-                                <div id="feedback-content" class="space-y-4">
-                                    <!-- Feedback will be dynamically inserted here -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Achievement Notification -->
-    <div id="achievement-notification" class="notification bg-white rounded-xl shadow-lg p-4 max-w-sm">
-        <div class="flex items-center space-x-3">
-            <div class="text-3xl" id="achievement-icon">🏆</div>
-            <div>
-                <div class="font-semibold text-gray-900" id="achievement-title">Achievement Unlocked!</div>
-                <div class="text-sm text-gray-600" id="achievement-description">You've earned a new badge</div>
-            </div>
-        </div>
     </div>
 
     <!-- Footer -->
@@ -723,102 +626,7 @@
         let isGuestMode = localStorage.getItem('guestMode') === 'true';
         let firebaseAvailable = typeof firebase !== 'undefined';
         
-        // Define showGuestModeBanner function early so it can be called immediately
-        function showGuestModeBanner() {
-            // Remove existing banner if any
-            const existingBanner = document.querySelector('.guest-mode-banner');
-            if (existingBanner) {
-                existingBanner.remove();
-            }
-            
-            // Show upgrade button in nav (more subtle than banner)
-            const upgradeBtn = document.getElementById('guest-upgrade-btn');
-            if (upgradeBtn) {
-                upgradeBtn.classList.remove('hidden');
-            }
-            
-            console.log('Guest mode banner displayed');
-        }
-        
-        // Immediate check on page load
-        if (isGuestMode) {
-            console.log('Guest mode detected on page load');
-            // Ensure game is visible immediately
-            const mainGameContainer = document.querySelector('.main-game-container');
-            if (mainGameContainer) {
-                mainGameContainer.classList.remove('hidden');
-            }
-            // Hide auth container if exists
-            const authContainer = document.getElementById('auth-container');
-            if (authContainer) {
-                authContainer.classList.add('hidden');
-            }
-            // Show banner immediately if in guest mode
-            setTimeout(() => {
-                if (!document.querySelector('.guest-mode-banner')) {
-                    showGuestModeBanner();
-                }
-            }, 100);
-        }
-        
-        // Wait for Firebase to load
-        setTimeout(() => {
-            // Check guest mode first
-            isGuestMode = localStorage.getItem('guestMode') === 'true';
-            console.log('Guest mode status:', isGuestMode);
-            
-            if (firebaseAvailable && firebase.apps && firebase.apps.length > 0) {
-                firebase.auth().onAuthStateChanged((user) => {
-                    if (user) {
-                        // User is authenticated - enable full features
-                        isGuestMode = false;
-                        localStorage.removeItem('guestMode');
-                        console.log('Authenticated user:', user.email);
-                        // Hide guest banner if shown
-                        document.querySelector('.fixed.top-0')?.remove();
-                    } else if (!isGuestMode) {
-                        // Not authenticated and not in guest mode - show mode selection
-                        const hasSeenModeSelection = sessionStorage.getItem('modeSelected');
-                        if (!hasSeenModeSelection) {
-                            showModeSelectionModal();
-                        }
-                    } else {
-                        // Guest mode - limited features
-                        console.log('Playing in Guest Mode');
-                        showGuestModeBanner();
-                        // Ensure game is visible in guest mode
-                        const mainGameContainer = document.querySelector('.main-game-container');
-                        if (mainGameContainer) {
-                            mainGameContainer.classList.remove('hidden');
-                        }
-                        // Remove any auth container
-                        const authContainer = document.getElementById('auth-container');
-                        if (authContainer) {
-                            authContainer.classList.add('hidden');
-                        }
-                    }
-                });
-            } else {
-                // Firebase not configured - auto guest mode
-                console.log('Firebase not configured - running in local-only mode');
-                if (!isGuestMode) {
-                    localStorage.setItem('guestMode', 'true');
-                    isGuestMode = true;
-                }
-                // Ensure game is visible
-                const mainGameContainer = document.querySelector('.main-game-container');
-                if (mainGameContainer) {
-                    mainGameContainer.classList.remove('hidden');
-                }
-                // Hide auth container if exists
-                const authContainer = document.getElementById('auth-container');
-                if (authContainer) {
-                    authContainer.classList.add('hidden');
-                }
-                showLocalOnlyBanner();
-            }
-        }, 500);
-        
+        // Define modal function FIRST before calling it
         function showModeSelectionModal() {
             const modal = document.createElement('div');
             modal.id = 'mode-selection-modal';
@@ -861,32 +669,32 @@
                         </div>
                         
                         <!-- Full Experience -->
-                        <div class="border-2 border-purple-500 rounded-xl p-6 bg-gradient-to-br from-purple-50 to-indigo-50 cursor-pointer" onclick="selectAuthMode()">
+                        <div class="border-2 border-indigo-500 rounded-xl p-6 bg-white cursor-pointer shadow-lg" onclick="selectAuthMode()">
                             <div class="text-5xl text-center mb-4">🏆</div>
-                            <h3 class="text-2xl font-bold text-center mb-3">Full Experience</h3>
-                            <ul class="space-y-2 text-sm text-gray-700 mb-4">
+                            <h3 class="text-2xl font-bold text-center mb-3 text-gray-900">Full Experience</h3>
+                            <ul class="space-y-2 text-sm text-gray-900 mb-4 font-medium">
                                 <li class="flex items-start">
-                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span class="text-green-600 mr-2 font-bold">✓</span>
                                     <span>Save your progress</span>
                                 </li>
                                 <li class="flex items-start">
-                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span class="text-green-600 mr-2 font-bold">✓</span>
                                     <span>Unlock achievements</span>
                                 </li>
                                 <li class="flex items-start">
-                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span class="text-green-600 mr-2 font-bold">✓</span>
                                     <span>Compete on leaderboards</span>
                                 </li>
                                 <li class="flex items-start">
-                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span class="text-green-600 mr-2 font-bold">✓</span>
                                     <span>Track statistics</span>
                                 </li>
                                 <li class="flex items-start">
-                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span class="text-green-600 mr-2 font-bold">✓</span>
                                     <span>Multi-device sync</span>
                                 </li>
                             </ul>
-                            <button class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity" onclick="selectAuthMode(); event.stopPropagation();">
+                            <button class="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 text-white py-3 rounded-lg font-bold hover:from-indigo-700 hover:to-emerald-700 transition-all shadow-lg" onclick="selectAuthMode(); event.stopPropagation();">
                                 Sign In / Register
                             </button>
                         </div>
@@ -901,6 +709,136 @@
         }
         
         function selectGuestMode() {
+            localStorage.setItem('guestMode', 'true');
+            sessionStorage.setItem('modeSelected', 'true');
+            const modal = document.getElementById('mode-selection-modal');
+            if (modal) modal.remove();
+            window.location.reload();
+        }
+        
+        function selectAuthMode() {
+            sessionStorage.setItem('modeSelected', 'true');
+            window.location.href = 'auth.html';
+        }
+        
+        // Make functions globally available
+        window.selectGuestMode = selectGuestMode;
+        window.selectAuthMode = selectAuthMode;
+        window.showModeSelectionModal = showModeSelectionModal;
+        
+        // Show modal immediately if no mode selected
+        if (!isGuestMode && !sessionStorage.getItem('modeSelected')) {
+            // Show modal immediately on page load
+            setTimeout(() => {
+                showModeSelectionModal();
+            }, 100);
+        }
+        
+        // Define showGuestModeBanner function early so it can be called immediately
+        function showGuestModeBanner() {
+            // Remove existing banner if any
+            const existingBanner = document.querySelector('.guest-mode-banner');
+            if (existingBanner) {
+                existingBanner.remove();
+            }
+            
+            // Show upgrade button in nav (more subtle than banner)
+            const upgradeBtn = document.getElementById('guest-upgrade-btn');
+            if (upgradeBtn) {
+                upgradeBtn.classList.remove('hidden');
+            }
+            
+            console.log('Guest mode banner displayed');
+        }
+        
+        // Immediate check on page load
+        if (isGuestMode) {
+            console.log('Guest mode detected on page load');
+            // Ensure game is visible immediately
+            const mainGameContainer = document.querySelector('.main-game-container');
+            if (mainGameContainer) {
+                mainGameContainer.classList.remove('hidden');
+            }
+            // Hide auth container if exists
+            const authContainer = document.getElementById('auth-container');
+            if (authContainer) {
+                authContainer.classList.add('hidden');
+            }
+            // Hide auth-only elements in guest mode
+            document.querySelectorAll('.auth-only').forEach(el => {
+                el.style.display = 'none';
+            });
+            // Show banner immediately if in guest mode
+            setTimeout(() => {
+                if (!document.querySelector('.guest-mode-banner')) {
+                    showGuestModeBanner();
+                }
+            }, 100);
+        }
+        
+        // Wait for Firebase to load
+        setTimeout(() => {
+            // Check guest mode first
+            isGuestMode = localStorage.getItem('guestMode') === 'true';
+            console.log('Guest mode status:', isGuestMode);
+            
+            if (firebaseAvailable && firebase.apps && firebase.apps.length > 0) {
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (user) {
+                        // User is authenticated - enable full features
+                        isGuestMode = false;
+                        localStorage.removeItem('guestMode');
+                        console.log('Authenticated user:', user.email);
+                        // Hide guest banner if shown
+                        document.querySelector('.fixed.top-0')?.remove();
+                    } else if (!isGuestMode) {
+                        // Not authenticated and not in guest mode - show mode selection
+                        // Always show on home page (index.html)
+                        showModeSelectionModal();
+                    } else {
+                        // Guest mode - limited features
+                        console.log('Playing in Guest Mode');
+                        showGuestModeBanner();
+                        // Ensure game is visible in guest mode
+                        const mainGameContainer = document.querySelector('.main-game-container');
+                        if (mainGameContainer) {
+                            mainGameContainer.classList.remove('hidden');
+                        }
+                        // Remove any auth container
+                        const authContainer = document.getElementById('auth-container');
+                        if (authContainer) {
+                            authContainer.classList.add('hidden');
+                        }
+                        // Hide auth-only elements in guest mode
+                        document.querySelectorAll('.auth-only').forEach(el => {
+                            el.style.display = 'none';
+                        });
+                    }
+                });
+            } else {
+                // Firebase not configured - auto guest mode
+                console.log('Firebase not configured - running in local-only mode');
+                if (!isGuestMode) {
+                    localStorage.setItem('guestMode', 'true');
+                    isGuestMode = true;
+                }
+                // Ensure game is visible
+                const mainGameContainer = document.querySelector('.main-game-container');
+                if (mainGameContainer) {
+                    mainGameContainer.classList.remove('hidden');
+                }
+                // Hide auth container if exists
+                const authContainer = document.getElementById('auth-container');
+                if (authContainer) {
+                    authContainer.classList.add('hidden');
+                }
+                showLocalOnlyBanner();
+            }
+        }, 500);
+        
+        // selectGuestMode and selectAuthMode already defined above
+        
+        function oldSelectGuestMode() {
             localStorage.setItem('guestMode', 'true');
             sessionStorage.setItem('modeSelected', 'true');
             console.log('Guest mode selected');
@@ -1028,17 +966,6 @@
                 }
             }
         });
-        
-        // Smooth scroll to challenges
-        function scrollToChallenges() {
-            const challengesSection = document.getElementById('challenges');
-            if (challengesSection) {
-                challengesSection.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        }
         
         // Open mini-games hub
         function openMiniGamesHub() {

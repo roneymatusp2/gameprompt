@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenges - Prompt Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Vanta.js dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    
+    <!-- New CSS files -->
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/dark-theme-fixes.css">
+    
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --primary-light: #818CF8;
+            --secondary: #059669;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+            
+            --bg-main: #0F0F1E;
+            --bg-card: rgba(30, 41, 59, 0.95);
+            --bg-card-hover: rgba(30, 41, 59, 1);
+            
+            --text-primary: #F9FAFB;
+            --text-secondary: #D1D5DB;
+            --text-muted: #9CA3AF;
+            
+            --border-light: rgba(75, 85, 99, 0.4);
+            --border-focus: rgba(79, 70, 229, 0.6);
+        }
+        
+        body.light-theme {
+            --bg-main: #FEFBF3;
+            --bg-card: rgba(255, 255, 255, 0.95);
+            --bg-card-hover: #FFFFFF;
+            
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #6B7280;
+            
+            --border-light: rgba(229, 231, 235, 1);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            position: relative;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        #vanta-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        /* Animated CSS background fallback */
+        @keyframes moveGradient {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0F0F1E;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 150%;
+            background: conic-gradient(
+                from 0deg at 50% 50%,
+                rgba(79, 70, 229, 0.3) 0deg,
+                transparent 60deg,
+                rgba(5, 150, 105, 0.3) 120deg,
+                transparent 180deg,
+                rgba(245, 158, 11, 0.2) 240deg,
+                transparent 300deg,
+                rgba(79, 70, 229, 0.3) 360deg
+            );
+            animation: moveGradient 20s linear infinite;
+        }
+        
+        .animated-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(15, 15, 30, 0.8) 70%);
+        }
+        
+        main {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .font-display { font-family: 'Poppins', sans-serif; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(75, 85, 99, 0.2);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(75, 85, 99, 0.3);
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        /* Dark theme for all cards */
+        .challenge-card, .bg-white {
+            background: rgba(30, 41, 59, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.3) !important;
+        }
+        
+        .text-gray-900 {
+            color: #F9FAFB !important;
+        }
+        
+        .text-gray-700, .text-gray-600 {
+            color: #D1D5DB !important;
+        }
+        
+        .text-gray-500 {
+            color: #9CA3AF !important;
+        }
+        
+        nav {
+            background: rgba(17, 24, 39, 0.98) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .bg-gray-50, .bg-blue-50, .bg-amber-50, .bg-green-50, .bg-purple-50, .bg-indigo-50 {
+            background: rgba(30, 41, 59, 0.6) !important;
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .text-blue-900, .text-amber-900, .text-green-900, .text-purple-900, .text-indigo-900 {
+            color: #F9FAFB !important;
+        }
+        
+        .text-blue-800, .text-amber-800, .text-green-800, .text-purple-800, .text-indigo-800 {
+            color: #E5E7EB !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div id="vanta-background"></div>
+    
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm px-4 py-4 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="font-display text-2xl font-bold gradient-text">Prompt Quest</a>
+                <span class="text-sm text-gray-500">Challenges</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <button class="open-mini-games flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-lg hover:bg-purple-200 transition-colors">
+                    <span>🎮</span>
+                    <span>Mini-Games</span>
+                </button>
+                <button class="open-achievements auth-only flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-lg hover:bg-yellow-200 transition-colors">
+                    <span>🏆</span>
+                    <span>Achievements</span>
+                </button>
+                <button onclick="window.audioSystem.toggleMute()" class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Toggle Sound">
+                    <span class="sound-on hidden">🔊</span>
+                    <span class="sound-off">🔇</span>
+                </button>
+                <button onclick="document.body.classList.toggle('light-theme')" class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" title="Toggle Theme">
+                    <span>🌓</span>
+                </button>
+                <a href="learning.html" class="text-gray-600 hover:text-gray-900 font-medium">Learning</a>
+                <a href="index.html" class="text-gray-600 hover:text-gray-900 font-medium">Home</a>
+                <div id="user-display" class="flex items-center gap-3">
+                    <!-- User info will be inserted here by Firebase -->
+                </div>
+                <div id="guest-upgrade-btn" class="hidden">
+                    <a href="auth.html" class="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium">
+                        <span>🔐</span>
+                        <span>LOGIN/SIGN UP</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Game Section -->
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h1 class="font-display text-4xl font-bold mb-4 gradient-text">Choose Your Challenge</h1>
+            <p class="text-xl text-gray-600">Start with beginner challenges and work your way up to advanced levels</p>
+        </div>
+        
+        <!-- Challenge Selection Grid -->
+        <div class="mb-12">
+            <h3 class="font-display text-2xl font-bold mb-6 text-gray-900 text-center">Available Challenges</h3>
+            <div id="challenge-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Challenge cards will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Challenge Display & Input -->
+        <div class="challenge-display">
+                <div class="bg-white rounded-2xl shadow-xl p-8 hidden" id="challenge-work-area">
+                    <div id="challenge-content" class="mb-8">
+                        <!-- Challenge content will be inserted here -->
+                    </div>
+
+                    <!-- Prompt Builder Section (Initially Hidden) -->
+                    <div id="prompt-builder-section" class="hidden">
+                        <!-- Drag and drop builder will be inserted here -->
+                    </div>
+
+                    <!-- Traditional Input Section (Initially Hidden) -->
+                    <div class="prompt-input-section hidden" id="prompt-input-section">
+                        <form id="prompt-form" class="space-y-6">
+                            <div>
+                                <label for="user-prompt" class="block text-lg font-semibold mb-2">Your Prompt:</label>
+                                <textarea 
+                                    id="user-prompt" 
+                                    class="w-full p-4 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all"
+                                    rows="4"
+                                    placeholder="Type your prompt here..."
+                                    required
+                                ></textarea>
+                            </div>
+                            
+                            <div class="flex gap-4">
+                                <button type="submit" class="btn btn-primary flex-1">
+                                    Submit Prompt
+                                </button>
+                                <button type="button" class="show-hint btn btn-secondary">
+                                    💡 Hint
+                                </button>
+                                <button type="button" class="show-example btn btn-secondary">
+                                    📝 Example
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- AI Preview Section will be inserted here by ai-preview.js -->
+
+                    <!-- Feedback Section -->
+                    <div id="feedback-section" class="hidden mt-8">
+                        <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6">
+                            <h3 class="font-display text-2xl font-bold mb-4">Feedback</h3>
+                            <div id="feedback-content" class="space-y-4">
+                                <!-- Feedback will be dynamically inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </main>
+
+    <!-- Achievement Notification -->
+    <div id="achievement-notification" class="notification bg-white rounded-xl shadow-lg p-4 max-w-sm">
+        <div class="flex items-center space-x-3">
+            <div class="text-3xl" id="achievement-icon">🏆</div>
+            <div>
+                <div class="font-semibold text-gray-900" id="achievement-title">Achievement Unlocked!</div>
+                <div class="text-sm text-gray-600" id="achievement-description">You've earned a new badge</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Local Config -->
+    <script src="js/firebase-config.local.js" onerror="console.log('Local Firebase config not found, using defaults')"></script>
+    <!-- Gemini Local Config -->
+    <script src="js/gemini-config.local.js" onerror="console.log('Local Gemini config not found, using defaults')"></script>
+    
+    <!-- Load scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="challenge-data.js"></script>
+    <script src="progress-system.js"></script>
+    <script src="gemini-integration.js"></script>
+    <script src="main.js"></script>
+    
+    <!-- Core feature scripts -->
+    <script src="js/mini-games.js"></script>
+    <script src="js/achievements.js"></script>
+    
+    <!-- Optional feature scripts -->
+    <script src="js/drag-drop-builder.js"></script>
+    <script src="js/ai-preview.js"></script>
+    <script src="js/multiplayer.js"></script>
+    <script src="js/audio-system.js"></script>
+    <script src="js/game-integration.js"></script>
+    
+    <!-- Initialize Vanta.js Background -->
+    <script>
+        if (typeof VANTA !== 'undefined') {
+            VANTA.NET({
+                el: "#vanta-background",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0x4f46e5,
+                backgroundColor: 0x0f0f1e,
+                points: 10.00,
+                maxDistance: 20.00,
+                spacing: 15.00
+            });
+        }
+    </script>
+</body>
+</html>

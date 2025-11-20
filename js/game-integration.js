@@ -129,8 +129,8 @@ class GameIntegration {
         // Add quick access buttons
         this.addQuickAccessBar();
         
-        // Initialize with welcome animation
-        this.showWelcomeAnimation();
+        // Initialize with welcome animation - DISABLED to show only Guest/Sign In modal
+        // this.showWelcomeAnimation();
     }
 
     togglePromptBuilder() {
@@ -164,6 +164,9 @@ class GameIntegration {
     }
 
     addQuickAccessBar() {
+        // Check if user is in guest mode
+        const isGuest = window.firebaseAuth?.isGuestMode() ?? true;
+        
         const quickAccessHTML = `
             <div class="quick-access-bar fixed bottom-20 right-4 flex flex-col gap-2 z-30">
                 <button class="quick-btn bg-purple-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform"
@@ -171,21 +174,18 @@ class GameIntegration {
                         title="Mini-Games">
                     🎮
                 </button>
+                ${!isGuest ? `
                 <button class="quick-btn bg-yellow-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform"
                         onclick="gameIntegration.quickAction('achievements')"
                         title="Achievements">
                     🏆
-                </button>
-                <button class="quick-btn bg-blue-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform"
-                        onclick="gameIntegration.quickAction('multiplayer')"
-                        title="Multiplayer">
-                    🌐
                 </button>
                 <button class="quick-btn bg-green-500 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform"
                         onclick="gameIntegration.quickAction('leaderboard')"
                         title="Leaderboard">
                     📊
                 </button>
+                ` : ''}
             </div>
         `;
         

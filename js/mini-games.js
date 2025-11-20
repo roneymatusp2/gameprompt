@@ -217,20 +217,67 @@ class PromptMiniGames {
         const submitBtn = document.querySelector('.submit-racing-prompt');
         const textarea = document.querySelector('.racing-input textarea');
 
-        const submitPrompt = () => {
+        const submitPrompt = async () => {
             const prompt = textarea.value.trim();
-            if (prompt.length > 10) { // Basic validation
-                score += Math.min(100, prompt.length * 2); // Score based on length/quality
+            if (prompt.length < 10) {
+                this.showQuickFeedback('Prompt too short! Write at least 10 characters.', 'error');
+                return;
+            }
+            
+            // Disable submit button during evaluation
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Evaluating...';
+            
+            try {
+                // Create a simple challenge object for evaluation
+                const miniChallenge = {
+                    id: currentChallenge,
+                    title: challenges[currentChallenge],
+                    task: challenges[currentChallenge],
+                    description: `Create a prompt for: ${challenges[currentChallenge]}`,
+                    successCriteria: [
+                        'Creates a proper AI instruction prompt',
+                        'Does not simply copy the challenge text',
+                        'Includes context or persona',
+                        'Is clear and specific'
+                    ]
+                };
+                
+                // Use Gemini to evaluate the prompt
+                const evaluation = await geminiIntegration.evaluatePrompt(prompt, miniChallenge);
+                
+                // Award points based on evaluation score
+                const pointsEarned = Math.round(evaluation.overallScore);
+                
+                if (pointsEarned === 0) {
+                    console.log('🚫 Showing copy detection feedback...');
+                    this.showQuickFeedback('❌ Copying detected! Write a proper prompt instruction.', 'error');
+                    // Don't advance, let them try again
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Prompt (Enter)';
+                    return;
+                }
+                
+                score += pointsEarned;
                 currentChallenge++;
                 
                 document.querySelector('.current-score').textContent = score;
                 document.querySelector('.progress-fill').style.width = 
                     `${(currentChallenge / challenges.length) * 100}%`;
                 
-                // Show success animation
-                this.showQuickFeedback('Great prompt! +' + Math.min(100, prompt.length * 2), 'success');
+                // Show success animation with actual score
+                const feedback = pointsEarned >= 80 ? 'Excellent prompt!' : 
+                                pointsEarned >= 60 ? 'Good prompt!' : 
+                                'Acceptable prompt.';
+                this.showQuickFeedback(`${feedback} +${pointsEarned}`, 'success');
                 
                 showNextChallenge();
+            } catch (error) {
+                console.error('Error evaluating prompt:', error);
+                this.showQuickFeedback('Error evaluating prompt. Try again.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Prompt (Enter)';
             }
         };
 
@@ -711,22 +758,44 @@ class PromptMiniGames {
     }
 
     showQuickFeedback(message, type) {
+        console.log('📢 Showing feedback:', message, 'Type:', type);
         const feedback = document.createElement('div');
         feedback.className = `quick-feedback fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                             px-8 py-4 rounded-lg text-white font-bold text-xl z-50 ${
+                             px-8 py-4 rounded-lg text-white font-bold text-xl shadow-2xl ${
             type === 'success' ? 'bg-green-500' : 'bg-red-500'
         }`;
+        feedback.style.zIndex = '9999';
+        feedback.style.minWidth = '300px';
+        feedback.style.textAlign = 'center';
         feedback.textContent = message;
         document.body.appendChild(feedback);
+        
+        console.log('✅ Feedback element added to DOM:', feedback);
 
-        anime({
-            targets: feedback,
-            scale: [0.5, 1.2, 1],
-            opacity: [0, 1, 1, 0],
-            duration: 2000,
-            easing: 'easeOutElastic(1, .8)',
-            complete: () => feedback.remove()
-        });
+        // Longer duration for errors so users can read them
+        const duration = type === 'error' ? 3500 : 2000;
+        
+        // Check if anime is available
+        if (typeof anime !== 'undefined') {
+            anime({
+                targets: feedback,
+                scale: [0.5, 1.2, 1],
+                opacity: [0, 1, 1, 0],
+                duration: duration,
+                easing: 'easeOutElastic(1, .8)',
+                complete: () => {
+                    console.log('🗑️ Removing feedback element');
+                    feedback.remove();
+                }
+            });
+        } else {
+            // Fallback without animation
+            console.warn('⚠️ anime.js not available, using fallback');
+            setTimeout(() => {
+                feedback.style.opacity = '0';
+                setTimeout(() => feedback.remove(), 500);
+            }, duration);
+        }
     }
 
     endRacingGame(score) {

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Copy Detection - Prompt Quest</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #4F46E5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #4338CA;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            background: #f0f0f0;
+        }
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .pass { color: green; }
+        .fail { color: red; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Copy Detection Test</h1>
+    <p>This page tests if the Gemini integration correctly detects when users copy the challenge text.</p>
+
+    <div class="test-section">
+        <h2>Test Challenge</h2>
+        <p><strong>Task:</strong> Write a prompt that asks the AI to explain the water cycle in a way that would make a 10-year-old want to save water.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Cases</h2>
+        
+        <h3>Test 1: Direct Copy (Should FAIL - Score 0)</h3>
+        <button onclick="testPrompt('Explain the water cycle in a way that would make a 10-year-old want to save water', 1)">Run Test 1</button>
+        <div id="result1" class="result" style="display:none;"></div>
+
+        <h3>Test 2: Good Prompt (Should PASS - Score 60+)</h3>
+        <button onclick="testPrompt('Act as a friendly water droplet named Drip. Tell the story of your journey through the water cycle to a group of 10-year-olds, and explain why it is so important for them to help you and your friends stay clean and not be wasted.', 2)">Run Test 2</button>
+        <div id="result2" class="result" style="display:none;"></div>
+
+        <h3>Test 3: Partial Copy (Should FAIL - Score 0-20)</h3>
+        <button onclick="testPrompt('Create a prompt for explaining the water cycle to make a 10-year-old want to save water', 3)">Run Test 3</button>
+        <div id="result3" class="result" style="display:none;"></div>
+    </div>
+
+    <script src="gemini-integration.js"></script>
+    <script src="challenge-data.js"></script>
+    <script>
+        async function testPrompt(userPrompt, testNum) {
+            const resultDiv = document.getElementById('result' + testNum);
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<p>⏳ Testing...</p>';
+
+            // Get the first challenge from challenge data
+            const challenge = challengeData.levels[0].challenges[0];
+
+            try {
+                const evaluation = await geminiIntegration.evaluatePrompt(userPrompt, challenge);
+                
+                const passOrFail = evaluation.overallScore === 0 ? 
+                    '<span class="fail">❌ FAIL (Correctly detected copy)</span>' : 
+                    evaluation.overallScore >= 60 ? 
+                    '<span class="pass">✅ PASS (Good prompt)</span>' : 
+                    '<span class="fail">⚠️ LOW SCORE</span>';
+
+                resultDiv.innerHTML = `
+                    <h4>Result: ${passOrFail}</h4>
+                    <div class="score">Score: ${evaluation.overallScore}/100</div>
+                    <p><strong>User Prompt:</strong> "${userPrompt}"</p>
+                    <p><strong>Feedback:</strong></p>
+                    <ul>
+                        ${evaluation.feedback.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                    <p><strong>Suggestions:</strong></p>
+                    <ul>
+                        ${evaluation.suggestions.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="fail">❌ Error: ${error.message}</p>`;
+                console.error('Test error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

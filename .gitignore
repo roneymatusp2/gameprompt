@@ -49,6 +49,5 @@ firebase-config.local.js
 dist/
 build/
 
-# Temporary files
-tmp/
-temp/
+# Documentation with sensitive data
+API_KEY_SECURITY.md

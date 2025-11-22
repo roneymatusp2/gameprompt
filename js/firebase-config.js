@@ -75,26 +75,14 @@ class FirebaseAuthSystem {
             return window.__FIREBASE_LOCAL_CONFIG__;
         }
 
-        // For Netlify/production: detect Netlify domain and use credentials
-        // This is safe because Firebase API keys are public by design
-        if (typeof window !== 'undefined' && window.location.hostname.includes('netlify.app')) {
-            return {
-                apiKey: "AIzaSyBuzlggCmuCkOgorMnLFw6aAmgh25b8FIs",
-                authDomain: "promptgames-65e49.firebaseapp.com",
-                projectId: "promptgames-65e49",
-                storageBucket: "promptgames-65e49.firebasestorage.app",
-                messagingSenderId: "617690670802",
-                appId: "1:617690670802:web:3c5be7009be9af5238ef0b"
-            };
-        }
-
         // Local/fallback configuration - use placeholders
         // Real credentials should be in firebase-config.local.js (not committed)
+        // Or set via Netlify environment variables
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
-            authDomain: "promptgames-65e49.firebaseapp.com",
-            projectId: "promptgames-65e49",
-            storageBucket: "promptgames-65e49.firebasestorage.app",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.firebasestorage.app",
             messagingSenderId: "YOUR_SENDER_ID",
             appId: "YOUR_APP_ID"
         };

@@ -15,6 +15,14 @@ class PromptQuestGame {
     setupEventListeners() {
         // Handle challenge selection with event delegation
         document.addEventListener('click', (e) => {
+            // Back to challenges button
+            if (e.target.closest('.back-to-challenges')) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.backToChallenges();
+                return;
+            }
+            
             // Challenge selection
             const challengeBtn = e.target.closest('.select-challenge');
             if (challengeBtn) {
@@ -90,6 +98,12 @@ class PromptQuestGame {
             });
         });
 
+        // Update overall stats
+        this.updateOverallStats();
+
+        // Setup filter functionality
+        this.setupFilters();
+
         // Animate cards in
         anime({
             targets: '.challenge-card',
@@ -101,9 +115,99 @@ class PromptQuestGame {
         });
     }
 
+    updateOverallStats() {
+        const stats = progressSystem.getOverallStats();
+        
+        // Update progress bar
+        const progressBar = document.getElementById('overall-progress-bar');
+        const percentageText = document.getElementById('overall-completion-percentage');
+        if (progressBar && percentageText) {
+            progressBar.style.width = `${stats.completionPercentage}%`;
+            percentageText.textContent = `${stats.completionPercentage}%`;
+        }
+
+        // Update stat boxes
+        const completedCount = document.getElementById('completed-count');
+        const inProgressCount = document.getElementById('in-progress-count');
+        const notStartedCount = document.getElementById('not-started-count');
+        const totalCount = document.getElementById('total-count');
+
+        if (completedCount) completedCount.textContent = stats.completed;
+        if (inProgressCount) inProgressCount.textContent = stats.inProgress;
+        if (notStartedCount) notStartedCount.textContent = stats.notStarted;
+        if (totalCount) totalCount.textContent = stats.total;
+    }
+
+    setupFilters() {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                this.filterChallenges(filter);
+            });
+        });
+    }
+
+    filterChallenges(filter) {
+        const cards = document.querySelectorAll('.challenge-card');
+        
+        cards.forEach(card => {
+            if (filter === 'all') {
+                card.style.display = 'block';
+            } else if (filter === 'completed' && card.classList.contains('challenge-completed')) {
+                card.style.display = 'block';
+            } else if (filter === 'in-progress' && card.classList.contains('challenge-in-progress')) {
+                card.style.display = 'block';
+            } else if (filter === 'not-started' && card.classList.contains('challenge-not-started')) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Animate visible cards
+        const visibleCards = Array.from(cards).filter(card => card.style.display !== 'none');
+        anime({
+            targets: visibleCards,
+            scale: [0.9, 1],
+            opacity: [0.5, 1],
+            delay: anime.stagger(50),
+            duration: 300,
+            easing: 'easeOutQuart'
+        });
+    }
+
     createChallengeCard(challenge, level, isCompleted, score) {
         const card = document.createElement('div');
-        card.className = 'challenge-card card-hover bg-white rounded-2xl p-6 shadow-lg cursor-pointer fade-in';
+        const stats = progressSystem.getChallengeStats(challenge.id);
+        const status = stats.status;
+        
+        // Add status-specific styling
+        let statusClass = '';
+        let statusBadge = '';
+        let statusIcon = '';
+        
+        if (status === 'completed') {
+            statusClass = 'challenge-completed';
+            statusBadge = '<div class="status-badge status-completed">✓ Completed</div>';
+            statusIcon = '<div class="text-green-500 text-2xl">✓</div>';
+        } else if (status === 'in-progress') {
+            statusClass = 'challenge-in-progress';
+            statusBadge = '<div class="status-badge status-in-progress">⏳ In Progress</div>';
+            statusIcon = '<div class="text-yellow-500 text-2xl">⏳</div>';
+        } else {
+            statusClass = 'challenge-not-started';
+            statusBadge = '<div class="status-badge status-not-started">🔒 Not Started</div>';
+            statusIcon = '<div class="text-gray-400 text-2xl">○</div>';
+        }
+        
+        card.className = `challenge-card card-hover bg-white rounded-2xl p-6 shadow-lg cursor-pointer fade-in ${statusClass}`;
         
         const difficultyClass = challenge.difficulty.toLowerCase() === 'beginner' ? 'difficulty-easy' :
                                challenge.difficulty.toLowerCase() === 'intermediate' ? 'difficulty-intermediate' :
@@ -112,17 +216,24 @@ class PromptQuestGame {
         card.innerHTML = `
             <div class="flex justify-between items-start mb-4">
                 <div class="badge ${difficultyClass}">${challenge.difficulty}</div>
-                ${isCompleted ? '<div class="text-green-500 text-xl">✓</div>' : ''}
+                ${statusIcon}
             </div>
+            
+            ${statusBadge}
             
             <h3 class="font-display text-xl font-bold mb-2 text-gray-900">${challenge.title}</h3>
             <p class="text-gray-600 mb-4 text-sm leading-relaxed">${challenge.description}</p>
+            
+            <div class="challenge-stats mb-4 text-xs text-gray-500 space-y-1">
+                ${stats.attempts > 0 ? `<div>📊 Attempts: ${stats.attempts}</div>` : ''}
+                ${stats.bestScore > 0 ? `<div>⭐ Best Score: ${stats.bestScore}</div>` : ''}
+                ${stats.completionDate ? `<div>📅 Completed: ${new Date(stats.completionDate).toLocaleDateString()}</div>` : ''}
+            </div>
             
             <div class="flex justify-between items-center mb-4">
                 <div class="text-sm text-gray-500">
                     <span class="font-medium">${challenge.points} XP</span>
                 </div>
-                ${isCompleted ? `<div class="text-sm font-bold text-green-600">Score: ${score}</div>` : ''}
             </div>
             
             <div class="flex justify-between items-center">
@@ -131,7 +242,7 @@ class PromptQuestGame {
                 </div>
                 <button class="select-challenge btn-primary text-white px-4 py-2 rounded-lg text-sm font-medium" 
                         data-challenge-id="${challenge.id}">
-                    ${isCompleted ? 'Retry' : 'Start'}
+                    ${isCompleted ? '🔄 Retry' : status === 'in-progress' ? '▶️ Continue' : '🚀 Start'}
                 </button>
             </div>
         `;
@@ -158,24 +269,48 @@ class PromptQuestGame {
         }
 
         this.currentChallenge = selectedChallenge;
+        
+        // Mark challenge as started
+        progressSystem.markChallengeAsStarted(challengeId);
+        
         this.displayChallenge(selectedChallenge, challengeLevel);
         
-        // Highlight selected challenge card
-        document.querySelectorAll('.challenge-card').forEach(card => {
-            card.style.borderColor = 'rgba(75, 85, 99, 0.4)';
-            card.style.boxShadow = 'none';
-        });
+        // FOCUS MODE: Hide challenge grid and show only selected challenge
+        const gridSection = document.getElementById('challenge-grid-section');
+        const workArea = document.getElementById('challenge-work-area');
         
-        const selectedCard = document.querySelector(`[data-challenge-id="${challengeId}"]`)?.closest('.challenge-card');
-        if (selectedCard) {
-            selectedCard.style.borderColor = 'rgba(79, 70, 229, 0.8)';
-            selectedCard.style.boxShadow = '0 8px 24px rgba(79, 70, 229, 0.3)';
+        if (gridSection) {
+            gridSection.classList.add('hidden-for-focus');
         }
         
-        // Scroll to challenge display section
-        const challengeDisplay = document.querySelector('.challenge-display');
-        if (challengeDisplay) {
-            challengeDisplay.scrollIntoView({ 
+        if (workArea) {
+            workArea.classList.add('focus-mode');
+        }
+        
+        // Scroll to top smoothly
+        window.scrollTo({ 
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+    
+    backToChallenges() {
+        // Show challenge grid again
+        const gridSection = document.getElementById('challenge-grid-section');
+        const workArea = document.getElementById('challenge-work-area');
+        
+        if (gridSection) {
+            gridSection.classList.remove('hidden-for-focus');
+        }
+        
+        if (workArea) {
+            workArea.classList.add('hidden');
+            workArea.classList.remove('focus-mode');
+        }
+        
+        // Scroll to challenges grid
+        if (gridSection) {
+            gridSection.scrollIntoView({ 
                 behavior: 'smooth',
                 block: 'start'
             });
@@ -346,12 +481,21 @@ class PromptQuestGame {
         this.isSubmitting = true;
         this.showLoadingState(true);
 
+        // Record attempt
+        progressSystem.recordChallengeAttempt(this.currentChallenge.id);
+
         try {
             // Get AI evaluation
             const evaluation = await geminiIntegration.evaluatePrompt(userPrompt, this.currentChallenge);
             
             // Award points based on score
             const pointsAwarded = Math.round(evaluation.overallScore);
+            
+            // Mark as completed if score is good enough
+            if (pointsAwarded >= 60) {
+                progressSystem.markChallengeCompleted(this.currentChallenge.id, pointsAwarded);
+            }
+            
             progressSystem.awardPoints(pointsAwarded, this.currentChallenge.id);
             
             // Track challenge completion in Firebase (if authenticated)
@@ -373,6 +517,11 @@ class PromptQuestGame {
             
             // Update stats
             this.updateStats();
+            
+            // Reload challenges to show updated status
+            setTimeout(() => {
+                this.loadChallenges();
+            }, 1000);
             
             // Prompt sign-up after 3rd successful submission in guest mode
             const totalPrompts = parseInt(localStorage.getItem('totalPrompts') || '0');

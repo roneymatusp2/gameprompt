@@ -488,6 +488,44 @@
         .btn-success:active {
             transform: translateY(0);
         }
+
+        /* Hero Section Buttons */
+        .hero-btn {
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary-hero {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            color: white;
+        }
+
+        .btn-primary-hero:hover {
+            background: linear-gradient(135deg, #4338CA 0%, #6D28D9 100%);
+            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.5);
+        }
+
+        .btn-secondary-hero {
+            background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+            color: white;
+        }
+
+        .btn-secondary-hero:hover {
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+            box-shadow: 0 20px 40px -10px rgba(5, 150, 105, 0.5);
+        }
+
+        .btn-games-hero {
+            background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+            color: white;
+        }
+
+        .btn-games-hero:hover {
+            background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%);
+            box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -541,18 +579,18 @@
             <p class="text-xl md:text-2xl mb-12 text-gray-700 max-w-3xl mx-auto">
                 Master the art of AI communication through interactive challenges, mini-games, and real-time feedback
             </p>
-            <div class="flex flex-wrap gap-4 justify-center items-center max-w-4xl mx-auto">
-                <a href="learning.html" class="btn btn-primary text-lg flex items-center gap-2 min-w-[200px] justify-center">
-                    <span class="text-2xl">📚</span>
-                    <span>Start Learning</span>
+            <div class="flex flex-wrap gap-6 justify-center items-center max-w-4xl mx-auto">
+                <a href="learning.html" class="hero-btn btn-primary-hero text-lg flex items-center gap-3 px-8 py-4 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1">
+                    <span class="text-3xl">📚</span>
+                    <span class="font-semibold">Start Learning</span>
                 </a>
-                <a href="challenges.html" class="btn btn-secondary text-lg flex items-center gap-2 min-w-[200px] justify-center">
-                    <span class="text-2xl">🎯</span>
-                    <span>Start Challenges</span>
+                <a href="challenges.html" class="hero-btn btn-secondary-hero text-lg flex items-center gap-3 px-8 py-4 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1">
+                    <span class="text-3xl">🎯</span>
+                    <span class="font-semibold">Start Challenges</span>
                 </a>
-                <button onclick="openMiniGamesHub()" class="btn btn-secondary text-lg flex items-center gap-2 min-w-[200px] justify-center">
-                    <span class="text-2xl">🎮</span>
-                    <span>Play Mini-Games</span>
+                <button onclick="openMiniGamesHub()" class="hero-btn btn-games-hero text-lg flex items-center gap-3 px-8 py-4 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1">
+                    <span class="text-3xl">🎮</span>
+                    <span class="font-semibold">Play Mini-Games</span>
                 </button>
             </div>
 
@@ -560,7 +598,7 @@
             <div class="absolute top-10 left-10 text-4xl animate-float" style="animation-delay: 0s;">💡</div>
             <div class="absolute top-20 right-20 text-4xl animate-float" style="animation-delay: 1s;">🚀</div>
             <div class="absolute bottom-10 left-1/4 text-4xl animate-float" style="animation-delay: 2s;">✨</div>
-            <div class="absolute bottom-20 right-1/3 text-4xl animate-float" style="animation-delay: 3s;">🎯</div>
+            <div class="absolute bottom-20 right-1/3 text-4xl animate-float" style="animation-delay: 3s;">⭐</div>
         </div>
     </section>
 

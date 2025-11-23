@@ -1,0 +1,248 @@
+{
+  "stageMetadata": {
+    "stageNumber": 4,
+    "title": "Thinking Inside the Box - Creative Constraints",
+    "learningObjectives": [
+      "Understand how constraints boost creativity (The 'Blank Page' Problem)",
+      "Learn to use negative constraints (What NOT to do)",
+      "Master rule-based generation (Length, Keywords, Style)",
+      "Explore bounded creativity for better results"
+    ],
+    "estimatedTime": "45-60 minutes",
+    "prerequisites": ["Stage 3: Formatting & Structure"]
+  },
+  "theorySection": {
+    "explanation": "It sounds contradictory, but AI is *more* creative when you give it limits. If you say 'Write a story', you might get a generic fairy tale. If you say 'Write a story using exactly 50 words about a robot who loves tea, without using the letter E', you get something unique. This is 'Bounded Creativity'. Stage 4 is about learning to use constraints—both positive (do this) and negative (do NOT do this)—to force the AI out of its boring, average habits.",
+    "keyPrinciples": [
+      "**The Blank Page Paradox**: Total freedom often leads to average results. Constraints force the AI to search deeper in its neural network for solutions.",
+      "**Negative Constraints**: Telling the AI what *not* to include (e.g., 'no jargon', 'no ethical lectures', 'no intro text') is as important as what to include.",
+      "**Hard Limits**: Strict rules like word counts ('under 280 characters') or format limits ('start every sentence with S') are excellent for testing AI capability."
+    ],
+    "commonMistakes": [
+      "Being vague about limits (e.g., 'make it short' vs 'under 50 words').",
+      "Over-constraining to the point of impossibility (e.g., 'write a novel in 1 word').",
+      "Forgetting to check if the AI actually followed the negative constraints (they sometimes struggle with 'not')."
+    ]
+  },
+  "workedExamples": [
+    {
+      "id": "ex1",
+      "badPrompt": "Write a short poem about winter.",
+      "goodPrompt": "Write a Haiku about winter. Constraint: It must not use the word 'snow' or 'cold'.",
+      "explanation": "The bad prompt invites clichés. The good prompt forces the AI to find new imagery (frost, ice, breath, white) to describe winter without the obvious words.",
+      "expectedOutputPreview": "Breath hangs in the air,\nCrystal branches touch the sky,\nSilence blankets all."
+    },
+    {
+      "id": "ex2",
+      "badPrompt": "Give me a business idea.",
+      "goodPrompt": "Generate a business idea that combines 'Gardening' and 'Virtual Reality'. Constraint: It must be a subscription service under £10/month.",
+      "explanation": "Random ideas are usually bad. By constraining the domains (Gardening + VR) and the business model (Subscription < £10), you force a specific, novel combination.",
+      "expectedOutputPreview": "**VR Bloom**: A £9.99/month app where you design your dream garden in VR, and we send you the actual seeds for the plants you chose every season."
+    },
+    {
+      "id": "ex3",
+      "badPrompt": "Summarise this text.",
+      "goodPrompt": "Summarise the text below using exactly 10 words. Do not use any verbs.",
+      "explanation": "This extreme constraint turns a summary task into a word puzzle, forcing the AI to distil the absolute essence of the text into a noun-heavy string.",
+      "expectedOutputPreview": "Revolutionary new solar panels: higher efficiency, lower cost, unlimited power."
+    }
+  ],
+  "interactiveExercises": [
+    {
+      "exerciseId": "S4E01",
+      "title": "The Word Diet",
+      "difficulty": "Beginner",
+      "xpReward": 70,
+      "scenario": "Twitter limit? Too easy. Try this.",
+      "taskDescription": "Write a prompt that asks the AI to explain 'Gravity' using exactly 15 words.",
+      "successCriteria": [
+        "Topic: Gravity",
+        "Constraint: Exactly 15 words",
+        "Goal: Explanation"
+      ],
+      "starterTemplate": "Explain gravity using...",
+      "modelAnswer": "Explain the concept of gravity using exactly 15 words. Do not use more or less.",
+      "feedbackHints": {
+        "noCount": "You must specify the number '15' words.",
+        "vague": "Don't just say 'short', say 'exactly 15 words'.",
+        "perfect": "Precision is power. The AI will count carefully."
+      }
+    },
+    {
+      "exerciseId": "S4E02",
+      "title": "The Forbidden Word",
+      "difficulty": "Beginner",
+      "xpReward": 70,
+      "scenario": "Describe a colour without naming it.",
+      "taskDescription": "Ask the AI to describe the colour 'Red' without using the words 'Red', 'Blood', 'Apple', or 'Fire'.",
+      "successCriteria": [
+        "Topic: Describe Red",
+        "Negative Constraint 1: No 'Red'",
+        "Negative Constraint 2: No 'Blood/Apple/Fire'",
+        "Goal: Creative description"
+      ],
+      "starterTemplate": "Describe the colour Red but do not use...",
+      "modelAnswer": "Describe the colour Red. Constraint: You must NOT use the words 'Red', 'Blood', 'Apple', or 'Fire'.",
+      "feedbackHints": {
+        "forgotNegative": "Did you tell the AI what NOT to use?",
+        "perfect": "Great use of negative constraints. This forces the AI to use associations like 'Sunset', 'Rose', or 'Danger'."
+      }
+    },
+    {
+      "exerciseId": "S4E03",
+      "title": "The Alphabet Game",
+      "difficulty": "Beginner",
+      "xpReward": 80,
+      "scenario": "A classic creative writing constraint.",
+      "taskDescription": "Write a prompt for a 5-word sentence where every word starts with the letter 'S'.",
+      "successCriteria": [
+        "Length: 5 words",
+        "Constraint: All start with 'S'",
+        "Goal: Coherent sentence"
+      ],
+      "starterTemplate": "Write a 5-word sentence where...",
+      "modelAnswer": "Write a sentence exactly 5 words long where every single word starts with the letter S.",
+      "feedbackHints": {
+        "tooLoose": "Make sure you specify 'every single word'.",
+        "perfect": "Silently, snakes slithered south slowly."
+      }
+    },
+    {
+      "exerciseId": "S4E04",
+      "title": "The Explain-Like-I-Am",
+      "difficulty": "Intermediate",
+      "xpReward": 100,
+      "scenario": "Extreme simplification.",
+      "taskDescription": "Explain 'The Internet' using only the 1,000 most common words in English.",
+      "successCriteria": [
+        "Topic: The Internet",
+        "Constraint: Only top 1000 common words",
+        "Goal: Simple explanation"
+      ],
+      "starterTemplate": "Explain the internet using only...",
+      "modelAnswer": "Explain how the internet works using only the 1,000 most common words in the English language.",
+      "feedbackHints": {
+        "vague": "Don't just say 'simple words'. Specify 'top 1000 most common words'. This is a known dataset for AI.",
+        "perfect": "This is similar to the famous 'Up Goer Five' challenge."
+      }
+    },
+    {
+      "exerciseId": "S4E05",
+      "title": "The Emoji Translator",
+      "difficulty": "Intermediate",
+      "xpReward": 110,
+      "scenario": "Visual communication.",
+      "taskDescription": "Ask the AI to summarise the plot of 'Romeo and Juliet' using ONLY emojis. No text allowed.",
+      "successCriteria": [
+        "Topic: Romeo and Juliet",
+        "Constraint: Only emojis",
+        "Negative Constraint: No text",
+        "Goal: Plot summary"
+      ],
+      "starterTemplate": "Summarise Romeo and Juliet using...",
+      "modelAnswer": "Summarise the plot of Romeo and Juliet using ONLY emojis. Do not include any text or letters.",
+      "feedbackHints": {
+        "allowedText": "Make sure you explicitly ban text, otherwise the AI might explain the emojis.",
+        "perfect": "👦🏼 ❤️ 👧🏼 ⚔️ ☠️"
+      }
+    },
+    {
+      "exerciseId": "S4E06",
+      "title": "The Keyword Stuffer",
+      "difficulty": "Intermediate",
+      "xpReward": 120,
+      "scenario": "SEO or Marketing copy.",
+      "taskDescription": "Write a product description for a 'Smart Toaster'. It MUST include these exact phrases: 'Crunch Technology', 'Wifi Enabled', and 'Bread Data'.",
+      "successCriteria": [
+        "Product: Smart Toaster",
+        "Requirement 1: Include 'Crunch Technology'",
+        "Requirement 2: Include 'Wifi Enabled'",
+        "Requirement 3: Include 'Bread Data'"
+      ],
+      "starterTemplate": "Write a description for a Smart Toaster including...",
+      "modelAnswer": "Write a product description for a Smart Toaster. You must include these three exact phrases naturally in the text: 'Crunch Technology', 'Wifi Enabled', and 'Bread Data'.",
+      "feedbackHints": {
+        "missingPhrase": "You need to list the exact phrases the AI must include.",
+        "perfect": "This technique is essential for marketing copy where specific brand terms are required."
+      }
+    },
+    {
+      "exerciseId": "S4E07",
+      "title": "The One-Syllable Challenge",
+      "difficulty": "Intermediate",
+      "xpReward": 120,
+      "scenario": "Punchy, direct writing.",
+      "taskDescription": "Ask the AI to write a motivational speech. Constraint: It can only use words with one syllable.",
+      "successCriteria": [
+        "Topic: Motivational speech",
+        "Constraint: One-syllable words only",
+        "Goal: Coherent speech"
+      ],
+      "starterTemplate": "Write a speech where every word...",
+      "modelAnswer": "Write a short motivational speech where every single word has only one syllable.",
+      "feedbackHints": {
+        "vague": "Be careful not to just say 'short words'. Say 'one syllable'.",
+        "perfect": "Go! Do it! Win! It works well."
+      }
+    },
+    {
+      "exerciseId": "S4E08",
+      "title": "The Rhyme Scheme",
+      "difficulty": "Advanced",
+      "xpReward": 150,
+      "scenario": "Poetic structure.",
+      "taskDescription": "Ask for a poem about 'Coding'. Constraint: It must follow the AABB rhyme scheme (couplets).",
+      "successCriteria": [
+        "Topic: Coding",
+        "Format: Poem",
+        "Constraint: AABB rhyme scheme"
+      ],
+      "starterTemplate": "Write a poem about coding with an...",
+      "modelAnswer": "Write a 4-line poem about computer coding. It must follow an AABB rhyme scheme.",
+      "feedbackHints": {
+        "noScheme": "Did you specify 'AABB'? Otherwise the AI might do ABAB or free verse.",
+        "perfect": "Great control over poetic structure."
+      }
+    },
+    {
+      "exerciseId": "S4E09",
+      "title": "The Dialogue Constraint",
+      "difficulty": "Advanced",
+      "xpReward": 160,
+      "scenario": "Screenwriting practice.",
+      "taskDescription": "Write a dialogue between two characters, Alice and Bob. Constraint: Alice can only ask questions. Bob can only answer 'Yes' or 'No'.",
+      "successCriteria": [
+        "Characters: Alice & Bob",
+        "Constraint 1 (Alice): Questions only",
+        "Constraint 2 (Bob): Yes/No only",
+        "Goal: Dialogue"
+      ],
+      "starterTemplate": "Write a dialogue between Alice and Bob where...",
+      "modelAnswer": "Write a dialogue between Alice and Bob. Constraint: Alice is only allowed to ask questions. Bob is only allowed to answer 'Yes' or 'No'.",
+      "feedbackHints": {
+        "tooLoose": "Make sure you lock down BOTH characters' rules.",
+        "perfect": "This creates a very specific, tense interrogation dynamic."
+      }
+    },
+    {
+      "exerciseId": "S4E10",
+      "title": "The Genre Mashup",
+      "difficulty": "Advanced",
+      "xpReward": 200,
+      "scenario": "Creative explosion.",
+      "taskDescription": "Write a story about a 'Haunted House'. Constraint: It must be written in the style of a 'Scientific Lab Report'.",
+      "successCriteria": [
+        "Topic: Haunted House",
+        "Style Constraint: Scientific Lab Report",
+        "Tone: Clinical/Objective",
+        "Format: Sections like 'Method', 'Observation', 'Conclusion'"
+      ],
+      "starterTemplate": "Write a story about a haunted house in the style of...",
+      "modelAnswer": "Write a story about investigating a haunted house, but write it in the exact style and format of a scientific lab report. Use headers like 'Hypothesis', 'Methodology', and 'Spectral Observations'.",
+      "feedbackHints": {
+        "styleMissing": "The key is the clash between the topic (ghosts) and the style (science).",
+        "perfect": "Subject: Ectoplasm. Status: Viscous. Conclusion: Run."
+      }
+    }
+  ]
+}

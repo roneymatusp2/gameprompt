@@ -19,6 +19,10 @@ class ProgressSystem {
                 bestStreak: 0,
                 lastActiveDate: new Date().toISOString().split('T')[0],
                 challengeScores: {},
+                challengeAttempts: {}, // Track number of attempts per challenge
+                challengeCompletionDates: {}, // Track when challenges were completed
+                challengeTimeSpent: {}, // Track time spent on each challenge
+                inProgressChallenges: [], // Challenges that were started but not completed
                 levelProgress: {
                     1: { unlocked: true, completed: false },
                     2: { unlocked: false, completed: false },
@@ -29,6 +33,12 @@ class ProgressSystem {
             };
             this.saveProgress();
         }
+
+        // Ensure new properties exist for existing users
+        if (!this.userProgress.challengeAttempts) this.userProgress.challengeAttempts = {};
+        if (!this.userProgress.challengeCompletionDates) this.userProgress.challengeCompletionDates = {};
+        if (!this.userProgress.challengeTimeSpent) this.userProgress.challengeTimeSpent = {};
+        if (!this.userProgress.inProgressChallenges) this.userProgress.inProgressChallenges = [];
 
         this.syncLevelUnlocks();
         this.saveProgress();
@@ -387,6 +397,95 @@ class ProgressSystem {
         
         const progress = ((currentLevelXP - prevLevelXP) / (nextLevelXP - prevLevelXP)) * 100;
         return Math.min(100, Math.max(0, progress));
+    }
+
+    // Enhanced tracking methods
+    getChallengeStatus(challengeId) {
+        if (this.userProgress.completedChallenges.includes(challengeId)) {
+            return 'completed';
+        } else if (this.userProgress.inProgressChallenges.includes(challengeId)) {
+            return 'in-progress';
+        } else {
+            return 'not-started';
+        }
+    }
+
+    markChallengeAsStarted(challengeId) {
+        if (!this.userProgress.inProgressChallenges.includes(challengeId) &&
+            !this.userProgress.completedChallenges.includes(challengeId)) {
+            this.userProgress.inProgressChallenges.push(challengeId);
+            this.saveProgress();
+        }
+    }
+
+    recordChallengeAttempt(challengeId) {
+        if (!this.userProgress.challengeAttempts[challengeId]) {
+            this.userProgress.challengeAttempts[challengeId] = 0;
+        }
+        this.userProgress.challengeAttempts[challengeId]++;
+        this.saveProgress();
+    }
+
+    getChallengeAttempts(challengeId) {
+        return this.userProgress.challengeAttempts[challengeId] || 0;
+    }
+
+    getChallengeScore(challengeId) {
+        return this.userProgress.challengeScores[challengeId] || 0;
+    }
+
+    getCompletionDate(challengeId) {
+        return this.userProgress.challengeCompletionDates[challengeId] || null;
+    }
+
+    getChallengeStats(challengeId) {
+        return {
+            status: this.getChallengeStatus(challengeId),
+            attempts: this.getChallengeAttempts(challengeId),
+            bestScore: this.getChallengeScore(challengeId),
+            completionDate: this.getCompletionDate(challengeId),
+            isCompleted: this.userProgress.completedChallenges.includes(challengeId)
+        };
+    }
+
+    getOverallStats() {
+        const totalChallenges = challengeData.levels.reduce((sum, level) => 
+            sum + level.challenges.length, 0);
+        const completedCount = this.userProgress.completedChallenges.length;
+        const inProgressCount = this.userProgress.inProgressChallenges.length;
+        const notStartedCount = totalChallenges - completedCount - inProgressCount;
+
+        return {
+            total: totalChallenges,
+            completed: completedCount,
+            inProgress: inProgressCount,
+            notStarted: notStartedCount,
+            completionPercentage: Math.round((completedCount / totalChallenges) * 100)
+        };
+    }
+
+    markChallengeCompleted(challengeId, score) {
+        // Remove from in-progress
+        const inProgressIndex = this.userProgress.inProgressChallenges.indexOf(challengeId);
+        if (inProgressIndex > -1) {
+            this.userProgress.inProgressChallenges.splice(inProgressIndex, 1);
+        }
+
+        // Add to completed if not already there
+        if (!this.userProgress.completedChallenges.includes(challengeId)) {
+            this.userProgress.completedChallenges.push(challengeId);
+        }
+
+        // Record completion date
+        this.userProgress.challengeCompletionDates[challengeId] = new Date().toISOString();
+
+        // Update score if better
+        const currentScore = this.userProgress.challengeScores[challengeId] || 0;
+        if (score > currentScore) {
+            this.userProgress.challengeScores[challengeId] = score;
+        }
+
+        this.saveProgress();
     }
 }
 

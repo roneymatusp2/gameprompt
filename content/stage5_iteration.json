@@ -1,0 +1,244 @@
+{
+  "stageMetadata": {
+    "stageNumber": 5,
+    "title": "Fixing & Improving - Iteration & Rescue",
+    "learningObjectives": [
+      "Learn to diagnose why a prompt failed",
+      "Master the art of iterative refinement (The 'Chat' aspect)",
+      "Understand how to fix 'hallucinations' and vague answers",
+      "Use self-correction prompts ('Critique your own work')"
+    ],
+    "estimatedTime": "45-60 minutes",
+    "prerequisites": ["Stage 4: Creative Constraints"]
+  },
+  "theorySection": {
+    "explanation": "The biggest myth about AI is that you have to get the prompt perfect on the first try. In reality, prompt engineering is a conversation. Stage 5 is about what happens *after* the first result. Sometimes the AI gives you a boring answer, a wrong answer, or ignores your rules. Instead of starting over, you 'iterate'. You can ask the AI to fix specific parts, change the tone, or even critique its own work to find improvements. This is how you go from 'good' to 'perfect'.",
+    "keyPrinciples": [
+      "**Iterate, Don't Restart**: If the output is 80% right, use your next prompt to fix the remaining 20%. (e.g., 'That's good, but make the tone funnier').",
+      "**The Self-Correction Hack**: You can ask the AI to review its own output. 'Read your previous answer. Did you follow the word count rule? If not, rewrite it.'",
+      "**Diagnosis**: If an answer is vague, your prompt was likely vague. If an answer is wrong (hallucination), you probably asked for a fact it doesn't know or didn't provide enough context."
+    ],
+    "commonMistakes": [
+      "Accepting the first mediocre result and thinking 'AI isn't smart enough'.",
+      "Rewriting the *entire* prompt when a simple follow-up instruction ('Make it shorter') would work.",
+      "Getting stuck in a loop of bad answers (sometimes it IS better to start a new chat context)."
+    ]
+  },
+  "workedExamples": [
+    {
+      "id": "ex1",
+      "badPrompt": "Try again.",
+      "goodPrompt": "That explanation was too technical. Rewrite the second paragraph to be simpler, using an analogy about cooking.",
+      "explanation": "The bad prompt is frustratingly vague. The good prompt points to the specific problem ('too technical'), the specific location ('second paragraph'), and offers a solution ('analogy about cooking').",
+      "expectedOutputPreview": "(Revised Paragraph) Think of the CPU like a head chef in a kitchen. It shouts orders to the other components..."
+    },
+    {
+      "id": "ex2",
+      "badPrompt": "You made it up.",
+      "goodPrompt": "You mentioned a 'Study from 2025', which is impossible. Please check your facts and remove any invented references. Only state what is verified.",
+      "explanation": "When AI hallucinates, you need to call it out specifically. This prompt identifies the error and sets a new constraint ('Only state what is verified').",
+      "expectedOutputPreview": "Apologies for the error. I have removed the incorrect reference. The latest verified study is from 2023..."
+    },
+    {
+      "id": "ex3",
+      "badPrompt": "Critique this.",
+      "goodPrompt": "Critique the email you just wrote. Rate it on: 1. Clarity, 2. Politeness, 3. Call to Action. Then, rewrite it to improve the score.",
+      "explanation": "Asking the AI to 'grade' itself is a powerful advanced technique. It forces the model to switch from 'generation mode' to 'evaluation mode', often spotting its own mistakes.",
+      "expectedOutputPreview": "Critique: 1. Clarity: 8/10. 2. Politeness: 6/10 (a bit blunt). 3. Call to Action: 5/10 (vague). 
+
+Here is the improved version..."
+    }
+  ],
+  "interactiveExercises": [
+    {
+      "exerciseId": "S5E01",
+      "title": "The Tone Tweak",
+      "difficulty": "Beginner",
+      "xpReward": 70,
+      "scenario": "The AI wrote an email, but it sounds like a robot.",
+      "taskDescription": "You have a boring email. Write a follow-up prompt to make it sound 'warmer and more human'.",
+      "successCriteria": [
+        "Reference previous output",
+        "Instruction: Change tone",
+        "Target Tone: Warm/Human"
+      ],
+      "starterTemplate": "Rewrite that email to make it...",
+      "modelAnswer": "Rewrite that email to make the tone much warmer and more human. Use friendly language.",
+      "feedbackHints": {
+        "vague": "Don't just say 'better'. Say 'warmer' or 'friendlier'.",
+        "perfect": "Tone adjustment is the most common iterative fix."
+      }
+    },
+    {
+      "exerciseId": "S5E02",
+      "title": "The Length Cutter",
+      "difficulty": "Beginner",
+      "xpReward": 70,
+      "scenario": "The AI wrote a novel when you needed a blurb.",
+      "taskDescription": "The previous answer was 500 words. Write a prompt to cut it down to exactly 50 words without losing the main point.",
+      "successCriteria": [
+        "Instruction: Shorten/Summarise",
+        "Constraint: Exactly 50 words",
+        "Constraint: Keep main point"
+      ],
+      "starterTemplate": "That's too long. Rewrite it in...",
+      "modelAnswer": "That response is too long. Rewrite it in exactly 50 words, keeping only the most important information.",
+      "feedbackHints": {
+        "noLimit": "Give a specific number (50 words) to get the best result.",
+        "perfect": "Summarisation is a key rescue skill."
+      }
+    },
+    {
+      "exerciseId": "S5E03",
+      "title": "The Format Fixer",
+      "difficulty": "Beginner",
+      "xpReward": 80,
+      "scenario": "You asked for a list, but got a paragraph.",
+      "taskDescription": "The AI gave you a paragraph of text. Write a prompt to convert that text into a 'bulleted list'.",
+      "successCriteria": [
+        "Reference previous text",
+        "Instruction: Convert/Format",
+        "Target Format: Bulleted list"
+      ],
+      "starterTemplate": "Convert the text above into a...",
+      "modelAnswer": "Take the paragraph you just wrote and convert it into a bulleted list.",
+      "feedbackHints": {
+        "vague": "Be specific. 'Put it in a list' or 'Use bullet points'.",
+        "perfect": "You don't need to regenerate content, just reformat it!"
+      }
+    },
+    {
+      "exerciseId": "S5E04",
+      "title": "The Missing Info",
+      "difficulty": "Intermediate",
+      "xpReward": 100,
+      "scenario": "The AI explained 'Photosynthesis' but forgot to mention the sun.",
+      "taskDescription": "Write a prompt to update the previous explanation. It must add the role of 'Sunlight' to the existing text.",
+      "successCriteria": [
+        "Instruction: Add information",
+        "Topic: Sunlight",
+        "Context: Integrate into existing text"
+      ],
+      "starterTemplate": "Add a sentence explaining the role of...",
+      "modelAnswer": "Rewrite the explanation to specifically include the role of sunlight in the process.",
+      "feedbackHints": {
+        "restart": "Don't start over! Just ask it to 'add' or 'include' the missing piece.",
+        "perfect": "Good. You're patching the holes in the answer."
+      }
+    },
+    {
+      "exerciseId": "S5E05",
+      "title": "The Jargon Buster",
+      "difficulty": "Intermediate",
+      "xpReward": 110,
+      "scenario": "The output is full of technical nonsense.",
+      "taskDescription": "The previous answer contained words like 'synergy' and 'paradigm'. Write a prompt to remove all jargon and replace it with plain English.",
+      "successCriteria": [
+        "Instruction: Remove/Replace",
+        "Target: Jargon/Buzzwords",
+        "Replacement: Plain English"
+      ],
+      "starterTemplate": "Rewrite that to remove...",
+      "modelAnswer": "Rewrite the previous response to remove all corporate jargon and buzzwords. Use simple, plain English instead.",
+      "feedbackHints": {
+        "tooSoft": "Be firm. 'Remove all jargon'.",
+        "perfect": "Simplification is one of the best uses of iteration."
+      }
+    },
+    {
+      "exerciseId": "S5E06",
+      "title": "The Perspective Switch",
+      "difficulty": "Intermediate",
+      "xpReward": 120,
+      "scenario": "The answer is good, but boring.",
+      "taskDescription": "The AI just explained 'Rain'. Ask it to explain it again, but this time from the perspective of a 'Fish'.",
+      "successCriteria": [
+        "Instruction: Rewrite/Explain again",
+        "New Persona: A Fish",
+        "Goal: Change perspective"
+      ],
+      "starterTemplate": "Now explain it again from the perspective of...",
+      "modelAnswer": "Now rewrite that explanation from the perspective of a fish who lives in a river.",
+      "feedbackHints": {
+        "noPersona": "You need to explicitly set the new persona (Fish).",
+        "perfect": "Pivoting perspective in the middle of a chat is a great way to brainstorm."
+      }
+    },
+    {
+      "exerciseId": "S5E07",
+      "title": "The Fact Checker",
+      "difficulty": "Intermediate",
+      "xpReward": 120,
+      "scenario": "The AI invented a fake quote.",
+      "taskDescription": "The AI included a quote it claims is from Shakespeare, but you know it isn't. Write a prompt asking it to verify the quote and remove it if it's false.",
+      "successCriteria": [
+        "Task: Verify quote",
+        "Action: Remove if false",
+        "Tone: Corrective"
+      ],
+      "starterTemplate": "Are you sure that quote is real? Please...",
+      "modelAnswer": "Are you sure that quote is actually by Shakespeare? Please verify the source. If it is a hallucination or misattribution, remove it.",
+      "feedbackHints": {
+        "tooTrusting": "Don't assume the AI is right. Ask it to 'verify'.",
+        "perfect": "Calling out hallucinations is a critical safety skill."
+      }
+    },
+    {
+      "exerciseId": "S5E08",
+      "title": "The Self-Critique",
+      "difficulty": "Advanced",
+      "xpReward": 150,
+      "scenario": "Quality Control.",
+      "taskDescription": "Write a prompt asking the AI to critique its own previous story based on 'plot holes'. Then ask it to fix them.",
+      "successCriteria": [
+        "Task 1: Critique self",
+        "Criteria: Plot holes",
+        "Task 2: Fix/Rewrite"
+      ],
+      "starterTemplate": "Critique your story for... and then...",
+      "modelAnswer": "Critique the story you just wrote. Look specifically for plot holes or logical inconsistencies. Then, rewrite the story to fix the issues you found.",
+      "feedbackHints": {
+        "missingFix": "Critique isn't enough—you must also ask it to *fix* the problems.",
+        "perfect": "This is the 'Self-Correction' loop. It improves quality massively."
+      }
+    },
+    {
+      "exerciseId": "S5E09",
+      "title": "The Structure Audit",
+      "difficulty": "Advanced",
+      "xpReward": 160,
+      "scenario": "Did you follow the rules?",
+      "taskDescription": "You previously asked for a response in 3 sentences. The AI gave you 5. Write a prompt pointing out this error and asking for a correction.",
+      "successCriteria": [
+        "Identify Error: Wrong length/Count",
+        "Restate Constraint: 3 sentences",
+        "Instruction: Fix it"
+      ],
+      "starterTemplate": "You ignored my constraint. I asked for...",
+      "modelAnswer": "You ignored my length constraint. I asked for exactly 3 sentences, but you wrote 5. Please rewrite it to follow the rule.",
+      "feedbackHints": {
+        "tooNice": "It's okay to be direct when the AI breaks a rule. Point out the error clearly.",
+        "perfect": "Direct feedback on broken constraints teaches you how to control the model."
+      }
+    },
+    {
+      "exerciseId": "S5E10",
+      "title": "The Final Polish",
+      "difficulty": "Advanced",
+      "xpReward": 200,
+      "scenario": "Make it shine.",
+      "taskDescription": "You have a draft text. Write a prompt to 'Proofread' it for spelling errors AND 'Improve' the vocabulary to be more professional.",
+      "successCriteria": [
+        "Task 1: Proofread/Spelling",
+        "Task 2: Improve Vocabulary",
+        "Target Tone: Professional"
+      ],
+      "starterTemplate": "Proofread the text above and...",
+      "modelAnswer": "Proofread the text above for any spelling or grammar errors. Simultaneously, upgrade the vocabulary to sound more professional and executive.",
+      "feedbackHints": {
+        "missingStep": "Make sure you ask for BOTH proofreading and vocabulary improvement.",
+        "perfect": "This is the ultimate 'Editor' prompt."
+      }
+    }
+  ]
+}

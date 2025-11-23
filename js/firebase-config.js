@@ -547,11 +547,16 @@ class FirebaseAuthSystem {
         if (userDisplay) {
             userDisplay.innerHTML = `
                 <div class="flex items-center gap-3">
-                    <img src="${user.photoURL || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || user.email)}" 
-                         class="w-8 h-8 rounded-full" 
-                         alt="User avatar">
-                    <span class="text-sm font-medium">${user.displayName || user.email}</span>
-                    <button onclick="firebaseAuth.logout()" class="text-xs text-red-500 hover:text-red-700">
+                    <a href="dashboard.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity" title="Go to Dashboard">
+                        <img src="${user.photoURL || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || user.email)}" 
+                             class="w-8 h-8 rounded-full border border-gray-300" 
+                             alt="User avatar">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-200">${user.displayName || user.email.split('@')[0]}</span>
+                    </a>
+                    <a href="dashboard.html" class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-200 transition-colors">
+                        Dashboard
+                    </a>
+                    <button onclick="firebaseAuth.logout()" class="text-xs text-red-500 hover:text-red-700 ml-2">
                         Sign Out
                     </button>
                 </div>

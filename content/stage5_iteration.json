@@ -44,9 +44,7 @@
       "badPrompt": "Critique this.",
       "goodPrompt": "Critique the email you just wrote. Rate it on: 1. Clarity, 2. Politeness, 3. Call to Action. Then, rewrite it to improve the score.",
       "explanation": "Asking the AI to 'grade' itself is a powerful advanced technique. It forces the model to switch from 'generation mode' to 'evaluation mode', often spotting its own mistakes.",
-      "expectedOutputPreview": "Critique: 1. Clarity: 8/10. 2. Politeness: 6/10 (a bit blunt). 3. Call to Action: 5/10 (vague). 
-
-Here is the improved version..."
+      "expectedOutputPreview": "Critique: 1. Clarity: 8/10. 2. Politeness: 6/10 (a bit blunt). 3. Call to Action: 5/10 (vague). Here is the improved version..."
     }
   ],
   "interactiveExercises": [

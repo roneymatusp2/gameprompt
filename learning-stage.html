@@ -32,6 +32,11 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
+    <!-- Progress System Dependencies -->
+    <script src="js/firebase-config.local.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="challenge-data.js"></script>
+    <script src="progress-system.js"></script>
 </head>
 <body>
     <div id="vanta-background"></div>
@@ -226,20 +231,27 @@
             const exercisesContainer = document.getElementById('exercises-list');
             data.interactiveExercises.forEach((ex, i) => {
                 const div = document.createElement('div');
-                div.className = 'glass-card rounded-xl p-6 hover:bg-white/5 transition-colors cursor-pointer group';
+                const isCompleted = window.progressSystem && window.progressSystem.isLearningExerciseCompleted(ex.exerciseId);
                 
+                div.className = `glass-card rounded-xl p-6 hover:bg-white/5 transition-colors cursor-pointer group relative overflow-hidden ${isCompleted ? 'border-emerald-500/50 bg-emerald-900/10' : ''}`;
+                div.id = `ex-card-${ex.exerciseId}`;
+                
+                const statusBadge = isCompleted 
+                    ? `<span class="bg-emerald-500 text-white text-xs px-2 py-1 rounded flex items-center gap-1"><span class="text-sm">✓</span> Completed</span>` 
+                    : `<span class="bg-yellow-500/20 text-yellow-300 rounded-full text-xs px-2 py-1 font-bold">+${ex.xpReward} XP</span>`;
+
                 div.innerHTML = `
                     <div class="flex justify-between items-start mb-4">
                         <div>
                             <span class="text-xs font-mono text-indigo-400 mb-1 block">${ex.exerciseId}</span>
                             <h3 class="text-xl font-bold text-white group-hover:text-indigo-300 transition-colors">${ex.title}</h3>
                         </div>
-                        <span class="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-xs font-bold">+${ex.xpReward} XP</span>
+                        ${statusBadge}
                     </div>
                     <p class="text-gray-300 mb-4">${ex.taskDescription}</p>
                     
                     <!-- Hidden/Expandable Content -->
-                    <div class="hidden-content hidden mt-6 pt-6 border-t border-white/10 space-y-4">
+                    <div class="hidden-content hidden mt-6 pt-6 border-t border-white/10 space-y-4 cursor-auto" onclick="event.stopPropagation()">
                         <div class="bg-black/30 p-4 rounded-lg">
                             <div class="text-xs text-gray-500 uppercase mb-2">Scenario</div>
                             <p class="text-gray-300 text-sm">${ex.scenario}</p>
@@ -255,21 +267,38 @@
                             <p class="text-indigo-100 font-mono text-sm filter blur-sm hover:blur-none transition-all cursor-help select-all">${ex.modelAnswer}</p>
                             <p class="text-xs text-center text-indigo-500/50 mt-1">(Hover to reveal)</p>
                         </div>
+
+                        <!-- Action Bar -->
+                        <div class="pt-4 flex justify-end">
+                            ${!isCompleted ? 
+                                `<button onclick="completeExercise('${ex.exerciseId}', ${ex.xpReward}, this)" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-colors flex items-center gap-2 shadow-lg hover:shadow-emerald-500/20">
+                                    <span>✓</span> Mark as Complete
+                                </button>` : 
+                                `<button disabled class="px-6 py-2 bg-gray-700/50 text-gray-400 font-bold rounded-lg cursor-not-allowed flex items-center gap-2">
+                                    <span>✓</span> Completed
+                                </button>`
+                            }
+                        </div>
                     </div>
                     
-                    <div class="text-center mt-2">
+                    <div class="text-center mt-2 trigger-expand">
                         <span class="text-xs text-gray-600 group-hover:text-gray-400 transition-colors">Click to expand/collapse</span>
                     </div>
                 `;
                 
-                // Toggle logic
-                div.onclick = function(e) {
+                // Toggle logic (ignore clicks on the button itself)
+                div.addEventListener('click', function(e) {
+                    if (e.target.closest('button')) return; 
+                    if (e.target.closest('.cursor-auto')) return; // Prevent closing when clicking inside content
                     const content = this.querySelector('.hidden-content');
                     content.classList.toggle('hidden');
-                };
+                });
                 
                 exercisesContainer.appendChild(div);
             });
+
+            // Update Progress Bar for Stage
+            updateStageProgressBar(data.stageMetadata.stageNumber);
 
             // Show content
             document.getElementById('loading').classList.add('hidden');
@@ -283,6 +312,51 @@
                 delay: anime.stagger(100),
                 easing: 'easeOutQuart'
             });
+        }
+
+        function updateStageProgressBar(stageNum) {
+            if (!window.progressSystem) return;
+            const progress = window.progressSystem.getStageProgress(stageNum);
+            
+            // Update the header stats
+            const statsHtml = `
+                <span class="flex items-center gap-2">⏱️ <span id="stage-time">${progress.completed}/${progress.total}</span> Done</span>
+                <span class="flex items-center gap-2">📊 ${progress.percentage}% Complete</span>
+            `;
+            // We can inject a progress bar here if we want, or just update the text
+            // Let's inject a visual bar
+            const header = document.querySelector('header');
+            let bar = document.getElementById('stage-progress-bar');
+            if (!bar) {
+                bar = document.createElement('div');
+                bar.id = 'stage-progress-bar';
+                bar.className = 'w-full max-w-md mx-auto h-2 bg-gray-800 rounded-full mt-4 overflow-hidden';
+                bar.innerHTML = `<div class="h-full bg-emerald-500 transition-all duration-1000" style="width: 0%"></div>`;
+                header.appendChild(bar);
+            }
+            setTimeout(() => {
+                bar.querySelector('div').style.width = `${progress.percentage}%`;
+            }, 100);
+        }
+
+        function completeExercise(id, xp, btn) {
+            if (window.progressSystem) {
+                const isNew = window.progressSystem.completeLearningExercise(id, xp);
+                if (isNew) {
+                    // Update UI instantly
+                    const card = document.getElementById(`ex-card-${id}`);
+                    card.classList.add('border-emerald-500/50', 'bg-emerald-900/10');
+                    btn.className = "px-6 py-2 bg-gray-700/50 text-gray-400 font-bold rounded-lg cursor-not-allowed flex items-center gap-2";
+                    btn.disabled = true;
+                    btn.innerHTML = "<span>✓</span> Completed";
+                    
+                    // Update Bar
+                    const params = new URLSearchParams(window.location.search);
+                    updateStageProgressBar(params.get('stage'));
+                    
+                    // Confetti or sound could go here
+                }
+            }
         }
 
         function renderList(id, items) {

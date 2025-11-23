@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "promptgames-65e49"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }

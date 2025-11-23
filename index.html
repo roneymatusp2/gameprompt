@@ -538,7 +538,6 @@
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-4">
                 <a href="index.html" class="font-display text-2xl font-bold gradient-text hover:opacity-80 transition-opacity">Prompt Quest</a>
-                <span class="text-sm text-gray-500">v2.0 Enhanced</span>
             </div>
             <div class="flex items-center space-x-6">
                 <button class="open-achievements flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-lg hover:bg-yellow-200 transition-colors">
@@ -646,16 +645,16 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
 
-<!-- Firebase Local Config (if exists, not committed to git) -->
-<script src="js/firebase-config.local.js" onerror="console.log('Local Firebase config not found, using defaults')"></script>
-<!-- Gemini Local Config (if exists, not committed to git) -->
-<script src="js/gemini-config.local.js" onerror="console.log('Local Gemini config not found, using defaults')"></script>
-
-
-<!-- Load scripts -->
-<script src="js/firebase-config.js"></script>
-<script src="challenge-data.js"></script>
-<script src="progress-system.js"></script>
+    <!-- Firebase Local Config (if exists, not committed to git) -->
+    <script src="js/firebase-config.local.js" onerror="console.log('Local Firebase config not found, using defaults')"></script>
+    <!-- Gemini Local Config (if exists, not committed to git) -->
+    <script src="js/gemini-config.local.js" onerror="console.log('Local Gemini config not found, using defaults')"></script>
+    
+    
+    <!-- Load scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils/storage-helper.js"></script>
+    <script src="challenge-data.js"></script><script src="progress-system.js"></script>
 <script src="gemini-integration.js"></script>
 <script src="main.js"></script>
 

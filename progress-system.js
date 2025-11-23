@@ -14,6 +14,7 @@ class ProgressSystem {
                 totalXP: 0,
                 currentLevel: 1,
                 completedChallenges: [],
+                completedLearning: [], // Track Learning IDs (e.g. S1E01)
                 earnedBadges: [],
                 currentStreak: 0,
                 bestStreak: 0,
@@ -138,6 +139,73 @@ class ProgressSystem {
         // Show XP gain animation
         this.showXPGain(points, previousXP);
     }
+
+    // --- Learning System Integration ---
+
+    completeLearningExercise(exerciseId, xpReward = 0) {
+        if (!this.userProgress.completedLearning) {
+            this.userProgress.completedLearning = [];
+        }
+
+        if (!this.userProgress.completedLearning.includes(exerciseId)) {
+            this.userProgress.completedLearning.push(exerciseId);
+            
+            // Award XP if provided
+            if (xpReward > 0) {
+                this.userProgress.totalXP += xpReward;
+                this.showXPGain(xpReward);
+            }
+
+            // Update streak
+            this.updateStreak();
+            
+            this.saveProgress();
+            this.updateUI();
+            
+            // Check for Stage Completion Achievements
+            this.checkLearningAchievements();
+            
+            // Trigger save to cloud if connected
+            if (window.firebaseAuth) {
+                window.firebaseAuth.syncProgressToCloud();
+            }
+            
+            return true; // New completion
+        }
+        return false; // Already completed
+    }
+
+    isLearningExerciseCompleted(exerciseId) {
+        return (this.userProgress.completedLearning || []).includes(exerciseId);
+    }
+
+    getStageProgress(stageNum) {
+        // Define total exercises per stage (Hardcoded for stability, or can be dynamic)
+        const exercisesPerStage = 10; 
+        const prefix = `S${stageNum}E`;
+        
+        const completedInStage = (this.userProgress.completedLearning || [])
+            .filter(id => id.startsWith(prefix)).length;
+            
+        return {
+            completed: completedInStage,
+            total: exercisesPerStage,
+            percentage: Math.round((completedInStage / exercisesPerStage) * 100)
+        };
+    }
+
+    checkLearningAchievements() {
+        // Check if a whole stage is done
+        for (let i = 1; i <= 5; i++) {
+            const progress = this.getStageProgress(i);
+            if (progress.percentage === 100) {
+                // Unlock badge logic here (if badges exist for learning)
+                // console.log(`Stage ${i} Mastered!`);
+            }
+        }
+    }
+
+    // --- End Learning System Integration ---
 
     calculateLevel(xp) {
         // Level progression: Level 1: 0 XP, Level 2: 500 XP, Level 3: 1200 XP, etc.

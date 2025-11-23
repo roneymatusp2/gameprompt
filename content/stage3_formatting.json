@@ -218,7 +218,7 @@
       "starterTemplate": "Generate a JSON object for a book with keys...",
       "modelAnswer": "Generate a description of a book in valid JSON format. Use the keys: title, author, year, and genre.",
       "feedbackHints": {
-        "notJSON": "JSON is a specific code format using brackets {} and quotes \"". Ask for it by name.",
+        "notJSON": "JSON is a specific code format using brackets {} and quotes. Ask for it by name.",
         "perfect": "Perfect. AI is excellent at generating structured data for code."
       }
     },

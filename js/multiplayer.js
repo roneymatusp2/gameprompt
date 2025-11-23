@@ -475,8 +475,8 @@ class MultiplayerSystem {
 }
 
 // Global Style for Animation
-const style = document.createElement('style');
-style.innerHTML = `
+const multiplayerStyle = document.createElement('style');
+multiplayerStyle.innerHTML = `
 @keyframes bounce-in {
     0% { transform: translate(-50%, -20px); opacity: 0; }
     50% { transform: translate(-50%, 5px); }
@@ -484,7 +484,7 @@ style.innerHTML = `
 }
 .animate-bounce-in { animation: bounce-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
 `;
-document.head.appendChild(style);
+document.head.appendChild(multiplayerStyle);
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {

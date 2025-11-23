@@ -10,7 +10,6 @@ class PromptQuestGame {
         this.setupEventListeners();
         // Load Level Selection View initially
         this.loadLevelSelection();
-        this.initializeAnimations();
         this.updateOverallStats();
     }
 

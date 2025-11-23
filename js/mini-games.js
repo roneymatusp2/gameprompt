@@ -120,15 +120,22 @@ class PromptMiniGames {
         document.addEventListener('click', (e) => {
             const gameCard = e.target.closest('.game-card');
             if (gameCard) {
-                this.startGame(gameCard.dataset.gameId);
+                const gameId = gameCard.dataset.gameId;
+                console.log('🎮 Starting game:', gameId);
+                this.startGame(gameId);
+                return;
             }
 
             if (e.target.classList.contains('back-to-main')) {
+                console.log('⬅️ Closing game hub');
                 this.closeGameHub();
+                return;
             }
 
-            if (e.target.classList.contains('open-mini-games')) {
+            if (e.target.closest('.open-mini-games')) {
+                console.log('🎮 Opening mini-games hub');
                 this.openGameHub();
+                return;
             }
         });
     }
@@ -144,19 +151,27 @@ class PromptMiniGames {
     }
 
     startGame(gameId) {
+        console.log('🎯 startGame called with ID:', gameId);
+        
         switch(gameId) {
             case 'racing':
+                console.log('🏁 Starting Prompt Racing');
                 this.startPromptRacing();
                 break;
             case 'puzzle':
+                console.log('🧩 Starting Prompt Puzzle');
                 this.startPromptPuzzle();
                 break;
             case 'match':
+                console.log('🎯 Starting Prompt Match');
                 this.startPromptMatch();
                 break;
             case 'fillBlanks':
+                console.log('✏️ Starting Fill the Blanks');
                 this.startFillBlanks();
                 break;
+            default:
+                console.error('❌ Unknown game ID:', gameId);
         }
     }
 

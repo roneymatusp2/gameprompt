@@ -540,7 +540,7 @@
                 <a href="index.html" class="font-display text-2xl font-bold gradient-text hover:opacity-80 transition-opacity">Prompt Quest</a>
             </div>
             <div class="flex items-center space-x-6">
-                <button class="open-achievements flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-lg hover:bg-yellow-200 transition-colors">
+                <button class="open-achievements flex items-center gap-2 px-4 py-2 bg-yellow-100 rounded-lg hover:bg-yellow-200 transition-colors" title="View your unlocked achievements and track your progress">
                     <span>🏆</span>
                     <span>Achievements</span>
                 </button>
@@ -550,7 +550,7 @@
                     <span>🌓</span>
                 </button>
                 <div class="relative">
-                    <div id="streak-counter" class="flex items-center space-x-2 bg-orange-100 px-3 py-1 rounded-full">
+                    <div id="streak-counter" class="flex items-center space-x-2 bg-orange-100 px-3 py-1 rounded-full" title="Daily streak: Complete challenges every day to maintain your streak!">
                         <span class="text-orange-600">🔥</span>
                         <span class="font-semibold text-orange-700" id="current-streak">0</span>
                     </div>
@@ -587,7 +587,7 @@
                     <span class="text-3xl">🎯</span>
                     <span class="font-semibold">Start Challenges</span>
                 </a>
-                <button onclick="openMiniGamesHub()" class="hero-btn btn-games-hero text-lg flex items-center gap-3 px-8 py-4 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1">
+                <button onclick="openMiniGamesHub()" class="hero-btn btn-games-hero text-lg flex items-center gap-3 px-8 py-4 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1" title="Practice prompt engineering through fun mini-games!">
                     <span class="text-3xl">🎮</span>
                     <span class="font-semibold">Play Mini-Games</span>
                 </button>
@@ -659,6 +659,7 @@
 <script src="main.js"></script>
 
 <!-- Core feature scripts -->
+<script src="js/instant-feedback.js"></script>
 <script src="js/mini-games.js"></script>
 <script src="js/achievements.js"></script>
 

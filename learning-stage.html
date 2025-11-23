@@ -155,13 +155,21 @@
             }
 
             try {
+                console.log('Attempting to load:', file);
                 const response = await fetch(file);
-                if (!response.ok) throw new Error("Content file missing");
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
+                console.log('Data loaded successfully:', data.stageMetadata.title);
                 renderContent(data);
             } catch (e) {
-                console.error(e);
-                showError("This stage is currently being built. Check back soon!");
+                console.error('Error loading stage:', e);
+                console.error('File path:', file);
+                showError(`Error loading stage content: ${e.message}. Please refresh the page or try again later.`);
             }
         }
 

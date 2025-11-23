@@ -1,0 +1,252 @@
+{
+  "stageMetadata": {
+    "stageNumber": 1,
+    "title": "The Essentials - Prompt Basics",
+    "learningObjectives": [
+      "Understand the core components of a clear prompt (Instruction & Context)",
+      "Learn to specify target audiences for tailored outputs",
+      "Master basic formatting controls (lists, summaries, tables)",
+      "Avoid common ambiguity errors"
+    ],
+    "estimatedTime": "30-45 minutes",
+    "prerequisites": []
+  },
+  "theorySection": {
+    "explanation": "Welcome to Prompt Quest! The secret to getting great results from AI isn't magic—it's clarity. Think of the AI as a brilliant but very literal intern. It wants to help, but it needs precise instructions. The most common mistake is assuming the AI knows what you want without you saying it. In this stage, we focus on the 'Essentials': telling the AI exactly **what** to do, **who** it is for, and **how** it should look.",
+    "keyPrinciples": [
+      "**The Golden Rule of Specificity**: Never just say 'write about X'. Say 'write a [format] about [topic] for [audience]'.",
+      "**Context is King**: Give the AI the background information it needs. Why are you asking? What is the goal?",
+      "**Format Control**: You can tell the AI exactly how to structure its answer (bullet points, table, single sentence)."
+    ],
+    "commonMistakes": [
+      "Being too vague (e.g., 'Help me with this')",
+      "Forgetting to define the audience (resulting in answers that are too simple or too complex)",
+      "ignoring output limits (getting a 5-page essay when you needed a paragraph)"
+    ]
+  },
+  "workedExamples": [
+    {
+      "id": "ex1",
+      "badPrompt": "Write about space.",
+      "goodPrompt": "Write a 3-sentence summary of the moon landing for a 10-year-old student.",
+      "explanation": "The bad prompt is too open-ended. The good prompt adds three crucial constraints: length (3 sentences), topic specificity (moon landing), and audience (10-year-old).",
+      "expectedOutputPreview": "In 1969, brave astronauts Neil Armstrong and Buzz Aldrin became the first humans to walk on the Moon. They flew there in a rocket called Apollo 11 and planted an American flag on the dusty surface. It was a giant leap for mankind!"
+    },
+    {
+      "id": "ex2",
+      "badPrompt": "Fix this email.",
+      "goodPrompt": "Proofread this email for grammar errors and make the tone more professional for a client.",
+      "explanation": "The bad prompt doesn't tell the AI *how* to fix it. The good prompt specifies the tasks (proofread, adjust tone) and the context (client email).",
+      "expectedOutputPreview": "Dear Client, I wanted to update you on the project status..."
+    },
+    {
+      "id": "ex3",
+      "badPrompt": "Give me ideas for dinner.",
+      "goodPrompt": "List 5 vegetarian dinner ideas that take under 30 minutes to cook. Format as a bulleted list.",
+      "explanation": "The bad prompt could return anything. The good prompt filters the results (vegetarian, under 30 mins) and defines the structure (list of 5).",
+      "expectedOutputPreview": "*   **Stir-fry Tofu & Veggies**\n*   **Caprese Pasta Salad**..."
+    }
+  ],
+  "interactiveExercises": [
+    {
+      "exerciseId": "S1E01",
+      "title": "The Concise Summariser",
+      "difficulty": "Beginner",
+      "xpReward": 50,
+      "scenario": "You are a news editor with very limited space on the front page.",
+      "taskDescription": "Write a prompt that asks the AI to summarise a long news article about the Mars Rover into exactly one sentence.",
+      "successCriteria": [
+        "Includes the instruction to 'summarise'",
+        "Specifies the length constraint (one sentence)",
+        "Mentions the topic (Mars Rover)"
+      ],
+      "starterTemplate": "Summarise the article about...",
+      "modelAnswer": "Summarise the news article about the Mars Rover into exactly one sentence.",
+      "feedbackHints": {
+        "noLength": "You forgot to tell the AI how long the summary should be!",
+        "tooComplex": "Keep it simple—just ask for a one-sentence summary.",
+        "perfect": "Great! Length constraints are the best way to control AI verbosity."
+      }
+    },
+    {
+      "exerciseId": "S1E02",
+      "title": "Know Your Audience",
+      "difficulty": "Beginner",
+      "xpReward": 60,
+      "scenario": "You need to explain a complex concept to a complete beginner.",
+      "taskDescription": "Write a prompt that asks the AI to explain 'Quantum Computing' to a 5-year-old child.",
+      "successCriteria": [
+        "Identifies the topic (Quantum Computing)",
+        "Specifies the target audience (5-year-old)",
+        "Uses an instruction verb (explain/describe)"
+      ],
+      "starterTemplate": "Explain Quantum Computing to...",
+      "modelAnswer": "Explain the concept of Quantum Computing to a 5-year-old using simple analogies.",
+      "feedbackHints": {
+        "noAudience": "Who are you explaining this to? The AI needs to know!",
+        "tooTechnical": "Remember, the audience is a child. Ask for simple language.",
+        "perfect": "Spot on! Defining the audience is the #1 way to get better explanations."
+      }
+    },
+    {
+      "exerciseId": "S1E03",
+      "title": "The List Master",
+      "difficulty": "Beginner",
+      "xpReward": 60,
+      "scenario": "You are planning a grocery trip and need an organized list.",
+      "taskDescription": "Write a prompt that asks for 7 healthy fruits, formatted as a numbered list.",
+      "successCriteria": [
+        "Requests a specific number of items (7)",
+        "Specifies the category (healthy fruits)",
+        "Demands a specific format (numbered list)"
+      ],
+      "starterTemplate": "Give me a list of...",
+      "modelAnswer": "Provide a numbered list of 7 healthy fruits.",
+      "feedbackHints": {
+        "noFormat": "How should the list look? Bullet points? Numbered?",
+        "noNumber": "Be specific—how many fruits do you want?",
+        "perfect": "Excellent! Numbered lists are much easier to read."
+      }
+    },
+    {
+      "exerciseId": "S1E04",
+      "title": "The Professional Email",
+      "difficulty": "Intermediate",
+      "xpReward": 100,
+      "scenario": "You are late for a meeting with your boss, Sarah, because your car broke down.",
+      "taskDescription": "Write a prompt to draft an email to your boss, Sarah. It must be professional, explain the car trouble, and apologize for being late.",
+      "successCriteria": [
+        "Specifies the recipient (Boss/Sarah)",
+        "Sets the tone (Professional)",
+        "Includes the key context (Car trouble/Late)",
+        "Includes the action (Apologize)"
+      ],
+      "starterTemplate": "Write an email to...",
+      "modelAnswer": "Write a professional email to my boss, Sarah, apologizing for being late to the meeting due to car trouble.",
+      "feedbackHints": {
+        "tooCasual": "Remember this is for your boss—ask for a professional tone.",
+        "missingContext": "Did you mention *why* you are late?",
+        "perfect": "Great job combining context, recipient, and tone."
+      }
+    },
+    {
+      "exerciseId": "S1E05",
+      "title": "The Blog Post Structurer",
+      "difficulty": "Intermediate",
+      "xpReward": 110,
+      "scenario": "You are a travel blogger writing about Paris.",
+      "taskDescription": "Write a prompt that generates an outline for a blog post about '3 Days in Paris'. The outline must include an Introduction, 3 Days of activities, and a Conclusion.",
+      "successCriteria": [
+        "Topic is clear (3 Days in Paris)",
+        "Format is specified (Outline)",
+        "Required sections are listed (Intro, 3 Days, Conclusion)"
+      ],
+      "starterTemplate": "Create a blog post outline for...",
+      "modelAnswer": "Create a detailed blog post outline for '3 Days in Paris' including an Introduction, Day 1, Day 2, Day 3, and a Conclusion.",
+      "feedbackHints": {
+        "vagueStructure": "Don't just ask for an outline—tell the AI exactly which sections you want.",
+        "perfect": "Specifying the structure upfront saves you editing time later."
+      }
+    },
+    {
+      "exerciseId": "S1E06",
+      "title": "The Contrast Check",
+      "difficulty": "Intermediate",
+      "xpReward": 120,
+      "scenario": "You want to see how tone changes the message.",
+      "taskDescription": "Write a prompt that asks the AI to write the same sentence ('I am quitting my job') in two different ways: once politely, and once angrily.",
+      "successCriteria": [
+        "Requests two distinct versions",
+        "Defines Tone A (Polite)",
+        "Defines Tone B (Angry)",
+        "Includes the core message (Quitting job)"
+      ],
+      "starterTemplate": "Write the sentence 'I am quitting my job' in...",
+      "modelAnswer": "Rewrite the sentence 'I am quitting my job' in two ways: first with a polite, professional tone, and second with an angry, burning-bridges tone.",
+      "feedbackHints": {
+        "missingContrast": "Make sure you ask for *both* styles in one prompt.",
+        "perfect": "Nicely done. Comparing tones is a great way to learn prompt control."
+      }
+    },
+    {
+      "exerciseId": "S1E07",
+      "title": "The Recipe Reformatter",
+      "difficulty": "Intermediate",
+      "xpReward": 120,
+      "scenario": "You have a messy paragraph of cooking instructions but need a clean recipe card.",
+      "taskDescription": "Write a prompt that asks the AI to take a text description of making pancakes and format it into two distinct sections: 'Ingredients' and 'Step-by-Step Instructions'.",
+      "successCriteria": [
+        "Mentions the dish (Pancakes)",
+        "Requests specific formatting (Ingredients section)",
+        "Requests specific formatting (Instructions section)"
+      ],
+      "starterTemplate": "Format a recipe for...",
+      "modelAnswer": "Write a recipe for pancakes formatted into two clear sections: a list of Ingredients and numbered Step-by-Step Instructions.",
+      "feedbackHints": {
+        "noSections": "Be specific—ask for 'Ingredients' and 'Instructions' explicitly.",
+        "perfect": "Structuring data is a superpower of LLMs!"
+      }
+    },
+    {
+      "exerciseId": "S1E08",
+      "title": "The Study Buddy",
+      "difficulty": "Advanced",
+      "xpReward": 150,
+      "scenario": "You are studying for a biology exam.",
+      "taskDescription": "Write a prompt that asks the AI to generate 5 multiple-choice practice questions about 'Photosynthesis'. Each question must have 4 options and indicate the correct answer.",
+      "successCriteria": [
+        "Topic: Photosynthesis",
+        "Format: 5 Multiple Choice Questions",
+        "Constraint: 4 options per question",
+        "Requirement: Include correct answers"
+      ],
+      "starterTemplate": "Create a quiz about...",
+      "modelAnswer": "Create 5 multiple-choice practice questions about Photosynthesis. Each question should have 4 options (A, B, C, D) and list the correct answer at the end.",
+      "feedbackHints": {
+        "missingAnswers": "Don't forget to ask for the answer key!",
+        "vagueFormat": "Be specific about the number of options (A, B, C, D).",
+        "perfect": "Excellent constraints. This is perfect for generating study materials."
+      }
+    },
+    {
+      "exerciseId": "S1E09",
+      "title": "The Specific Critic",
+      "difficulty": "Advanced",
+      "xpReward": 160,
+      "scenario": "You want feedback on your writing, but only on specific aspects.",
+      "taskDescription": "Write a prompt that asks the AI to critique a short paragraph (you can invent one) focusing ONLY on 'spelling' and 'sentence length'. It should ignore the content.",
+      "successCriteria": [
+        "Includes text to critique",
+        "Specifies positive constraints (Focus on spelling/length)",
+        "Specifies negative constraints (Ignore content)",
+        "Clear role (Critic/Editor)"
+      ],
+      "starterTemplate": "Critique this text focusing only on...",
+      "modelAnswer": "Act as an editor. Critique the following text focusing ONLY on spelling errors and sentence length. Do not comment on the plot or content: [Insert Text Here]",
+      "feedbackHints": {
+        "tooBroad": "If you just say 'critique', it will comment on everything. Narrow the focus!",
+        "perfect": "Great use of negative constraints ('ignore content')."
+      }
+    },
+    {
+      "exerciseId": "S1E10",
+      "title": "The Universal Translator",
+      "difficulty": "Advanced",
+      "xpReward": 180,
+      "scenario": "Translation requires context to be accurate.",
+      "taskDescription": "Write a prompt to translate the phrase 'I'm running late' into Spanish. You must specify that the context is a text message to a friend, so it should be colloquial/slang.",
+      "successCriteria": [
+        "Phrase: 'I'm running late'",
+        "Target Language: Spanish",
+        "Context: Text message/Friend",
+        "Tone: Colloquial/Slang"
+      ],
+      "starterTemplate": "Translate 'I'm running late'...",
+      "modelAnswer": "Translate the phrase 'I'm running late' into Spanish. The context is a text message to a close friend, so use colloquial slang.",
+      "feedbackHints": {
+        "literalTranslation": "Without context, you might get a formal translation. Add 'text message' or 'slang'.",
+        "perfect": "Perfect. Context is the difference between 'textbook' Spanish and 'real' Spanish."
+      }
+    }
+  ]
+}

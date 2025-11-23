@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements - Prompt Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Vanta.js dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338CA;
+            --primary-light: #818CF8;
+            --secondary: #059669;
+            --accent: #F59E0B;
+            --danger: #EF4444;
+
+            --bg-main: #0F0F1E;
+            --bg-card: rgba(30, 41, 59, 0.95);
+            --bg-card-hover: rgba(30, 41, 59, 1);
+
+            --text-primary: #F9FAFB;
+            --text-secondary: #D1D5DB;
+            --text-muted: #9CA3AF;
+
+            --border-light: rgba(75, 85, 99, 0.4);
+            --border-focus: rgba(79, 70, 229, 0.6);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            position: relative;
+            min-height: 100vh;
+        }
+
+        #vanta-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        nav, main, section, footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        .font-display { font-family: 'Poppins', sans-serif; }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Dark theme cards */
+        .bg-white, .stat-card {
+            background: rgba(30, 41, 59, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+
+        .text-gray-900 {
+            color: #F9FAFB !important;
+        }
+
+        .text-gray-700, .text-gray-600 {
+            color: #D1D5DB !important;
+        }
+
+        .text-gray-500 {
+            color: #9CA3AF !important;
+        }
+
+        nav {
+            background: rgba(17, 24, 39, 0.98) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(75, 85, 99, 0.3);
+        }
+
+        /* Achievement cards */
+        .achievement-card {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .achievement-card.locked {
+            opacity: 0.6;
+        }
+
+        .achievement-card.locked .achievement-icon {
+            filter: grayscale(100%);
+        }
+
+        .achievement-card.unlocked::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Rarity colours */
+        .rarity-common { border-color: #6B7280; }
+        .rarity-rare { border-color: #3B82F6; }
+        .rarity-epic { border-color: #8B5CF6; }
+        .rarity-legendary { border-color: #F59E0B; }
+        .rarity-secret { border-color: #EC4899; }
+
+        .achievement-card.unlocked.rarity-common { border-left: 4px solid #6B7280; }
+        .achievement-card.unlocked.rarity-rare { border-left: 4px solid #3B82F6; }
+        .achievement-card.unlocked.rarity-epic { border-left: 4px solid #8B5CF6; }
+        .achievement-card.unlocked.rarity-legendary { border-left: 4px solid #F59E0B; }
+        .achievement-card.unlocked.rarity-secret { border-left: 4px solid #EC4899; }
+
+        /* Category tabs */
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            background: rgba(75, 85, 99, 0.3);
+            color: var(--text-secondary);
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .tab-btn:hover {
+            background: rgba(75, 85, 99, 0.5);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Stat cards */
+        .stat-card {
+            background: rgba(30, 41, 59, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+
+        /* Rarity badge colours */
+        .badge-common { background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%); }
+        .badge-rare { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); }
+        .badge-epic { background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); }
+        .badge-legendary { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); }
+        .badge-secret { background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%); }
+
+        /* Confetti particles */
+        .confetti-particle {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div id="vanta-background"></div>
+
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <a href="challenges.html" class="font-display font-bold text-xl gradient-text">Prompt Quest</a>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm">🏆</span>
+                        </div>
+                        <span class="text-sm text-gray-600">Achievements</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <div class="hidden md:flex items-center space-x-2">
+                        <span class="text-sm font-medium text-gray-700">Points:</span>
+                        <span class="text-lg font-bold gradient-text" id="total-points">0</span>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <span class="text-sm font-medium text-gray-700">Unlocked:</span>
+                        <span class="text-lg font-bold text-yellow-500" id="unlocked-count">0</span>
+                    </div>
+                    <a href="challenges.html" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg font-medium">Challenges</a>
+                    <a href="progress.html" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg font-medium">Progress</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-16 px-4">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="font-display text-4xl md:text-5xl font-bold mb-6 gradient-text">
+                🏆 Achievements
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                Unlock badges and earn points by mastering prompt engineering skills
+            </p>
+        </div>
+    </section>
+
+    <!-- Stats Overview -->
+    <section class="py-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="stat-card card-hover rounded-2xl p-6 text-center fade-in stagger-1">
+                    <div class="text-3xl mb-2">⭐</div>
+                    <div class="text-3xl font-bold gradient-text mb-1" id="total-points-display">0</div>
+                    <div class="text-gray-400 text-sm">Total Points</div>
+                </div>
+
+                <div class="stat-card card-hover rounded-2xl p-6 text-center fade-in stagger-2">
+                    <div class="text-3xl mb-2">🔓</div>
+                    <div class="text-3xl font-bold text-yellow-500 mb-1" id="unlocked-display">0 / 0</div>
+                    <div class="text-gray-400 text-sm">Achievements Unlocked</div>
+                </div>
+
+                <div class="stat-card card-hover rounded-2xl p-6 text-center fade-in stagger-3">
+                    <div class="text-3xl mb-2">📊</div>
+                    <div class="text-3xl font-bold text-emerald-500 mb-1" id="completion-display">0%</div>
+                    <div class="text-gray-400 text-sm">Completion Rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Tabs -->
+    <section class="py-4 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-wrap justify-center gap-3 mb-8" id="category-tabs">
+                <button class="tab-btn active" data-category="all">All</button>
+                <button class="tab-btn" data-category="common">Common</button>
+                <button class="tab-btn" data-category="rare">Rare</button>
+                <button class="tab-btn" data-category="epic">Epic</button>
+                <button class="tab-btn" data-category="legendary">Legendary</button>
+                <button class="tab-btn" data-category="secret">Secret</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Grid -->
+    <section class="py-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div id="achievements-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Achievement cards will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900/50 text-white py-12 px-4 mt-16">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="font-display text-2xl font-bold mb-4 gradient-text">Prompt Quest</div>
+            <p class="text-gray-400 mb-6">Master the art of AI communication through interactive learning</p>
+            <div class="text-sm text-gray-500">
+                © 2025 Prompt Quest. Educational tool for AI literacy development.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Achievement Notification Container -->
+    <div class="achievement-notification-container fixed top-4 right-4 z-50">
+        <!-- Notifications will appear here -->
+    </div>
+
+    <!-- Load scripts -->
+    <script src="challenge-data.js"></script>
+    <script src="progress-system.js"></script>
+
+    <script>
+        // Achievements data
+        const achievementsData = {
+            // Beginner Achievements
+            firstPrompt: {
+                id: 'firstPrompt',
+                name: 'First Steps',
+                description: 'Submit your first prompt',
+                icon: '👶',
+                points: 10,
+                rarity: 'common'
+            },
+            fiveInRow: {
+                id: 'fiveInRow',
+                name: 'On Fire!',
+                description: 'Complete 5 challenges in a row',
+                icon: '🔥',
+                points: 50,
+                rarity: 'rare'
+            },
+            speedDemon: {
+                id: 'speedDemon',
+                name: 'Speed Demon',
+                description: 'Complete a challenge in under 30 seconds',
+                icon: '⚡',
+                points: 30,
+                rarity: 'rare'
+            },
+
+            // Game Mode Achievements
+            racingChampion: {
+                id: 'racingChampion',
+                name: 'Racing Champion',
+                description: 'Score 1000+ in Prompt Racing',
+                icon: '🏆',
+                points: 100,
+                rarity: 'epic'
+            },
+            puzzleMaster: {
+                id: 'puzzleMaster',
+                name: 'Puzzle Master',
+                description: 'Complete a puzzle with minimal moves',
+                icon: '🧩',
+                points: 75,
+                rarity: 'epic'
+            },
+            perfectMatch: {
+                id: 'perfectMatch',
+                name: 'Perfect Match',
+                description: 'Complete matching game without mistakes',
+                icon: '💯',
+                points: 60,
+                rarity: 'rare'
+            },
+
+            // Skill Achievements
+            promptArtist: {
+                id: 'promptArtist',
+                name: 'Prompt Artist',
+                description: 'Create 50 successful prompts',
+                icon: '🎨',
+                points: 200,
+                rarity: 'legendary'
+            },
+            detailOriented: {
+                id: 'detailOriented',
+                name: 'Detail Oriented',
+                description: 'Use all 5 prompt categories in one prompt',
+                icon: '🔍',
+                points: 40,
+                rarity: 'rare'
+            },
+            experimentalist: {
+                id: 'experimentalist',
+                name: 'Experimentalist',
+                description: 'Try 20 different prompt combinations',
+                icon: '🧪',
+                points: 50,
+                rarity: 'rare'
+            },
+
+            // Special Achievements
+            nightOwl: {
+                id: 'nightOwl',
+                name: 'Night Owl',
+                description: 'Complete challenges after midnight',
+                icon: '🦉',
+                points: 25,
+                rarity: 'common'
+            },
+            earlyBird: {
+                id: 'earlyBird',
+                name: 'Early Bird',
+                description: 'Complete challenges before 6 AM',
+                icon: '🐦',
+                points: 25,
+                rarity: 'common'
+            },
+            perfectionist: {
+                id: 'perfectionist',
+                name: 'Perfectionist',
+                description: 'Achieve 100% accuracy on 10 challenges',
+                icon: '✨',
+                points: 150,
+                rarity: 'legendary'
+            },
+            socialButterfly: {
+                id: 'socialButterfly',
+                name: 'Social Butterfly',
+                description: 'Share 5 prompts with the community',
+                icon: '🦋',
+                points: 30,
+                rarity: 'common'
+            },
+
+            // Hidden Achievements
+            easterEgg: {
+                id: 'easterEgg',
+                name: 'Easter Egg Hunter',
+                description: '???',
+                icon: '🥚',
+                points: 100,
+                rarity: 'secret',
+                hidden: true
+            },
+            promptHacker: {
+                id: 'promptHacker',
+                name: 'Prompt Hacker',
+                description: 'Discover the secret prompt pattern',
+                icon: '💻',
+                points: 200,
+                rarity: 'secret',
+                hidden: true
+            }
+        };
+
+        class AchievementsPage {
+            constructor() {
+                this.achievements = achievementsData;
+                this.unlockedAchievements = this.loadAchievements();
+                this.currentCategory = 'all';
+                this.init();
+            }
+
+            init() {
+                this.loadStats();
+                this.renderAchievements();
+                this.setupTabEvents();
+                this.setupKonamiCode();
+            }
+
+            loadAchievements() {
+                const saved = localStorage.getItem('promptQuestAchievements');
+                return saved ? JSON.parse(saved) : [];
+            }
+
+            loadStats() {
+                const totalPoints = this.getTotalPoints();
+                const unlockedCount = this.getUnlockedCount();
+                const totalCount = this.getTotalCount();
+                const completion = this.getCompletionPercentage();
+
+                // Animate stats
+                this.animateNumber('total-points-display', totalPoints);
+                this.animateNumber('total-points', totalPoints);
+
+                document.getElementById('unlocked-display').textContent = `${unlockedCount} / ${totalCount}`;
+                document.getElementById('unlocked-count').textContent = unlockedCount;
+                document.getElementById('completion-display').textContent = `${completion}%`;
+            }
+
+            animateNumber(elementId, targetValue) {
+                const element = document.getElementById(elementId);
+                if (!element) return;
+
+                anime({
+                    targets: { value: 0 },
+                    value: targetValue,
+                    duration: 1500,
+                    easing: 'easeOutQuart',
+                    update: function(anim) {
+                        element.textContent = Math.round(anim.animatables[0].target.value);
+                    }
+                });
+            }
+
+            renderAchievements(category = 'all') {
+                const grid = document.getElementById('achievements-grid');
+                grid.innerHTML = '';
+
+                const filteredAchievements = Object.values(this.achievements)
+                    .filter(ach => !ach.hidden || this.isUnlocked(ach.id))
+                    .filter(ach => category === 'all' || ach.rarity === category);
+
+                filteredAchievements.forEach((achievement, index) => {
+                    const card = this.createAchievementCard(achievement, index);
+                    grid.appendChild(card);
+                });
+
+                // Animate cards in
+                anime({
+                    targets: '.achievement-card',
+                    opacity: [0, 1],
+                    translateY: [30, 0],
+                    delay: anime.stagger(50),
+                    duration: 400,
+                    easing: 'easeOutQuart'
+                });
+            }
+
+            createAchievementCard(achievement, index) {
+                const unlocked = this.isUnlocked(achievement.id);
+                const card = document.createElement('div');
+
+                card.className = `achievement-card rounded-xl p-6 ${unlocked ? 'unlocked' : 'locked'} rarity-${achievement.rarity}`;
+                card.style.animationDelay = `${index * 0.05}s`;
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="achievement-icon text-4xl ${unlocked ? '' : 'opacity-50'}">
+                            ${achievement.icon}
+                        </div>
+                        ${unlocked ? '<span class="text-emerald-400 text-xl">✓</span>' : '<span class="text-gray-500 text-xl">🔒</span>'}
+                    </div>
+                    <h4 class="font-bold text-lg mb-2 ${unlocked ? 'text-white' : 'text-gray-400'}">${achievement.name}</h4>
+                    <p class="text-sm mb-4 ${unlocked ? 'text-gray-300' : 'text-gray-500'}">
+                        ${achievement.hidden && !unlocked ? '???' : achievement.description}
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs px-3 py-1 rounded-full text-white badge-${achievement.rarity}">
+                            ${achievement.rarity.toUpperCase()}
+                        </span>
+                        <span class="text-sm font-bold ${unlocked ? 'text-yellow-400' : 'text-gray-500'}">
+                            ${achievement.points} pts
+                        </span>
+                    </div>
+                `;
+
+                return card;
+            }
+
+            setupTabEvents() {
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+
+                        const category = e.target.dataset.category;
+                        this.currentCategory = category;
+                        this.renderAchievements(category);
+                    });
+                });
+            }
+
+            setupKonamiCode() {
+                let konamiProgress = 0;
+                const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === konamiCode[konamiProgress]) {
+                        konamiProgress++;
+                        if (konamiProgress === konamiCode.length) {
+                            this.unlockAchievement('easterEgg');
+                            konamiProgress = 0;
+                        }
+                    } else {
+                        konamiProgress = 0;
+                    }
+                });
+            }
+
+            unlockAchievement(achievementId) {
+                if (this.isUnlocked(achievementId)) return;
+
+                const achievement = this.achievements[achievementId];
+                if (!achievement) return;
+
+                this.unlockedAchievements.push(achievementId);
+                this.saveAchievements();
+                this.showUnlockNotification(achievement);
+                this.loadStats();
+                this.renderAchievements(this.currentCategory);
+
+                if (achievement.rarity === 'legendary' || achievement.rarity === 'secret') {
+                    this.triggerConfetti();
+                }
+            }
+
+            showUnlockNotification(achievement) {
+                const notification = document.createElement('div');
+                notification.className = 'bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-4 mb-4 flex items-center gap-4 min-w-[300px]';
+                notification.innerHTML = `
+                    <div class="achievement-icon text-4xl animate-bounce">${achievement.icon}</div>
+                    <div>
+                        <h4 class="font-bold text-lg text-white">Achievement Unlocked!</h4>
+                        <p class="text-gray-300">${achievement.name}</p>
+                        <p class="text-sm text-yellow-400">+${achievement.points} points</p>
+                    </div>
+                `;
+
+                const container = document.querySelector('.achievement-notification-container');
+                container.appendChild(notification);
+
+                anime({
+                    targets: notification,
+                    translateX: [300, 0],
+                    opacity: [0, 1],
+                    duration: 500,
+                    easing: 'easeOutQuart'
+                });
+
+                setTimeout(() => {
+                    anime({
+                        targets: notification,
+                        translateX: [0, 300],
+                        opacity: [1, 0],
+                        duration: 300,
+                        easing: 'easeInQuart',
+                        complete: () => notification.remove()
+                    });
+                }, 4000);
+            }
+
+            triggerConfetti() {
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti-particle';
+                    confetti.style.cssText = `
+                        position: fixed;
+                        width: 10px;
+                        height: 10px;
+                        background: ${['#FFD700', '#FF69B4', '#00CED1', '#FF6347', '#7FFF00'][Math.floor(Math.random() * 5)]};
+                        left: ${Math.random() * 100}%;
+                        top: -20px;
+                        transform: rotate(${Math.random() * 360}deg);
+                        z-index: 9999;
+                    `;
+                    document.body.appendChild(confetti);
+
+                    anime({
+                        targets: confetti,
+                        translateY: window.innerHeight + 20,
+                        translateX: `${(Math.random() - 0.5) * 200}px`,
+                        rotate: Math.random() * 720,
+                        duration: 2000 + Math.random() * 1000,
+                        easing: 'easeOutQuad',
+                        complete: () => confetti.remove()
+                    });
+                }
+            }
+
+            // Utility methods
+            isUnlocked(achievementId) {
+                return this.unlockedAchievements.includes(achievementId);
+            }
+
+            getTotalPoints() {
+                return this.unlockedAchievements.reduce((total, id) => {
+                    return total + (this.achievements[id]?.points || 0);
+                }, 0);
+            }
+
+            getUnlockedCount() {
+                return this.unlockedAchievements.length;
+            }
+
+            getTotalCount() {
+                return Object.values(this.achievements).filter(a => !a.hidden).length;
+            }
+
+            getCompletionPercentage() {
+                const total = this.getTotalCount();
+                const unlocked = this.unlockedAchievements.filter(id => !this.achievements[id]?.hidden).length;
+                return total > 0 ? Math.round((unlocked / total) * 100) : 0;
+            }
+
+            saveAchievements() {
+                localStorage.setItem('promptQuestAchievements', JSON.stringify(this.unlockedAchievements));
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.achievementsPage = new AchievementsPage();
+        });
+    </script>
+
+    <!-- Initialize Vanta.js Background -->
+    <script>
+        if (typeof VANTA !== 'undefined') {
+            VANTA.NET({
+                el: "#vanta-background",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0xf59e0b,
+                backgroundColor: 0x0f0f1e,
+                points: 10.00,
+                maxDistance: 20.00,
+                spacing: 15.00
+            });
+        }
+    </script>
+</body>
+</html>

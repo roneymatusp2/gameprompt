@@ -1,0 +1,10 @@
+{
+  "enabledMcpjsonServers": [
+    "brave-search",
+    "github",
+    "file-system",
+    "n8n",
+    "firebase",
+    "docker"
+  ]
+}

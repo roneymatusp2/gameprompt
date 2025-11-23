@@ -155,55 +155,19 @@ class AchievementSystem {
     }
 
     init() {
-        this.createAchievementDisplay();
         this.createNotificationSystem();
         this.setupTracking();
+        this.setupAchievementLinks();
     }
 
-    createAchievementDisplay() {
-        const displayHTML = `
-            <div class="achievements-panel hidden" id="achievements-panel">
-                <div class="panel-header bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 rounded-t-xl">
-                    <h2 class="text-3xl font-bold mb-2">🏆 Achievements</h2>
-                    <div class="achievement-stats flex gap-6">
-                        <div>
-                            <span class="text-2xl font-bold">${this.getTotalPoints()}</span>
-                            <span class="text-sm">Total Points</span>
-                        </div>
-                        <div>
-                            <span class="text-2xl font-bold">${this.getUnlockedCount()}</span>
-                            <span class="text-sm">Unlocked</span>
-                        </div>
-                        <div>
-                            <span class="text-2xl font-bold">${this.getCompletionPercentage()}%</span>
-                            <span class="text-sm">Completion</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="achievement-categories p-6">
-                    <div class="category-tabs flex gap-4 mb-6">
-                        <button class="tab-btn active" data-category="all">All</button>
-                        <button class="tab-btn" data-category="common">Common</button>
-                        <button class="tab-btn" data-category="rare">Rare</button>
-                        <button class="tab-btn" data-category="epic">Epic</button>
-                        <button class="tab-btn" data-category="legendary">Legendary</button>
-                        <button class="tab-btn" data-category="secret">Secret</button>
-                    </div>
-                    
-                    <div class="achievements-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        ${this.renderAchievements()}
-                    </div>
-                </div>
-                
-                <button class="close-panel absolute top-4 right-4 text-white text-2xl hover:scale-110 transition-transform">
-                    ×
-                </button>
-            </div>
-        `;
-
-        document.body.insertAdjacentHTML('beforeend', displayHTML);
-        this.setupPanelEvents();
+    // Redirect achievement buttons/links to the achievements page
+    setupAchievementLinks() {
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.open-achievements')) {
+                e.preventDefault();
+                window.location.href = 'achievements.html';
+            }
+        });
     }
 
     renderAchievements(category = 'all') {
@@ -397,50 +361,7 @@ class AchievementSystem {
         }, 4000);
     }
 
-    setupPanelEvents() {
-        // Tab switching
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('tab-btn')) {
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
-                
-                const category = e.target.dataset.category;
-                document.querySelector('.achievements-grid').innerHTML = this.renderAchievements(category);
-            }
-
-            if (e.target.classList.contains('close-panel')) {
-                this.hidePanel();
-            }
-
-            if (e.target.classList.contains('open-achievements')) {
-                this.showPanel();
-            }
-        });
-    }
-
-    showPanel() {
-        const panel = document.getElementById('achievements-panel');
-        panel.classList.remove('hidden');
-        anime({
-            targets: panel,
-            scale: [0.9, 1],
-            opacity: [0, 1],
-            duration: 300,
-            easing: 'easeOutQuart'
-        });
-    }
-
-    hidePanel() {
-        const panel = document.getElementById('achievements-panel');
-        anime({
-            targets: panel,
-            scale: [1, 0.9],
-            opacity: [1, 0],
-            duration: 300,
-            easing: 'easeInQuart',
-            complete: () => panel.classList.add('hidden')
-        });
-    }
+    // Panel methods removed - achievements now displayed on dedicated page
 
     triggerConfetti() {
         // Create confetti particles
@@ -478,25 +399,8 @@ class AchievementSystem {
     }
 
     updateDisplay() {
-        // Update stats in panel if open
-        const panel = document.getElementById('achievements-panel');
-        if (!panel.classList.contains('hidden')) {
-            // Update stats
-            panel.querySelector('.achievement-stats').innerHTML = `
-                <div>
-                    <span class="text-2xl font-bold">${this.getTotalPoints()}</span>
-                    <span class="text-sm">Total Points</span>
-                </div>
-                <div>
-                    <span class="text-2xl font-bold">${this.getUnlockedCount()}</span>
-                    <span class="text-sm">Unlocked</span>
-                </div>
-                <div>
-                    <span class="text-2xl font-bold">${this.getCompletionPercentage()}%</span>
-                    <span class="text-sm">Completion</span>
-                </div>
-            `;
-        }
+        // Display is now handled by the dedicated achievements page
+        // This method is kept for compatibility with existing code
     }
 
     // Utility methods
@@ -535,68 +439,29 @@ document.addEventListener('DOMContentLoaded', () => {
     window.achievementSystem = new AchievementSystem();
 });
 
-// Add styles for achievements
+// Styles for achievement notifications (panel styles removed - now on dedicated page)
 const achievementStyles = `
     <style>
-        .achievement-card {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .achievement-card.locked {
-            filter: grayscale(100%);
-        }
-        
-        .achievement-card.unlocked::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        
-        .tab-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            background: #e5e7eb;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        
-        .tab-btn:hover {
-            background: #d1d5db;
-        }
-        
-        .tab-btn.active {
-            background: #4F46E5;
-            color: white;
-        }
-        
-        .achievements-panel {
+        .achievement-notification-container {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 1200px;
-            max-height: 90vh;
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            z-index: 1000;
+            top: 1rem;
+            right: 1rem;
+            z-index: 9999;
         }
-        
-        .grayscale {
-            filter: grayscale(100%);
+
+        .achievement-unlocked {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
     </style>
 `;

@@ -19,18 +19,49 @@ class PromptMiniGames {
     createGameHub() {
         const hubHTML = `
             <div class="mini-games-hub hidden" id="mini-games-hub">
-                <div class="hub-header text-center mb-8">
-                    <h2 class="text-4xl font-bold gradient-text mb-4">🎮 Mini-Games Arena</h2>
-                    <p class="text-xl text-gray-600">Master prompt engineering through fun challenges!</p>
+                <!-- Navigation Bar -->
+                <nav class="mini-games-nav bg-gray-900 bg-opacity-95 backdrop-blur-md shadow-lg px-6 py-4 mb-8">
+                    <div class="max-w-7xl mx-auto flex justify-between items-center">
+                        <div class="flex items-center space-x-4">
+                            <a href="index.html" class="font-display text-2xl font-bold gradient-text hover:opacity-80 transition-opacity">Prompt Quest</a>
+                            <span class="text-sm text-gray-400">Mini-Games Arena</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <a href="index.html" class="btn btn-secondary text-sm">
+                                🏠 Home
+                            </a>
+                            <button class="back-to-main btn btn-secondary text-sm">
+                                ← Back
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Main Content -->
+                <div class="max-w-7xl mx-auto px-6 py-8">
+                    <div class="hub-header text-center mb-12">
+                        <h2 class="text-5xl font-bold gradient-text mb-4">🎮 Mini-Games Arena</h2>
+                        <p class="text-xl text-gray-400">Master prompt engineering through fun challenges!</p>
+                    </div>
+                    
+                    <div class="games-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                        ${this.createGameCards()}
+                    </div>
                 </div>
-                
-                <div class="games-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    ${this.createGameCards()}
-                </div>
-                
-                <button class="back-to-main mt-8 btn btn-secondary">
-                    Back to Main Game
-                </button>
+
+                <!-- Footer -->
+                <footer class="bg-gray-900 bg-opacity-50 backdrop-blur-lg text-white py-8 px-4 mt-16 border-t border-gray-800">
+                    <div class="max-w-7xl mx-auto text-center">
+                        <div class="font-display text-2xl font-bold mb-3 gradient-text">Prompt Quest</div>
+                        <p class="text-gray-400 mb-4">Master the art of AI communication through interactive learning</p>
+                        <div class="text-sm text-gray-500">
+                            © 2025 Prompt Quest. Educational tool for AI literacy development.
+                        </div>
+                        <div class="text-xs text-gray-600 mt-2">
+                            Created by Mr Nascimento
+                        </div>
+                    </div>
+                </footer>
             </div>
         `;
 

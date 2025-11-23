@@ -1,10 +1,29 @@
 /* Dark Theme Text Visibility Fixes */
 
 /* Mini-Games Hub */
+.mini-games-hub {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-main);
+    overflow-y: auto;
+    z-index: 100;
+}
+
 .mini-games-hub .hub-header h2,
 .mini-games-hub .hub-header p {
     color: var(--text-primary) !important;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.mini-games-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.mini-games-nav a,
+.mini-games-nav button {
+    color: var(--text-primary) !important;
 }
 
 .game-card h3 {

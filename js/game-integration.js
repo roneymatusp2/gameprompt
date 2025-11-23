@@ -198,7 +198,7 @@ class GameIntegration {
                 this.systems.miniGames?.openGameHub();
                 break;
             case 'achievements':
-                this.systems.achievements?.showPanel();
+                window.location.href = 'achievements.html';
                 break;
             case 'multiplayer':
                 this.systems.multiplayer?.showPanel();

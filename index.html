@@ -431,14 +431,17 @@
 
         /* Button styles */
         .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 1.75rem;
+            border-radius: 0.75rem;
             font-weight: 600;
             transition: all 0.2s;
             cursor: pointer;
             border: none;
             text-align: center;
+            gap: 0.5rem;
         }
 
         .btn-primary {
@@ -539,18 +542,21 @@
             <h1 class="font-display text-5xl md:text-7xl font-bold mb-6 text-gray-900">
                 <span id="typed-text"></span>
             </h1>
-            <p class="text-xl md:text-2xl mb-8 text-gray-700 max-w-3xl mx-auto">
+            <p class="text-xl md:text-2xl mb-12 text-gray-700 max-w-3xl mx-auto">
                 Master the art of AI communication through interactive challenges, mini-games, and real-time feedback
             </p>
-            <div class="flex gap-4 justify-center">
-                <a href="learning.html" class="btn btn-primary text-lg">
-                    📚 Start Learning
+            <div class="flex flex-wrap gap-4 justify-center items-center max-w-4xl mx-auto">
+                <a href="learning.html" class="btn btn-primary text-lg flex items-center gap-2 min-w-[200px] justify-center">
+                    <span class="text-2xl">📚</span>
+                    <span>Start Learning</span>
                 </a>
-                <a href="challenges.html" class="btn btn-secondary text-lg">
-                    🎯 Start Challenges
+                <a href="challenges.html" class="btn btn-secondary text-lg flex items-center gap-2 min-w-[200px] justify-center">
+                    <span class="text-2xl">🎯</span>
+                    <span>Start Challenges</span>
                 </a>
-                <button onclick="openMiniGamesHub()" class="btn btn-secondary text-lg">
-                    🎮 Play Mini-Games
+                <button onclick="openMiniGamesHub()" class="btn btn-secondary text-lg flex items-center gap-2 min-w-[200px] justify-center">
+                    <span class="text-2xl">🎮</span>
+                    <span>Play Mini-Games</span>
                 </button>
             </div>
 
@@ -595,6 +601,9 @@
         <p class="text-gray-400 mb-6">Master the art of AI communication through interactive learning</p>
         <div class="text-sm text-gray-500">
             © 2025 Prompt Quest. Educational tool for AI literacy development.
+        </div>
+        <div class="text-xs text-gray-600 mt-2">
+            Created by Mr Nascimento
         </div>
     </div>
 </footer>

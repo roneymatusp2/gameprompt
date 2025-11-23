@@ -553,8 +553,8 @@ class FirebaseAuthSystem {
                              alt="User avatar">
                         <span class="text-sm font-medium text-gray-700 dark:text-gray-200">${user.displayName || user.email.split('@')[0]}</span>
                     </a>
-                    <a href="dashboard.html" class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded hover:bg-indigo-200 transition-colors">
-                        Dashboard
+                    <a href="dashboard.html" class="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition-colors font-medium shadow-sm">
+                        📊 Dashboard
                     </a>
                     <button onclick="firebaseAuth.logout()" class="text-xs text-red-500 hover:text-red-700 ml-2">
                         Sign Out

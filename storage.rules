@@ -1,17 +1,23 @@
 rules_version = '2';
+
 service firebase.storage {
   match /b/{bucket}/o {
-    // User Profiles: Users can read any profile, but only write their own
+    // Allow users to read and write their own profile pictures
     match /users/{userId}/profile_pic.jpg {
-      allow read: if true;
-      allow write: if request.auth != null && request.auth.uid == userId
-                   && request.resource.size < 5 * 1024 * 1024 // Max 5MB
-                   && request.resource.contentType.matches('image/.*');
+      allow read: if true; // Anyone can read profile pictures
+      allow write: if request.auth != null && request.auth.uid == userId;
     }
     
-    // Default deny
-    match /{allPaths=**} {
-      allow read, write: if false;
+    // Allow users to manage their own files
+    match /users/{userId}/{allPaths=**} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Public assets (if needed)
+    match /public/{allPaths=**} {
+      allow read: if true;
+      allow write: if false; // Only admins via backend
     }
   }
 }

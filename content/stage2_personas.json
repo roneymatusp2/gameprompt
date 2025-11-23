@@ -1,0 +1,255 @@
+{
+  "stageMetadata": {
+    "stageNumber": 2,
+    "title": "Playing Pretend - Context & Personas",
+    "learningObjectives": [
+      "Understand the power of 'Act as...' instructions",
+      "Learn to tailor output using expert personas",
+      "Master the adjustment of tone for different audiences",
+      "Explore perspective-taking for problem solving"
+    ],
+    "estimatedTime": "45-60 minutes",
+    "prerequisites": ["Stage 1: The Essentials"]
+  },
+  "theorySection": {
+    "explanation": "In Stage 1, you learned to give clear instructions. Now, we unlock the AI's creative potential by giving it a 'Role'. When you ask an AI to 'Act as a biology teacher' or 'Respond as a grumpy pirate', you are setting a 'Persona'. This is powerful because it automatically brings in a whole set of assumptions about knowledge, vocabulary, and tone without you having to list them all. It's like giving the AI a costume and a script.",
+    "keyPrinciples": [
+      "**The 'Act As' Hack**: Starting your prompt with 'Act as [Role]' primes the AI to access specific knowledge and vocabulary associated with that role.",
+      "**Tone Matching**: A persona dictates tone. A 'judge' is formal and serious; a 'clown' is silly and chaotic. Use roles to instantly set the vibe.",
+      "**Perspective Taking**: You can use personas to see a problem from different angles. How would a 'lawyer' view this contract vs. a 'designer'?"
+    ],
+    "commonMistakes": [
+      "Using generic roles like 'an expert' instead of specific ones like 'a senior Python developer'.",
+      "Forgetting to tell the AI who it is talking *to* (the audience) after defining who *it* is.",
+      "Letting the persona override the facts (e.g., a 'funny' persona giving incorrect serious advice)."
+    ]
+  },
+  "workedExamples": [
+    {
+      "id": "ex1",
+      "badPrompt": "Write an email complaining about the noise.",
+      "goodPrompt": "Act as a polite but firm elderly neighbour. Write a formal letter to the young couple next door complaining about their loud music last night.",
+      "explanation": "The bad prompt has no personality. The good prompt sets a specific character (polite, elderly neighbour) which dictates the vocabulary ('I am writing to express my concern...') and tone.",
+      "expectedOutputPreview": "Dear Neighbours, I hope this letter finds you well. I am writing to gently bring to your attention the volume of the music coming from your flat last evening..."
+    },
+    {
+      "id": "ex2",
+      "badPrompt": "Tell me about Mars.",
+      "goodPrompt": "You are an enthusiastic astronaut who has just landed on Mars. Describe the landscape to a group of school children back on Earth.",
+      "explanation": "Instead of a dry encyclopaedia entry, the good prompt creates a story. The 'enthusiastic astronaut' persona adds emotion ('It's breathtaking!') and the audience (children) keeps it simple.",
+      "expectedOutputPreview": "Hello Earthlings! You won't believe what I'm seeing! The ground is covered in rusty red dust that swirls around my boots like magic glitter..."
+    },
+    {
+      "id": "ex3",
+      "badPrompt": "Give me interview advice.",
+      "goodPrompt": "Act as a strict corporate recruiter at a top bank. Give me 3 hard truths about why candidates fail their interviews.",
+      "explanation": "Specifying 'strict corporate recruiter' signals the AI to give direct, perhaps harsh, feedback rather than generic, fluffy advice.",
+      "expectedOutputPreview": "1. **You're too rehearsed.** We can tell when you're reading a script. \n2. **You didn't do your homework.** If you don't know our stock price, don't bother showing up..."
+    }
+  ],
+  "interactiveExercises": [
+    {
+      "exerciseId": "S2E01",
+      "title": "The Helpful Guide",
+      "difficulty": "Beginner",
+      "xpReward": 60,
+      "scenario": "You are creating a welcome guide for a zoo.",
+      "taskDescription": "Write a prompt that asks the AI to explain what a 'giraffe' is. You must tell the AI to act as a 'friendly tour guide'.",
+      "successCriteria": [
+        "Instruction: Explain/Describe giraffe",
+        "Role: Friendly tour guide",
+        "Tone: Welcoming/Enthusiastic"
+      ],
+      "starterTemplate": "Act as a... and explain...",
+      "modelAnswer": "Act as a friendly tour guide at a zoo. Explain what a giraffe is to a group of visitors.",
+      "feedbackHints": {
+        "noRole": "You forgot to set the persona! Start with 'Act as...'",
+        "wrongRole": "Make sure the role is a 'tour guide', not just a teacher.",
+        "perfect": "Great! Notice how the tone becomes much more engaging?"
+      }
+    },
+    {
+      "exerciseId": "S2E02",
+      "title": "The 5-Year-Old explainer",
+      "difficulty": "Beginner",
+      "xpReward": 70,
+      "scenario": "Complexity is the enemy. You need to simplify a hard topic.",
+      "taskDescription": "Write a prompt asking the AI to explain 'inflation' (economics). The constraint: it must act as a primary school teacher talking to a 5-year-old.",
+      "successCriteria": [
+        "Topic: Inflation",
+        "Role: Primary school teacher",
+        "Audience: 5-year-old",
+        "Tone: Simple/Patient"
+      ],
+      "starterTemplate": "You are a... explain inflation to...",
+      "modelAnswer": "You are a kind primary school teacher. Explain the concept of economic inflation to a 5-year-old child using examples they would understand, like sweets or toys.",
+      "feedbackHints": {
+        "tooComplex": "Did you specify the audience is a 5-year-old? The explanation is still too hard.",
+        "noRole": "Who is the AI supposed to be? A teacher!",
+        "perfect": "Perfect. The AI should now use analogies like 'pocket money' instead of 'purchasing power'."
+      }
+    },
+    {
+      "exerciseId": "S2E03",
+      "title": "The Tech Support Rescue",
+      "difficulty": "Beginner",
+      "xpReward": 70,
+      "scenario": "A customer is angry because their internet is down.",
+      "taskDescription": "Write a prompt for the AI to draft an apology email. The AI should act as a 'calm and empathetic customer support agent'.",
+      "successCriteria": [
+        "Task: Draft apology email",
+        "Role: Support Agent",
+        "Tone: Calm/Empathetic",
+        "Topic: Internet outage"
+      ],
+      "starterTemplate": "Draft an email acting as...",
+      "modelAnswer": "Act as a calm and empathetic customer support agent. Draft an email to a customer apologising for their internet outage and assuring them a technician is on the way.",
+      "feedbackHints": {
+        "tooRobotic": "Did you ask for empathy? The response feels cold.",
+        "perfect": "Excellent. The 'Act as' instruction is key for getting the right customer service voice."
+      }
+    },
+    {
+      "exerciseId": "S2E04",
+      "title": "The Villain's Monologue",
+      "difficulty": "Intermediate",
+      "xpReward": 100,
+      "scenario": "You are writing a script for a movie.",
+      "taskDescription": "Write a prompt asking the AI to explain why it stole the crown jewels. The catch: It must act as a 'dramatic, classic movie villain'.",
+      "successCriteria": [
+        "Task: Explain theft",
+        "Role: Dramatic Villain",
+        "Tone: Evil/Dramatic/Arrogant",
+        "Context: Crown Jewels"
+      ],
+      "starterTemplate": "You are a... explain why...",
+      "modelAnswer": "You are a dramatic, arrogant movie villain. Deliver a short monologue explaining why you stole the crown jewels, focusing on your genius plan.",
+      "feedbackHints": {
+        "boring": "It's too plain! Did you use words like 'dramatic' or 'arrogant'?",
+        "perfect": "Mwahahaha! Excellent use of persona to drive creativity."
+      }
+    },
+    {
+      "exerciseId": "S2E05",
+      "title": "The Fitness Drill Sergeant",
+      "difficulty": "Intermediate",
+      "xpReward": 110,
+      "scenario": "You need motivation to get out of bed.",
+      "taskDescription": "Write a prompt for a morning alarm message. The AI should act as a 'tough military drill sergeant' shouting at you to wake up.",
+      "successCriteria": [
+        "Task: Wake up message",
+        "Role: Drill Sergeant",
+        "Tone: Aggressive/Loud/Motivating",
+        "Format: Short text/Speech"
+      ],
+      "starterTemplate": "Act as a... write a message to...",
+      "modelAnswer": "Act as a tough military drill sergeant. Write a short, aggressive, all-caps message to wake a recruit up at 05:00 AM.",
+      "feedbackHints": {
+        "tooSoft": "A drill sergeant isn't polite! Use words like 'tough' or 'aggressive'.",
+        "perfect": "Sir, yes sir! That's a prompt with energy."
+      }
+    },
+    {
+      "exerciseId": "S2E06",
+      "title": "The Professional Chef",
+      "difficulty": "Intermediate",
+      "xpReward": 120,
+      "scenario": "You have only eggs, cheese, and bread.",
+      "taskDescription": "Ask the AI for a recipe using these ingredients. It must act as a 'Michelin-star chef' describing a gourmet dish.",
+      "successCriteria": [
+        "Ingredients: Eggs, cheese, bread",
+        "Role: Michelin-star chef",
+        "Tone: Sophisticated/Fancy",
+        "Output: Recipe description"
+      ],
+      "starterTemplate": "I have eggs, cheese, and bread. Act as...",
+      "modelAnswer": "I have eggs, cheese, and bread. Act as a snobby Michelin-star chef and describe a gourmet dish you would create with these simple ingredients.",
+      "feedbackHints": {
+        "tooSimple": "The description shouldn't be 'cheese on toast'. Ask for 'gourmet' or 'fancy'.",
+        "perfect": "Bon appétit! You turned a simple request into a creative writing exercise."
+      }
+    },
+    {
+      "exerciseId": "S2E07",
+      "title": "The Time Traveller",
+      "difficulty": "Intermediate",
+      "xpReward": 130,
+      "scenario": "History lesson with a twist.",
+      "taskDescription": "Ask the AI to describe a 'smartphone'. The Persona: A person from the year 1800 who has just seen one for the first time.",
+      "successCriteria": [
+        "Topic: Smartphone",
+        "Persona: Person from 1800",
+        "Perspective: Confusion/Wonder/Magic",
+        "Vocabulary: Historical/Non-technical"
+      ],
+      "starterTemplate": "Describe a smartphone acting as...",
+      "modelAnswer": "Act as a person from the year 1800. Describe your reaction to seeing a modern smartphone for the first time, focusing on the 'glowing glass' and 'magic voices'.",
+      "feedbackHints": {
+        "tooModern": "Wait, a person from 1800 wouldn't know words like 'screen' or 'battery'.",
+        "perfect": "Great perspective taking. This forces the AI to describe the *experience* rather than the specs."
+      }
+    },
+    {
+      "exerciseId": "S2E08",
+      "title": "The Devil's Advocate",
+      "difficulty": "Advanced",
+      "xpReward": 150,
+      "scenario": "You are debating whether to ban cars in the city centre.",
+      "taskDescription": "Write a prompt asking the AI to give 3 reasons AGAINST banning cars. It must act as a 'representative for local shop owners' who are worried about losing customers.",
+      "successCriteria": [
+        "Topic: Banning cars",
+        "Stance: Against",
+        "Role: Shop owner representative",
+        "Motivation: Economic fear/Losing customers"
+      ],
+      "starterTemplate": "Act as a... give 3 arguments against...",
+      "modelAnswer": "Act as a representative for local shop owners. Provide 3 strong arguments AGAINST banning cars in the city centre, focusing on the potential loss of business and delivery difficulties.",
+      "feedbackHints": {
+        "wrongStance": "Make sure the AI is arguing *against* the ban.",
+        "generic": "The arguments should be specific to shop owners, not just drivers in general.",
+        "perfect": "Excellent. Using specific personas is a great way to stress-test arguments."
+      }
+    },
+    {
+      "exerciseId": "S2E09",
+      "title": "The Alien Anthropologist",
+      "difficulty": "Advanced",
+      "xpReward": 160,
+      "scenario": "You want a fresh look at human behaviour.",
+      "taskDescription": "Ask the AI to describe the human ritual of 'Birthday Parties'. Persona: An alien scientist observing humans for the first time.",
+      "successCriteria": [
+        "Topic: Birthday Party",
+        "Role: Alien Scientist",
+        "Tone: Clinical/Observational/Confused",
+        "Key Detail: Burning candles on food"
+      ],
+      "starterTemplate": "You are an alien... describe...",
+      "modelAnswer": "You are an alien anthropologist observing humans. Write a report describing the strange ritual of 'Birthday Parties', specifically why they set fire to their food (candles) and then blow it out.",
+      "feedbackHints": {
+        "tooHuman": "The description feels too normal. The alien should find it weird!",
+        "perfect": "Perfect. This 'defamiliarization' technique is great for creative writing."
+      }
+    },
+    {
+      "exerciseId": "S2E10",
+      "title": "The Dual Perspective",
+      "difficulty": "Advanced",
+      "xpReward": 200,
+      "scenario": "Conflict resolution.",
+      "taskDescription": "Write a prompt that asks the AI to rewrite a rude email ('Where is my project??') in two ways: 1. As a supportive mentor. 2. As a panicked intern.",
+      "successCriteria": [
+        "Input: 'Where is my project??'",
+        "Task: Rewrite twice",
+        "Persona 1: Supportive Mentor",
+        "Persona 2: Panicked Intern",
+        "Goal: Compare tones"
+      ],
+      "starterTemplate": "Rewrite 'Where is my project??' as...",
+      "modelAnswer": "Rewrite the message 'Where is my project??' in two different ways. First, act as a supportive mentor checking in. Second, act as a panicked intern who needs it immediately.",
+      "feedbackHints": {
+        "missingOne": "Did you ask for *both* perspectives?",
+        "perfect": "Outstanding. Mastering multiple personas in one prompt is a pro skill."
+      }
+    }
+  ]
+}

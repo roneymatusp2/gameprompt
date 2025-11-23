@@ -1,0 +1,246 @@
+{
+  "stageMetadata": {
+    "stageNumber": 3,
+    "title": "Getting Organised - Formatting & Structure",
+    "learningObjectives": [
+      "Master the art of controlling output structure (Lists vs. Tables)",
+      "Learn to request specific data formats (CSV, JSON, Markdown)",
+      "Understand how to use structural templates for complex tasks",
+      "Improve readability through formatting constraints"
+    ],
+    "estimatedTime": "45-60 minutes",
+    "prerequisites": ["Stage 2: Context & Personas"]
+  },
+  "theorySection": {
+    "explanation": "You can act as a genius expert (Stage 2), but if that genius gives you a wall of unstructured text, it's useless. Stage 3 is about being an architect. You don't just ask for *information*; you define the *blueprint* for how that information is presented. AI models are incredibly good at following structural rules. You can ask for tables, code blocks, bullet points, or even specific file formats like CSV or JSON. This is the secret to turning AI from a 'chatbot' into a productivity tool.",
+    "keyPrinciples": [
+      "**Format is a Constraint**: Asking for a 'table' or a 'list' is a type of constraint that forces the AI to organise its thoughts.",
+      "**Be Explicit**: Don't say 'organise this'. Say 'create a 3-column table with headers: Name, Date, and Score'.",
+      "**Templates Work**: You can provide a 'skeleton' (e.g., 'Use this format: Title -> Summary -> Key Points') and ask the AI to fill it in."
+    ],
+    "commonMistakes": [
+      "Asking for a 'list' when you actually need a 'table' to compare data.",
+      "Forgetting to specify headers for tables (leaving the AI to guess relevant columns).",
+      "Assuming the AI knows your preferred software format (e.g., asking for 'data' instead of 'CSV format for Excel')."
+    ]
+  },
+  "workedExamples": [
+    {
+      "id": "ex1",
+      "badPrompt": "Compare cats and dogs.",
+      "goodPrompt": "Create a comparison table between Cats and Dogs with the following columns: Lifespan, Social Needs, Exercise Requirements, and Best Suited For.",
+      "explanation": "The bad prompt usually results in a long, wandering essay. The good prompt forces a structured comparison that is easy to scan and understand.",
+      "expectedOutputPreview": "| Lifespan | Social Needs | Exercise Requirements | Best Suited For |\n|----------|--------------|-----------------------|----------------- |\n| 12-18 yrs| Moderate     | Low-Medium            | Apartments      |"
+    },
+    {
+      "id": "ex2",
+      "badPrompt": "Give me 5 tweet ideas about coffee.",
+      "goodPrompt": "Write 5 tweet ideas about coffee. Format each one as a bullet point followed by a suitable set of 3 hashtags.",
+      "explanation": "The good prompt defines the exact structure of each item: content + hashtags. This saves you from having to edit or add hashtags manually later.",
+      "expectedOutputPreview": "*   Coffee is a hug in a mug. #CoffeeLover #MorningVibes #Caffeine\n*   Decaf is just brown sadness water. #CoffeeHumor #Espresso #BaristaLife"
+    },
+    {
+      "id": "ex3",
+      "badPrompt": "Extract names from this text.",
+      "goodPrompt": "Extract all the full names mentioned in the text below. Return the result as a Comma-Separated List (CSV) so I can paste it into Excel.",
+      "explanation": "Specifying 'CSV' ensures the output is raw data ('John Doe, Jane Smith') rather than a sentence ('The names are John Doe and Jane Smith'), making it instantly usable.",
+      "expectedOutputPreview": "John Doe, Jane Smith, Bob Wilson, Alice Cooper"
+    }
+  ],
+  "interactiveExercises": [
+    {
+      "exerciseId": "S3E01",
+      "title": "The Simple List",
+      "difficulty": "Beginner",
+      "xpReward": 60,
+      "scenario": "You are packing for a holiday and need a checklist.",
+      "taskDescription": "Write a prompt asking for 10 essential items to pack for a beach holiday. Format the result as a 'numbered list'.",
+      "successCriteria": [
+        "Topic: Beach packing",
+        "Quantity: 10 items",
+        "Format: Numbered list"
+      ],
+      "starterTemplate": "Create a...",
+      "modelAnswer": "Create a numbered list of 10 essential items to pack for a beach holiday.",
+      "feedbackHints": {
+        "noFormat": "Did you specify 'numbered list'? A paragraph isn't a list!",
+        "wrongQuantity": "Make sure you ask for exactly 10 items.",
+        "perfect": "Good start. Lists are the simplest form of structured output."
+      }
+    },
+    {
+      "exerciseId": "S3E02",
+      "title": "Bullets vs Numbers",
+      "difficulty": "Beginner",
+      "xpReward": 60,
+      "scenario": "You are brainstorming, not ranking.",
+      "taskDescription": "Ask for 5 gift ideas for a gardener. Use 'bullet points' instead of numbers (because numbers imply a ranking).",
+      "successCriteria": [
+        "Topic: Gifts for gardener",
+        "Quantity: 5 ideas",
+        "Format: Bullet points"
+      ],
+      "starterTemplate": "List 5...",
+      "modelAnswer": "List 5 gift ideas for a gardener, formatted as bullet points.",
+      "feedbackHints": {
+        "wrongFormat": "Use 'bullet points' or a 'bulleted list', not numbers.",
+        "perfect": "Correct. Bullets are great for non-ordered items."
+      }
+    },
+    {
+      "exerciseId": "S3E03",
+      "title": "The Table Maker",
+      "difficulty": "Beginner",
+      "xpReward": 70,
+      "scenario": "You need to compare phone plans.",
+      "taskDescription": "Write a prompt to compare 'Plan A' ($10/month) and 'Plan B' ($20/month) in a table. The AI should invent the features.",
+      "successCriteria": [
+        "Items: Plan A vs Plan B",
+        "Format: Table",
+        "Context: Phone plans"
+      ],
+      "starterTemplate": "Create a table comparing...",
+      "modelAnswer": "Create a table comparing Phone Plan A ($10/month) and Phone Plan B ($20/month). Include columns for Price, Data Limit, and Speed.",
+      "feedbackHints": {
+        "noTable": "You must explicitly ask for a 'Table'.",
+        "perfect": "Tables are one of the most useful things an AI can generate."
+      }
+    },
+    {
+      "exerciseId": "S3E04",
+      "title": "The Specific Columns",
+      "difficulty": "Intermediate",
+      "xpReward": 100,
+      "scenario": "You are buying a new laptop.",
+      "taskDescription": "Ask the AI to compare the 'MacBook Air' and 'Dell XPS'. You must request a table with exactly these 3 columns: 'Battery Life', 'Weight', and 'Price'.",
+      "successCriteria": [
+        "Items: MacBook Air vs Dell XPS",
+        "Format: Table",
+        "Constraint: Specific columns (Battery, Weight, Price)"
+      ],
+      "starterTemplate": "Compare... in a table with columns...",
+      "modelAnswer": "Create a comparison table for the MacBook Air and Dell XPS with the following columns: Battery Life, Weight, and Price.",
+      "feedbackHints": {
+        "missingColumns": "You need to list the specific columns names you want.",
+        "perfect": "Perfect. Defining headers prevents the AI from filling the table with irrelevant info."
+      }
+    },
+    {
+      "exerciseId": "S3E05",
+      "title": "The Recipe Card",
+      "difficulty": "Intermediate",
+      "xpReward": 110,
+      "scenario": "You are formatting a cookbook.",
+      "taskDescription": "Ask for a recipe for 'Scrambled Eggs'. You must define the structure: 'Title', then 'Ingredients List', then 'Numbered Steps', then 'Chef's Tip'.",
+      "successCriteria": [
+        "Topic: Scrambled Eggs",
+        "Structure Part 1: Title",
+        "Structure Part 2: Ingredients List",
+        "Structure Part 3: Numbered Steps",
+        "Structure Part 4: Chef's Tip"
+      ],
+      "starterTemplate": "Write a recipe for... use this structure...",
+      "modelAnswer": "Write a recipe for scrambled eggs using this exact structure: Title, Ingredients List, Numbered Steps, and finally a Chef's Tip.",
+      "feedbackHints": {
+        "vagueStructure": "Don't just say 'structured'. List the sections: Title, Ingredients, Steps, Tip.",
+        "perfect": "Excellent. You're acting like a layout editor."
+      }
+    },
+    {
+      "exerciseId": "S3E06",
+      "title": "The Email Template",
+      "difficulty": "Intermediate",
+      "xpReward": 120,
+      "scenario": "You hate writing subject lines.",
+      "taskDescription": "Ask the AI to write a sick leave email. It must provide the output in two distinct parts: 'Subject Line:' and 'Email Body:'.",
+      "successCriteria": [
+        "Topic: Sick leave email",
+        "Format Constraint 1: Separate Subject Line",
+        "Format Constraint 2: Separate Body"
+      ],
+      "starterTemplate": "Write a sick leave email. Format it with...",
+      "modelAnswer": "Write a sick leave email to my manager. Format the output with a clear 'Subject Line:' section and a separate 'Email Body:' section.",
+      "feedbackHints": {
+        "merged": "Make sure you ask for the Subject Line to be separate from the Body.",
+        "perfect": "Great. This makes it easy to copy-paste into your email client."
+      }
+    },
+    {
+      "exerciseId": "S3E07",
+      "title": "The Data Scraper",
+      "difficulty": "Intermediate",
+      "xpReward": 120,
+      "scenario": "You need data for a spreadsheet.",
+      "taskDescription": "Ask the AI to generate a list of 5 imaginary customers. The format must be 'CSV' (Comma Separated Values) with columns: ID, Name, Email.",
+      "successCriteria": [
+        "Content: 5 imaginary customers",
+        "Format: CSV (Comma Separated Values)",
+        "Headers: ID, Name, Email"
+      ],
+      "starterTemplate": "Generate 5 customers in... format...",
+      "modelAnswer": "Generate 5 imaginary customers in CSV format. The columns should be: ID, Name, Email.",
+      "feedbackHints": {
+        "notCSV": "You asked for a list, but not CSV format. CSV means separated by commas.",
+        "perfect": "Spot on. You can paste that result directly into Excel."
+      }
+    },
+    {
+      "exerciseId": "S3E08",
+      "title": "The Meeting Agenda",
+      "difficulty": "Advanced",
+      "xpReward": 150,
+      "scenario": "You are chairing a project kickoff.",
+      "taskDescription": "Create a meeting agenda. Use a specific pattern for each agenda item: 'Time - Topic (Owner)'. E.g., '10:00 - Intro (John)'.",
+      "successCriteria": [
+        "Topic: Project Kickoff",
+        "Format: Agenda",
+        "Pattern constraint: Time - Topic (Owner)"
+      ],
+      "starterTemplate": "Create a meeting agenda where each item follows the pattern...",
+      "modelAnswer": "Create a meeting agenda for a project kickoff. Format each item using this pattern: 'Time - Topic (Owner)'.",
+      "feedbackHints": {
+        "noPattern": "You didn't define the pattern. Show the AI an example like 'Time - Topic (Owner)'.",
+        "perfect": "Advanced formatting! Defining a custom pattern gives you total control."
+      }
+    },
+    {
+      "exerciseId": "S3E09",
+      "title": "The JSON Generator",
+      "difficulty": "Advanced",
+      "xpReward": 160,
+      "scenario": "You are a developer (or pretending to be one).",
+      "taskDescription": "Ask the AI to describe a 'Book'. But the output must be valid JSON format with keys: 'title', 'author', 'year', and 'genre'.",
+      "successCriteria": [
+        "Topic: A Book",
+        "Format: JSON",
+        "Keys: title, author, year, genre"
+      ],
+      "starterTemplate": "Generate a JSON object for a book with keys...",
+      "modelAnswer": "Generate a description of a book in valid JSON format. Use the keys: title, author, year, and genre.",
+      "feedbackHints": {
+        "notJSON": "JSON is a specific code format using brackets {} and quotes \"". Ask for it by name.",
+        "perfect": "Perfect. AI is excellent at generating structured data for code."
+      }
+    },
+    {
+      "exerciseId": "S3E10",
+      "title": "The Nested Summary",
+      "difficulty": "Advanced",
+      "xpReward": 200,
+      "scenario": "You need a study guide.",
+      "taskDescription": "Ask for a summary of 'The French Revolution'. The structure must be: 1. Main Summary (paragraph), 2. Key Dates (bullet list), 3. Important Figures (table with Name/Role).",
+      "successCriteria": [
+        "Topic: French Revolution",
+        "Section 1: Summary (Paragraph)",
+        "Section 2: Dates (List)",
+        "Section 3: Figures (Table)"
+      ],
+      "starterTemplate": "Summarise the French Revolution using this structure: 1...",
+      "modelAnswer": "Provide a study guide for the French Revolution following this structure: 1. Main Summary (paragraph), 2. Key Dates (bulleted list), and 3. Important Figures (table with columns Name and Role).",
+      "feedbackHints": {
+        "missingSection": "Did you ask for all three sections? Summary, List, and Table?",
+        "perfect": "Masterful. Combining multiple formats (text, list, table) in one response is highly efficient."
+      }
+    }
+  ]
+}

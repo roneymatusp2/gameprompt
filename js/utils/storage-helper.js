@@ -18,7 +18,12 @@ class StorageManager {
      * @returns {Promise<string>} - The download URL of the uploaded image
      */
     async uploadProfilePicture(file) {
-        if (!this.storage) throw new Error("Storage not initialized");
+        // Lazy init
+        if (!this.storage && typeof firebase !== 'undefined') {
+            this.storage = firebase.storage();
+        }
+        
+        if (!this.storage) throw new Error("Storage could not be initialized. Firebase might not be ready.");
         
         const user = firebase.auth().currentUser;
         if (!user) throw new Error("User not logged in");

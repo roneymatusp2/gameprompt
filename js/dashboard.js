@@ -88,6 +88,11 @@ class Dashboard {
 
     loadStats() {
         // Get data from ProgressSystem (which syncs with LocalStorage/Firestore)
+        if (!window.progressSystem) {
+            console.warn('ProgressSystem not ready yet, retrying in 500ms...');
+            setTimeout(() => this.loadStats(), 500);
+            return;
+        }
         const stats = window.progressSystem.userProgress;
         
         // Update Basic Counters

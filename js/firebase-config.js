@@ -360,12 +360,12 @@ class FirebaseAuthSystem {
                 lastSession: firebase.firestore.FieldValue.serverTimestamp()
             };
 
-            await this.db.collection('users').doc(this.currentUser.uid).update({
+            await this.db.collection('users').doc(this.currentUser.uid).set({
                 progress,
                 stats,
                 analytics,
                 lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            }, { merge: true });
 
             console.log('Progress synced to cloud');
         } catch (error) {
